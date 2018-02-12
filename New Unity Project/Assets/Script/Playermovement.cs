@@ -14,24 +14,46 @@ public class Playermovement : MonoBehaviour
 
     [SerializeField]
     float movementspeed = 10;
-
+    float test = 0;
     bool jump2 = false;
     bool jumping = false;
-    bool jumpOnce = false;
+    int dashcountdown;
+    float regaindash = 0;
     // Use this for initialization
     void Start()
     {
         jump2 = false;
         jumping = false;
+        dashcountdown = 10;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(dashcountdown==0)
+        {
+            regaindash += Time.deltaTime;
+        }
+        if(regaindash>=5)
+        {
+            dashcountdown = 5;
+            regaindash = 0;
+        }
         if (Input.GetKey(KeyCode.D)|| Input.GetKey(KeyCode.RightArrow))
         {
             transform.position += transform.right * movementspeed * Time.deltaTime;
         }
+        if(Input.GetKey(KeyCode.RightArrow)|| Input.GetKey(KeyCode.D)&&Input.GetKey(KeyCode.LeftShift)&&dashcountdown>0)
+        {
+            transform.position += transform.right * 20 * Time.deltaTime;
+            dashcountdown--;
+        }
+        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.LeftShift) && dashcountdown > 0)
+        {
+            transform.position -= transform.right * 20 * Time.deltaTime;
+            dashcountdown--;
+        }
+
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
             transform.position -= transform.right * movementspeed * Time.deltaTime;
