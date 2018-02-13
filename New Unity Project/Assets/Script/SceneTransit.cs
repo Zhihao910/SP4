@@ -21,6 +21,10 @@ public class SceneTransit : MonoBehaviour {
     {
         SceneManager.LoadScene("MainMenu");
     }
+    public void ToHelp()
+    {
+        SceneManager.LoadScene("Help");
+    }
     public void ToQuit()
     {
         Application.Quit();
