@@ -24,6 +24,11 @@ public class PlayerController : MonoBehaviour
 
     bool leftDash, rightDash;
 
+    bool parryAttack = false;
+    float parryTimer = 0;
+    float parryCooldown = 0.3f;
+    public Collider2D attackTrigger;
+
     [SerializeField]
     GameObject healthBar, manaBar;
 
@@ -47,7 +52,9 @@ public class PlayerController : MonoBehaviour
         var Horizontal = Input.GetAxis("Horizontal");
         
         if (touchedGround)
+        {
             doubleJump = false;
+        }
         //Jump
         if (Input.GetKeyDown(KeyCode.Space) && touchedGround)
         {
@@ -64,10 +71,12 @@ public class PlayerController : MonoBehaviour
             doubleJump = true;
             animator.SetInteger("States", 4);
         }
+
         //Move Left without dash
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             GetComponent<Rigidbody2D>().velocity = new Vector2(-movementSpeed, GetComponent<Rigidbody2D>().velocity.y);
+
             Debug.Log("Left" + movementSpeed);
             animator.SetInteger("States", 1);
         }
@@ -75,6 +84,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.RightArrow))
         {
             GetComponent<Rigidbody2D>().velocity = new Vector2(movementSpeed, GetComponent<Rigidbody2D>().velocity.y);
+
             Debug.Log("Right" + movementSpeed);
             animator.SetInteger("States", 2);
         }
@@ -108,6 +118,28 @@ public class PlayerController : MonoBehaviour
         //if (mana >= 100)
         //    mana = totalMana;
         //mana += Time.deltaTime * 3;
+        
+        if (Input.GetKeyDown(KeyCode.D) && !parryAttack)
+        {
+            parryAttack = true;
+            attackTrigger.enabled = true;
+            parryTimer = parryCooldown;
+            mana -= 10;
+            Debug.Log("Attack");
+        }
+
+        if (parryAttack)
+        {
+            if (parryTimer > 0)
+            {
+                parryTimer -= Time.deltaTime;
+            }
+            else
+            {
+                parryAttack = false;
+                attackTrigger.enabled = false;
+            }
+        }
 
         if (mana <= 0)
             mana = 0;
