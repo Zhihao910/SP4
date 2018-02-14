@@ -22,6 +22,11 @@ public class PlayerController : MonoBehaviour
 
     bool leftDash, rightDash;
 
+    bool parryAttack = false;
+    float parryTimer = 0;
+    float parryCooldown = 0.3f;
+    public Collider2D attackTrigger;
+
     [SerializeField]
     GameObject healthBar, manaBar;
 
@@ -42,7 +47,9 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         if (touchedGround)
+        {
             doubleJump = false;
+        }
 
         //Jump
         if (Input.GetKeyDown(KeyCode.Space) && touchedGround)
@@ -56,16 +63,19 @@ public class PlayerController : MonoBehaviour
             Jump();
             doubleJump = true;
         }
+
         //Move Left without dash
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             GetComponent<Rigidbody2D>().velocity = new Vector2(-movementSpeed, GetComponent<Rigidbody2D>().velocity.y);
+
             Debug.Log("Left" + movementSpeed);
         }
         //Move Right without dash
         if (Input.GetKey(KeyCode.RightArrow))
         {
             GetComponent<Rigidbody2D>().velocity = new Vector2(movementSpeed, GetComponent<Rigidbody2D>().velocity.y);
+
             Debug.Log("Right" + movementSpeed);
         }
         //Move Left with dash
@@ -88,8 +98,28 @@ public class PlayerController : MonoBehaviour
         if (health <= 0)
             health = 0;
 
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.D) && !parryAttack)
+        {
+            parryAttack = true;
+            attackTrigger.enabled = true;
+            parryTimer = parryCooldown;
             mana -= 10;
+            Debug.Log("Attack");
+        }
+
+        if (parryAttack)
+        {
+            if (parryTimer > 0)
+            {
+                parryTimer -= Time.deltaTime;
+            }
+            else
+            {
+                parryAttack = false;
+                attackTrigger.enabled = false;
+            }
+        }
+
         if (mana <= 0)
             mana = 0;
         if (mana >= 100)

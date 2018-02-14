@@ -26,7 +26,7 @@ public class ProjectileSpawner : MonoBehaviour
     {
         spawnTime += Time.deltaTime;
         spawnTime2 += Time.deltaTime;
-        Vector2 randomPosition = new Vector2(15, Random.Range(-4, 4));
+        Vector2 randomPosition = new Vector2(15, Random.Range(-1, -5));
 
         if (spawnTime >= 1)
         {
