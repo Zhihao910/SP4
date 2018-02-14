@@ -5,6 +5,8 @@ using UnityEngine;
 public class BaseState : MonoBehaviour {
 
     public AudioPeerManager m_audioManager;
+    public GameObject _go;
+
 
     [SerializeField]
     List<double> m_Attacks = new List<double>();
@@ -23,16 +25,16 @@ public class BaseState : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
         if (m_Run)
         {
-            Debug.Log(m_audioManager.TimeNow());
+            //Debug.Log(m_audioManager.TimeNow());
             if (m_Queue.Peek() <= m_audioManager.TimeNow())
             {
-                Debug.Log("PEW PEW PEW");
+                m_Queue.Dequeue();
+                Vector2 randomPosition = new Vector2(15, Random.Range(-4, 4));
+                Instantiate(_go, randomPosition, Quaternion.identity);
 
-                double a = m_Queue.Dequeue();
-                
             }
         }
 	}

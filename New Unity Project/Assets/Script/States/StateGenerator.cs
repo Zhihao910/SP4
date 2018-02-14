@@ -8,7 +8,10 @@ public class StateGenerator : MonoBehaviour {
 
     [SerializeField]
     AudioPeerManager ap;
-   
+
+    [SerializeField]
+    GameObject p;
+
 
     // Use this for initialization
     void Start () {
@@ -19,20 +22,21 @@ public class StateGenerator : MonoBehaviour {
 		
 	}
 
-    public BaseState CreateBaseState(string _clipname, AudioClip _clip)
+    public BaseState CreateBaseState(string _clipname, AudioClip _clip,float multiplier = 1f)
     {
         BaseState result = gameObject.AddComponent<BaseState>();
         result.SetClipName(_clipname);
         //Run adding attacks here
 
-        double beattime = 0.588; //0.5357
+        double beattime = 0.4918 * multiplier;//0.5357; // 0.588
 
         int beatcount = 0;
         for (double time = 0; time < _clip.length; time += beattime)
         {
-            beatcount++;
+            result.name = _clipname;
             result.AddAttack(time);
             result.m_audioManager = ap;
+            result._go = p;
         }
 
         Debug.Log(result.GetClipName());
@@ -40,5 +44,10 @@ public class StateGenerator : MonoBehaviour {
         m_StateMap[_clipname] = result;
 
         return result;
+    }
+
+    public BaseState GetState(string _clipname)
+    {
+        return m_StateMap[_clipname];
     }
 }

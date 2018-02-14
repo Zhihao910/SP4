@@ -19,7 +19,6 @@ public class AudioPeerManager : MonoBehaviour {
 
     static bool swap = false;
     Queue<BaseState> m_playqueue = new Queue<BaseState>();
-    //Queue<string> m_playqueue2 = new Queue<string>();
 
     Dictionary<string, AudioClip> m_audioclipmap = new Dictionary<string, AudioClip>();
 
@@ -28,38 +27,29 @@ public class AudioPeerManager : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        //m_audioclipmap.Add("Intro", AudioSplitter.SplitAudio(0, 12, _sample.clip, "Intro"));
-        //m_audioclipmap.Add("Verse1", AudioSplitter.SplitAudio(12, 60 - 12, _sample.clip, "Verse1"));
-        //m_audioclipmap.Add("BuildUp1", AudioSplitter.SplitAudio(60, 84 - 60, _sample.clip, "BuildUp1"));
-        //m_audioclipmap.Add("Drop1", AudioSplitter.SplitAudio(84, 108 - 84, _sample.clip, "Drop1"));
-        //m_audioclipmap.Add("Verse2", AudioSplitter.SplitAudio(108, 132 - 108, _sample.clip, "Verse2"));
-        //m_audioclipmap.Add("Break1", AudioSplitter.SplitAudio(132, 156 - 132, _sample.clip, "Break1"));
-        //m_audioclipmap.Add("Verse3", AudioSplitter.SplitAudio(156, 180 - 156, _sample.clip, "Verse3"));
-        //m_audioclipmap.Add("BuildUp2", AudioSplitter.SplitAudio(180, 204 - 180, _sample.clip, "BuildUp2"));
-        //m_audioclipmap.Add("Drop2", AudioSplitter.SplitAudio(204, 252 - 204, _sample.clip, "Drop2"));
 
-        //m_playqueue2.Enqueue("Intro");
-        //m_playqueue2.Enqueue("Verse1");
+        //m_audioclipmap.Add("Song", _sample);
+        //m_playqueue.Enqueue(_stateGenerator.CreateBaseState("Song", _sample));
 
-        m_audioclipmap.Add("Song", _sample);
-        m_playqueue.Enqueue(_stateGenerator.CreateBaseState("Song", _sample));
-        Debug.Log(1);
+        m_audioclipmap.Add("Intro1", AudioSplitter.SplitAudio(5.8f, 20.7f - 5.8f, _sample, "Intro1"));
+        m_playqueue.Enqueue(_stateGenerator.CreateBaseState("Intro1", m_audioclipmap["Intro1"],8));
+        m_audioclipmap.Add("Break1", AudioSplitter.SplitAudio(20.7f, 35.6f - 20.7f, _sample, "Break1"));
+        m_audioclipmap.Add("Verse1", AudioSplitter.SplitAudio(35.6f, 50.6f - 35.6f, _sample, "Verse1"));
+        m_audioclipmap.Add("BuildUp1", AudioSplitter.SplitAudio(50.6f, 73.2f - 50.6f, _sample, "BuildUp1"));
+        m_audioclipmap.Add("Drop1", AudioSplitter.SplitAudio(73.2f, 103.2f - 73.2f, _sample, "Drop1"));
+        m_audioclipmap.Add("Break2", AudioSplitter.SplitAudio(103.2f, 118f - 103.2f, _sample, "Break2"));
+        m_audioclipmap.Add("Verse2", AudioSplitter.SplitAudio(118f, 133.5f - 118f, _sample, "Verse2"));
+        m_audioclipmap.Add("BuildUp2", AudioSplitter.SplitAudio(133.5f, 148.8f - 133.5f, _sample, "BuildUp2"));
+        m_audioclipmap.Add("Drop2", AudioSplitter.SplitAudio(148.8f, 178 - 148.8f, _sample, "Drop2"));
 
-        curr = m_playqueue.Dequeue();
-        Debug.Log(curr.GetClipName());
-        frontpeer.SetAudioClip(m_audioclipmap[curr.GetClipName()]);
-        frontpeer.StartPlaying();
-        curr.Run();
-
-        //m_audioclipmap.Add("Intro1", AudioSplitter.SplitAudio(5.8f, 20.7f - 5.8f, _sample.clip, "Intro1"));
-        //m_audioclipmap.Add("Break1", AudioSplitter.SplitAudio(20.7f, 35.6f - 20.7f, _sample.clip, "Break1"));
-        //m_audioclipmap.Add("Verse1", AudioSplitter.SplitAudio(35.6f, 50.6f - 35.6f, _sample.clip, "Verse1"));
-        //m_audioclipmap.Add("BuildUp1", AudioSplitter.SplitAudio(50.6f, 73.2f - 50.6f, _sample.clip, "BuildUp1"));
-        //m_audioclipmap.Add("Drop1", AudioSplitter.SplitAudio(73.2f, 103.2f - 73.2f, _sample.clip, "Drop1"));
-        //m_audioclipmap.Add("Break2", AudioSplitter.SplitAudio(103.2f, 118f - 103.2f, _sample.clip, "Break2"));
-        //m_audioclipmap.Add("Verse2", AudioSplitter.SplitAudio(118f, 133.5f - 118f, _sample.clip, "Verse2"));
-        //m_audioclipmap.Add("BuildUp2", AudioSplitter.SplitAudio(133.5f, 148.8f - 133.5f, _sample.clip, "BuildUp2"));
-        //m_audioclipmap.Add("Drop2", AudioSplitter.SplitAudio(148.8f, 178 - 148.8f, _sample.clip, "Drop2"));
+        m_playqueue.Enqueue(_stateGenerator.CreateBaseState("Break1", m_audioclipmap["Break1"],4));
+        m_playqueue.Enqueue(_stateGenerator.CreateBaseState("Verse1", m_audioclipmap["Verse1"],3));
+        m_playqueue.Enqueue(_stateGenerator.CreateBaseState("BuildUp1", m_audioclipmap["BuildUp1"],2));
+        m_playqueue.Enqueue(_stateGenerator.CreateBaseState("Drop1", m_audioclipmap["Drop1"]));
+        m_playqueue.Enqueue(_stateGenerator.CreateBaseState("Break2", m_audioclipmap["Break2"],4));
+        m_playqueue.Enqueue(_stateGenerator.CreateBaseState("Verse2", m_audioclipmap["Verse2"],3));
+        m_playqueue.Enqueue(_stateGenerator.CreateBaseState("BuildUp2", m_audioclipmap["BuildUp2"],2));
+        m_playqueue.Enqueue(_stateGenerator.CreateBaseState("Drop2", m_audioclipmap["Drop2"]));
 
         //m_audioclipmap.Add("Intro2", AudioSplitter.SplitAudio(5, 19 - 5, _sample2.clip, "Intro2"));
         //m_audioclipmap.Add("Verse3", AudioSplitter.SplitAudio(19, 35 - 19, _sample2.clip, "Verse3"));
@@ -85,12 +75,10 @@ public class AudioPeerManager : MonoBehaviour {
         //    m_playqueue2.Enqueue("Break" + Random.Range(1, 3));
         //    m_playqueue2.Enqueue("Verse" + Random.Range(1, 3));
         //}
-        //foreach (KeyValuePair<string, AudioClip> _ac in m_audioclipmap)
-        //{
-        //    m_playqueue2.Enqueue(_ac.Key);
-        //}
-        //frontpeer.SetAudioClip(m_audioclipmap[m_playqueue2.Dequeue()]);
-        //frontpeer.StartPlaying();
+        curr = m_playqueue.Dequeue();
+        curr.Run();
+        frontpeer.SetAudioClip(m_audioclipmap[curr.GetClipName()]);
+        frontpeer.StartPlaying();
     }
 
     // Update is called once per frame
