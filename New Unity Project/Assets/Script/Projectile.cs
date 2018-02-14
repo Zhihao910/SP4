@@ -28,6 +28,7 @@ public class Projectile : MonoBehaviour
         {
             Debug.Log("HIT");
             other.GetComponent<PlayerController>().health -= 10;
+            other.GetComponent<PlayerController>().mana += 10;
             Destroy(this.gameObject);
         }
     }
