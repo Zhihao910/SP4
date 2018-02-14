@@ -77,6 +77,7 @@ public class AudioPeerManager : MonoBehaviour {
         //}
         curr = m_playqueue.Dequeue();
         curr.Run();
+        Debug.Log(m_audioclipmap[curr.GetClipName()]);
         frontpeer.SetAudioClip(m_audioclipmap[curr.GetClipName()]);
         frontpeer.StartPlaying();
     }

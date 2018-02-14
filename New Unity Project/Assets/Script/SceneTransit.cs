@@ -15,7 +15,7 @@ public class SceneTransit : MonoBehaviour {
 	}
     public void ToGame()
     {
-        SceneManager.LoadScene("MainGame");
+        SceneManager.LoadScene("MainGame 1");
     }
     public void ToMainMenu()
     {
