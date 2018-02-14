@@ -17,8 +17,7 @@ public class PlayerController : MonoBehaviour
     float totalHealth = 100;
     public float health = 100;
     float totalMana = 100;
-    //float mana = 100;
-    public float mana = 0;
+    public float mana = 100;
     float dashCountdown;
     float regainDash = 0;
 
@@ -117,8 +116,8 @@ public class PlayerController : MonoBehaviour
         //    mana = 0;
         //if (mana >= 100)
         //    mana = totalMana;
-        //mana += Time.deltaTime * 3;
-        
+        mana += Time.deltaTime * 3;
+
         if (Input.GetKeyDown(KeyCode.D) && !parryAttack)
         {
             parryAttack = true;
