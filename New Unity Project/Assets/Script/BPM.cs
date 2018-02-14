@@ -36,7 +36,7 @@ public class BPM : MonoBehaviour
     private float _constant;
 
     // Time between beats
-    private double _beatTime;
+    public double _beatTime;
 
     // Time counting up until nextbeat
     private double _nextBeat;
@@ -62,7 +62,7 @@ public class BPM : MonoBehaviour
     //private double[] _bpms = new double[10];
 
     // Beats Per Minute
-    private double _bpm;
+    public double _bpm;
 
     // Check if detection is done
     private bool _detectedFinish = false;
