@@ -20,21 +20,21 @@ public class BaseState : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        foreach (double a in m_Attacks)
-            m_Queue.Enqueue(a);
+
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        if (m_Run)
+        if (m_Run && m_Queue.Count > 0)
         {
             //Debug.Log(m_audioManager.TimeNow());
             if (m_Queue.Peek() <= m_audioManager.TimeNow())
             {
-                m_Queue.Dequeue();
-                Vector2 randomPosition = new Vector2(15, Random.Range(-4, 4));
-                Instantiate(_go, randomPosition, Quaternion.identity);
+                double StartTIme =  m_Queue.Dequeue();
+                Vector2 randomPosition = new Vector2(15, Random.Range(-3, 3));
+                Vector2 randomTarget = new Vector2(Random.Range(-15, 5), randomPosition.y);
 
+                GameObject newgo = Instantiate(_go, randomPosition, Quaternion.identity);
             }
         }
 	}
@@ -57,6 +57,8 @@ public class BaseState : MonoBehaviour {
 
     public void Run()
     {
+        foreach (double a in m_Attacks)
+            m_Queue.Enqueue(a);
         m_Run = true;
     }
 
