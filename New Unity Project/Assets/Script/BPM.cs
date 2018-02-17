@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BPM : MonoBehaviour
@@ -13,7 +14,7 @@ public class BPM : MonoBehaviour
     public static bool _bpmbeat;
 
     // History Buffer
-    private float[] _historyBuffer = new float[13];
+    private float[] _historyBuffer = new float[22];
 
     // Right and Left audio channels
     private float[] _rightChannel;
@@ -36,7 +37,7 @@ public class BPM : MonoBehaviour
     private float _constant;
 
     // Time between beats
-    public double _beatTime;
+    private double _beatTime;
 
     // Time counting up until nextbeat
     private double _nextBeat;
@@ -62,7 +63,10 @@ public class BPM : MonoBehaviour
     //private double[] _bpms = new double[10];
 
     // Beats Per Minute
-    public double _bpm;
+    private double _bpm;
+
+    // List of bpms
+    private List<double> _bpmList = new List<double>();
 
     // Check if detection is done
     private bool _detectedFinish = false;
@@ -96,6 +100,9 @@ public class BPM : MonoBehaviour
         //_addTime = 0.0;
 
         //divideBy = 0;
+
+        //Time.timeScale = 5;
+        //_audioSource.pitch = 5;
 	}
 	
 	// Update is called once per frame
@@ -105,15 +112,29 @@ public class BPM : MonoBehaviour
         _tempNextBeat += Time.deltaTime;
         //_addTime += Time.deltaTime;
 
-        if (!_audioSource.isPlaying && !_detectedFinish)
+        if (!_audioSource.isPlaying)
         {
-            _detectedFinish = true;
+            if (!_detectedFinish)
+            {
+                _detectedFinish = true;
 
-            Debug.Log("DONE DETECTING BPM -----------------------------------------------------------");
+                foreach (double _bpmIndex in _bpmList)
+                {
+                    _bpm += _bpmIndex;
+                }
+
+                _bpm /= _bpmList.Capacity;
+
+                _beatTime = 60.0 / _bpm;
+
+                Debug.Log("DONE DETECTING BPM -----------------------------------------------------------");
+            }
         }
 
         if (_detectedFinish)
         {
+            //Time.timeScale = 1;
+            //_audioSource.pitch = 1;
         }
         else
         {
@@ -122,14 +143,14 @@ public class BPM : MonoBehaviour
 
         if (_bpm < 30.0)
         {
-            _bpm *= 6;
-            _beatTime /= 6;
+            _bpm *= 5;
+            _beatTime /= 5;
         }
         
-        if (_bpm < 70)
+        if (_bpm < 58)
         {
-            _bpm *= 3;
-            _beatTime /= 3;
+            _bpm *= 2;
+            _beatTime /= 2;
         }
 
         if (_nextBeat > _beatTime)
@@ -137,6 +158,7 @@ public class BPM : MonoBehaviour
             _bpmbeat = true;
             _nextBeat = 0.0;
             Debug.Log(_bpm);
+            Debug.Log(FreqBeat._highSection);
             //Debug.Log("BPM BEAT");
         }
         else
@@ -243,6 +265,8 @@ public class BPM : MonoBehaviour
                         _beatTime /= 4;
 
                         _bpm = 60.0 / _beatTime;
+                        _bpmList.Add(_bpm);
+
                         Debug.Log("CHANGE BPM ----------------------------------------------------------------------------------------------------------------");
 
                         _beatCount = 1;
@@ -275,6 +299,9 @@ public class BPM : MonoBehaviour
                         _beatTime /= 4;
 
                         _bpm = 60.0 / _beatTime;
+                        _bpmList.Add(_bpm);
+                        print(_bpm);
+
                         Debug.Log("CHANGE BPM ----------------------------------------------------------------------------------------------------------------");
 
                         _beatCount = 1;

@@ -12,7 +12,6 @@ public class StateGenerator : MonoBehaviour {
     [SerializeField]
     GameObject p;
 
-
     // Use this for initialization
     void Start () {
 	}
