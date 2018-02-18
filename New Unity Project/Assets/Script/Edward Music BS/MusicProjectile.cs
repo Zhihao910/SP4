@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Edwardstuff : MonoBehaviour {
+public class MusicProjectile : MonoBehaviour {
 
     [SerializeField]
     AudioWrapper frontpeer;
