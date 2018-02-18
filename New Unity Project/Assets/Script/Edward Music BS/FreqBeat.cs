@@ -150,9 +150,9 @@ public class FreqBeat : MonoBehaviour
 
                         SpawnEffect._spawnKick = true;
                     }
-                    else if (!SpawnEffect._spawnBass && i < 4)
-                    {
-                        //print("spawn bass");
+                    else if (!SpawnEffect._spawnBass && i > 2 && i < 4) // bass is 0-3 but
+                    {                                                   // it goes in a wave
+                        //print("spawn bass");                          // so like, yeah
 
                         SpawnEffect._spawnBass = true;
                     }
@@ -182,11 +182,11 @@ public class FreqBeat : MonoBehaviour
                 {
                     if (i > 18)
                     {
-                        _highs[i][_highSection] *= 0.7f; // 0.7
+                        _highs[i][_highSection] *= 0.8f; // 0.7
                     }
                     else if (i > 6)
                     {
-                        _highs[i][_highSection] *= 0.5f; // 0.5
+                        _highs[i][_highSection] *= 0.6f; // 0.5
                     }
                     else if (i > 3)
                     {
