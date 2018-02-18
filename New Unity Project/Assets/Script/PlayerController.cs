@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     float parryTimer = 0;
     float parryCooldown = 0.3f;
     public Collider2D attackTrigger;
+    public Renderer attackVisual;
 
     [SerializeField]
     GameObject healthBar, manaBar;
@@ -125,6 +126,7 @@ public class PlayerController : MonoBehaviour
             parryTimer = parryCooldown;
             mana -= 10;
             Debug.Log("Attack");
+            attackVisual.enabled = true;
         }
 
         if (parryAttack)
@@ -137,6 +139,7 @@ public class PlayerController : MonoBehaviour
             {
                 parryAttack = false;
                 attackTrigger.enabled = false;
+                attackVisual.enabled = false;
             }
         }
 
