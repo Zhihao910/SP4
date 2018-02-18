@@ -182,19 +182,19 @@ public class FreqBeat : MonoBehaviour
                 {
                     if (i > 18)
                     {
-                        _highs[i][_highSection] *= 0.9f;
+                        _highs[i][_highSection] *= 0.7f; // 0.7
                     }
                     else if (i > 6)
                     {
-                        _highs[i][_highSection] *= 0.7f;
+                        _highs[i][_highSection] *= 0.5f; // 0.5
                     }
                     else if (i > 3)
                     {
-                        _highs[i][_highSection] *= 0.6f;
+                        _highs[i][_highSection] *= 0.7f; //0.7
                     }
                     else
                     {
-                        _highs[i][_highSection] *= 0.6f;
+                        _highs[i][_highSection] *= 0.5f; //0.5
                     }
 
                     //if (i > 20)

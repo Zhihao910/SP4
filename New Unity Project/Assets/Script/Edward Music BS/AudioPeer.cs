@@ -21,6 +21,8 @@ sealed public class AudioPeer : MonoBehaviour
 	// Use this for initialization
 	private void Start ()
     {
+        Application.runInBackground = true;
+
         _audioBand64 = new float[64];
         _audioBandBuffer64 = new float[64];
 
@@ -136,7 +138,25 @@ sealed public class AudioPeer : MonoBehaviour
             else if (_freqBand64[i] < _bandBuffer64[i])
             {
                 _bandBuffer64[i] -= _bufferDecrease64[i];
-                _bufferDecrease64[i] *= 3.6f;
+
+                if (i > 18)
+                {
+                    _bufferDecrease64[i] *= 2.4f;
+                }
+                else if (i > 6)
+                {
+                    _bufferDecrease64[i] *= 2.4f;
+                }
+                else if (i > 3)
+                {
+                    _bufferDecrease64[i] *= 3.6f;
+                }
+                else
+                {
+                    _bufferDecrease64[i] *= 4.8f;
+                }
+
+                //_bufferDecrease64[i] *= 2.4f; // 3.6
 
                 if (_bandBuffer64[i] < 0)
                 {
