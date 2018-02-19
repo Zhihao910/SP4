@@ -18,7 +18,7 @@ public class Projectile : MonoBehaviour
 	// Update is called once per frame
 	void Update () {
         lifeTime -= Time.deltaTime;
-        transform.Translate(projectileSpeed * Time.deltaTime, 0, 0);
+        transform.Translate(dir.x * projectileSpeed * Time.deltaTime, dir.y * projectileSpeed * Time.deltaTime, 0);
         if (lifeTime <= 0)
             Destroy(gameObject);
     }
@@ -35,5 +35,10 @@ public class Projectile : MonoBehaviour
             }
             Destroy(this.gameObject);
         }
+    }
+
+    public void SetDir(Vector3 _Dir)
+    {
+        dir = _Dir;
     }
 }
