@@ -162,29 +162,29 @@ public class PlayerController : MonoBehaviour
         
         ParryAttack();
 
-        if (Input.GetKeyDown(KeyCode.D) && !parryAttack)
-        {
-            parryAttack = true;
-            attackTrigger.enabled = true;
-            parryTimer = parryCooldown;
-            Debug.Log("Attack");
-            animator.SetInteger("States", 6);
-            attackVisual.enabled = true;
-        }
+        //if (Input.GetKeyDown(KeyCode.D) && !parryAttack)
+        //{
+        //    parryAttack = true;
+        //    attackTrigger.enabled = true;
+        //    parryTimer = parryCooldown;
+        //    Debug.Log("Attack");
+        //    animator.SetInteger("States", 6);
+        //    attackVisual.enabled = true;
+        //}
 
-        if (parryAttack)
-        {
-            if (parryTimer > 0)
-            {
-                parryTimer -= Time.deltaTime;
-            }
-            else
-            {
-                parryAttack = false;
-                attackTrigger.enabled = false;
-                attackVisual.enabled = false;
-            }
-        }
+        //if (parryAttack)
+        //{
+        //    if (parryTimer > 0)
+        //    {
+        //        parryTimer -= Time.deltaTime;
+        //    }
+        //    else
+        //    {
+        //        parryAttack = false;
+        //        attackTrigger.enabled = false;
+        //        attackVisual.enabled = false;
+        //    }
+        //}
 
         if (mana <= 0)
             mana = 0;
