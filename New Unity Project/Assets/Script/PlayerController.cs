@@ -169,6 +169,7 @@ public class PlayerController : MonoBehaviour
             attackTrigger.enabled = true;
             parryTimer = parryCooldown;
             Debug.Log("Attack");
+            animator.SetInteger("States", 6);
             attackVisual.enabled = true;
         }
 
