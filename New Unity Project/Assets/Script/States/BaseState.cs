@@ -7,8 +7,6 @@ public class BaseState : MonoBehaviour {
     public delegate void Attack();
 
     public AudioPeerManager m_audioManager;
-    public GameObject _go;
-
 
     [SerializeField]
     List<KeyValuePair<double, Attack>> m_Attacks = new List<KeyValuePair<double, Attack>>();
@@ -67,5 +65,10 @@ public class BaseState : MonoBehaviour {
     public void StopRun()
     {
         m_Run = false;
+    }
+
+    public void Sort()
+    {
+        m_Attacks.Sort((x, y) => x.Key.CompareTo(y.Key));
     }
 }
