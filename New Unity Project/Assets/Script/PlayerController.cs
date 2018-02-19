@@ -159,8 +159,37 @@ public class PlayerController : MonoBehaviour
             SceneManager.LoadScene("GameOver");
             health = 0;
         }
-
+        
         ParryAttack();
+
+        if (Input.GetKeyDown(KeyCode.D) && !parryAttack)
+        {
+            parryAttack = true;
+            attackTrigger.enabled = true;
+            parryTimer = parryCooldown;
+            Debug.Log("Attack");
+            animator.SetInteger("States", 6);
+            attackVisual.enabled = true;
+        }
+
+        if (parryAttack)
+        {
+            if (parryTimer > 0)
+            {
+                parryTimer -= Time.deltaTime;
+            }
+            else
+            {
+                parryAttack = false;
+                attackTrigger.enabled = false;
+                attackVisual.enabled = false;
+            }
+        }
+
+        if (mana <= 0)
+            mana = 0;
+        if (mana >= 100)
+            mana = totalMana;
 
         if (dashCountdown == 0)
         {
