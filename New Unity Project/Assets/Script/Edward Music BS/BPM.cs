@@ -63,7 +63,7 @@ public class BPM : MonoBehaviour
     //private double[] _bpms = new double[10];
 
     // Beats Per Minute
-    private double _bpm;
+    public static double _bpm;
 
     // List of bpms
     private List<double> _bpmList = new List<double>();

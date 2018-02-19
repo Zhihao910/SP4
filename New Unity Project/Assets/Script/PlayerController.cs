@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(dashCountdown);
+        //Debug.Log(dashCountdown);
         var Horizontal = Input.GetAxis("Horizontal");
         if (touchedGround)
         {

@@ -145,11 +145,11 @@ sealed public class AudioPeer : MonoBehaviour
                 }
                 else if (i > 6)
                 {
-                    _bufferDecrease64[i] *= 2.4f;
+                    _bufferDecrease64[i] *= 1.2f;
                 }
                 else if (i > 3)
                 {
-                    _bufferDecrease64[i] *= 3.6f;
+                    _bufferDecrease64[i] *= 4.8f;
                 }
                 else
                 {
