@@ -5,7 +5,9 @@ using UnityEngine;
 public class PlatformGenerator : MonoBehaviour
 {
     [SerializeField]
-    GameObject platform;
+    GameObject[] platform;
+    List<GameObject> movingPlatforms = new List<GameObject>();
+    Vector3 pos;
     int numOfPlatforms = 5;
     bool stopSpawn = true;
     float spawnTimer = 3;
@@ -24,15 +26,38 @@ public class PlatformGenerator : MonoBehaviour
             stopSpawn = false;
             GeneratePlatform();
         }
+        UpdatePlatform();
     }
 
     void GeneratePlatform()
     {
         for (int i = 0; i < numOfPlatforms; ++i)
         {
-            Vector2 position = new Vector2(Random.Range(-8, 8), -5);
-            Instantiate(platform, position, Quaternion.identity);
-            platform.SetActive(true);
+            Vector3 pos = gameObject.GetComponent<Transform>().position;
+            Vector3 randomPosition = new Vector2(Random.Range(-8, 8), -10);
+            movingPlatforms.Add(Instantiate(platform[Random.Range(0, 2)], randomPosition, Quaternion.identity)); //Create platform at different position
+            platform[0].SetActive(true); //Show the platform
+        }
+
+        
+    }
+
+    void UpdatePlatform()
+    {
+        foreach (GameObject go in movingPlatforms)
+        {
+
+            go.transform.Translate(0, 1 * Time.deltaTime, 0);
+            if (go.transform.position.y >= -6)
+            {
+                go.transform.position = new Vector3(go.transform.position.x, -6, 0);
+            }
         }
     }
+
+    public void setPos(Vector3 _Position)
+    {
+        pos = _Position;
+    }
 }
+

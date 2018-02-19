@@ -31,6 +31,8 @@ public class AudioPeerManager : MonoBehaviour {
         //m_audioclipmap.Add("Song", _sample);
         //m_playqueue.Enqueue(_stateGenerator.CreateBaseState("Song", _sample));
 
+        
+
         m_audioclipmap.Add("Intro1", AudioSplitter.SplitAudio(5.8f, 20.7f - 5.8f, _sample, "Intro1"));
         m_playqueue.Enqueue(_stateGenerator.CreateBaseState("Intro1", m_audioclipmap["Intro1"],8));
         m_audioclipmap.Add("Break1", AudioSplitter.SplitAudio(20.7f, 35.6f - 20.7f, _sample, "Break1"));
@@ -73,13 +75,9 @@ public class AudioPeerManager : MonoBehaviour {
         _stateGenerator.CreateBaseState("BuildUp4", m_audioclipmap["BuildUp4"], 2);
         _stateGenerator.CreateDropState("Drop4", m_audioclipmap["Drop4"]);
 
+        m_playqueue.Clear();
+        m_playqueue.Enqueue(_stateGenerator.GetState("Drop" + Random.Range(1, 5)));
 
-        //m_playqueue2.Enqueue("Intro1");
-        //m_playqueue2.Enqueue("Break1");
-        //m_playqueue2.Enqueue("Verse1");
-
-
-        ////_sample.clip = Audio
 
         for (int i = 0; i < 20; ++i)
         {

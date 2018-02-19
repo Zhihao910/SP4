@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     private bool touchedGround;
     private bool doubleJump;
     float totalHealth = 100;
-    public float health = 100;
+    public float health;
     float totalMana = 100;
     public float mana;
     float dashCountdown;
@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
         jumpHeight = 5;
         dashCountdown = 7.0f;
         mana = 0;
+        health = 100;
     }
 
     void FixedUpdate()
@@ -57,20 +58,13 @@ public class PlayerController : MonoBehaviour
             doubleJump = false;
             animator.SetInteger("States", 3);
         }
-        //change animation to jump
-        if (Input.GetKeyDown(KeyCode.Space) && Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            animator.SetInteger("States", 4);
-        }
+
         //crouch animation
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             downbtn = true;
         }
-        if(Input.GetKeyUp(KeyCode.DownArrow))
-        {
-            downbtn = false;
-        }
+        
         if (downbtn == true)
         {
             animator.SetInteger("States", 5);
@@ -78,8 +72,13 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyUp(KeyCode.DownArrow))
         {
+            downbtn = false;
+        }
+        if (Input.GetKeyUp(KeyCode.DownArrow))
+        {
             animator.SetInteger("States", 3);
         }
+
         //Jump
         if (Input.GetKeyDown(KeyCode.Space) && touchedGround)
         {
@@ -120,6 +119,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("dash upright");
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, movementSpeed * 2);
             dashCountdown--;
+            invincible = true;
         }
         //Move Right with dash
         else if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftShift) && dashCountdown > 0)
@@ -134,6 +134,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("dash upleft");
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, movementSpeed * 2);
             dashCountdown--;
+            invincible = true;
         }
         //Move Left with dash
         else if (Input.GetKey(KeyCode.LeftArrow) && Input.GetKey(KeyCode.LeftShift) && dashCountdown > 0)
@@ -148,6 +149,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("dash up");
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, movementSpeed * 2);
             dashCountdown--;
+            invincible = true;
         }
 
         healthBar.transform.localScale = new Vector3(health / totalHealth, 1, 1);
@@ -159,29 +161,32 @@ public class PlayerController : MonoBehaviour
             SceneManager.LoadScene("GameOver");
             health = 0;
         }
+        
+        ParryAttack();
 
-        if (Input.GetKeyDown(KeyCode.D) && !parryAttack)
-        {
-            parryAttack = true;
-            attackTrigger.enabled = true;
-            parryTimer = parryCooldown;
-            Debug.Log("Attack");
-            attackVisual.enabled = true;
-        }
+        //if (Input.GetKeyDown(KeyCode.D) && !parryAttack)
+        //{
+        //    parryAttack = true;
+        //    attackTrigger.enabled = true;
+        //    parryTimer = parryCooldown;
+        //    Debug.Log("Attack");
+        //    animator.SetInteger("States", 6);
+        //    attackVisual.enabled = true;
+        //}
 
-        if (parryAttack)
-        {
-            if (parryTimer > 0)
-            {
-                parryTimer -= Time.deltaTime;
-            }
-            else
-            {
-                parryAttack = false;
-                attackTrigger.enabled = false;
-                attackVisual.enabled = false;
-            }
-        }
+        //if (parryAttack)
+        //{
+        //    if (parryTimer > 0)
+        //    {
+        //        parryTimer -= Time.deltaTime;
+        //    }
+        //    else
+        //    {
+        //        parryAttack = false;
+        //        attackTrigger.enabled = false;
+        //        attackVisual.enabled = false;
+        //    }
+        //}
 
         if (mana <= 0)
             mana = 0;
@@ -224,6 +229,33 @@ public class PlayerController : MonoBehaviour
             dashCountdown--;
             Debug.Log("RightDash" + movementSpeed);
             rightDash = false;
+        }
+    }
+   
+
+    void ParryAttack()
+    {
+        if (Input.GetKeyDown(KeyCode.D) && !parryAttack)
+        {
+            parryAttack = true;
+            attackTrigger.enabled = true;
+            attackVisual.enabled = true;
+            parryTimer = parryCooldown;
+            Debug.Log("Attack");
+        }
+
+        if (parryAttack)
+        {
+            if (parryTimer > 0)
+            {
+                parryTimer -= Time.deltaTime;
+            }
+            else
+            {
+                parryAttack = false;
+                attackTrigger.enabled = false;
+                attackVisual.enabled = false;
+            }
         }
     }
 }

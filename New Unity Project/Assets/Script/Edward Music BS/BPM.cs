@@ -91,6 +91,40 @@ public class BPM : MonoBehaviour
             _tempo[i] = _beatTime;
         }
 
+        //for (int ilmao = 0; ilmao < 100;++ilmao)
+        //{
+        //    float[] _data = new float[1024];
+        //    _audioSource.clip.GetData(_data, 1024 * ilmao);
+        //    _audioSource.GetSpectrumData(_data, 0, FFTWindow.Hamming);
+        //    //_audioSource.GetSpectrumData(_data, 2, FFTWindow.Hamming);
+        //    //_rightChannel = _audioSource.GetSpectrumData(_data, 1, FFTWindow.Hamming);
+        //    //_leftChannel = _audioSource.GetSpectrumData(_data, 2, FFTWindow.Hamming);
+
+        //    float highest = 0;
+        //    int k = 0;
+        //    for (int j = 0; j < 1024; ++j)
+        //    {
+        //        float f = _data[j];
+        //        //print(f);
+        //        if (f > highest)
+        //        {
+        //            highest = f;
+        //            k = j;
+        //        }
+        //    }
+        //    //Debug.Log(highest);
+        //    float l = k * 23.4f;
+        //    float beattime = (_audioSource.clip.frequency/l);
+        //    Debug.Log(60/beattime);
+
+        //    //for (int i = 1; i < _data.Length - 1; i++)
+        //    //{
+        //    //    Debug.DrawLine(new Vector3(i - 1, _data[i] + 10, 0), new Vector3(i, _data[i + 1] + 10, 0), Color.red);
+        //    //    Debug.DrawLine(new Vector3(i - 1, Mathf.Log(_data[i - 1]) + 10, 2), new Vector3(i, Mathf.Log(_data[i]) + 10, 2), Color.cyan);
+        //    //    Debug.DrawLine(new Vector3(Mathf.Log(i - 1), _data[i - 1] - 10, 1), new Vector3(Mathf.Log(i), _data[i] - 10, 1), Color.green);
+        //    //    Debug.DrawLine(new Vector3(Mathf.Log(i - 1), Mathf.Log(_data[i - 1]), 3), new Vector3(Mathf.Log(i), Mathf.Log(_data[i]), 3), Color.blue);
+        //    //}
+        //}
         //for (int i = 0; i < _bpms.Length; ++i)
         //{
         //    _bpms[i] = 0.0;
@@ -103,7 +137,7 @@ public class BPM : MonoBehaviour
 
         //Time.timeScale = 5;
         //_audioSource.pitch = 5;
-	}
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -157,8 +191,8 @@ public class BPM : MonoBehaviour
         {
             _bpmbeat = true;
             _nextBeat = 0.0;
-            Debug.Log(_bpm);
-            Debug.Log(FreqBeat._highSection);
+            //Debug.Log(_bpm);
+            //Debug.Log(FreqBeat._highSection);
             //Debug.Log("BPM BEAT");
         }
         else
