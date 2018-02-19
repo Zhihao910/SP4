@@ -39,6 +39,8 @@ public class AudioWrapper : MonoBehaviour {
 
     public void SetAudioClip(AudioClip _clip)
     {
+        if(!_audioSource)
+            _audioSource = GetComponent<AudioSource>();
         _audioSource.clip = _clip;
     }
 

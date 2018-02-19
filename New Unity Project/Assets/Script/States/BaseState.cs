@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class BaseState : MonoBehaviour {
 
+    public delegate void Attack();
+
     public AudioPeerManager m_audioManager;
+    public GameObject _go;
+
 
     [SerializeField]
-    List<double> m_Attacks = new List<double>();
+    List<KeyValuePair<double, Attack>> m_Attacks = new List<KeyValuePair<double, Attack>>();
 
-    Queue<double> m_Queue = new Queue<double>();
+    Queue<KeyValuePair<double, Attack>> m_Queue = new Queue<KeyValuePair<double, Attack>>();
+    
 
     [SerializeField]
     string m_clipname;
@@ -18,28 +23,27 @@ public class BaseState : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        foreach (double a in m_Attacks)
-            m_Queue.Enqueue(a);
+
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        if (m_Run)
+	void FixedUpdate () {
+        if (m_Run && m_Queue.Count > 0)
         {
-            Debug.Log(m_audioManager.TimeNow());
-            if (m_Queue.Peek() <= m_audioManager.TimeNow())
+            if (m_Queue.Peek().Key <= m_audioManager.TimeNow())
             {
-                Debug.Log("PEW PEW PEW");
+                KeyValuePair<double, Attack> value = m_Queue.Dequeue();
+                double StartTIme = value.Key;
+                value.Value();
+                Debug.Log("Hello2");
 
-                double a = m_Queue.Dequeue();
-                
             }
         }
 	}
 
-    public void AddAttack(double _go)
+    public void AddAttack(double _go,Attack _function)
     {
-        m_Attacks.Add(_go);
+        m_Attacks.Add(new KeyValuePair<double, Attack>(_go, _function));
     }
 
 
@@ -55,6 +59,8 @@ public class BaseState : MonoBehaviour {
 
     public void Run()
     {
+        foreach (KeyValuePair<double,Attack> a in m_Attacks)
+            m_Queue.Enqueue(a);
         m_Run = true;
     }
 

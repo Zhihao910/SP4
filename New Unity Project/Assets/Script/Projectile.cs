@@ -6,6 +6,8 @@ public class Projectile : MonoBehaviour
 {
     float lifeTime;
     public float projectileSpeed ;
+    Vector3 dir;
+    Vector3 target;
 
 	// Use this for initialization
 	void Start () {

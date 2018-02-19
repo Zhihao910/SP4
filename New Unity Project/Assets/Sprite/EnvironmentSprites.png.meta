@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: c44b31663ba5e9c4ea3a49201debb90b
-timeCreated: 1518594073
-licenseType: Pro
+timeCreated: 1518971115
+licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: EnvironmentSprites_0
@@ -150,7 +150,7 @@ TextureImporter:
         x: 8
         y: 311
         width: 32
-        height: 33
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -163,7 +163,7 @@ TextureImporter:
         x: 58
         y: 311
         width: 64
-        height: 39
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -176,7 +176,7 @@ TextureImporter:
         x: 140
         y: 311
         width: 96
-        height: 39
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -251,7 +251,7 @@ TextureImporter:
       name: EnvironmentSprites_12
       rect:
         serializedVersion: 2
-        x: 89
+        x: 90
         y: 200
         width: 103
         height: 64
