@@ -20,8 +20,6 @@ public class ParryAttack : MonoBehaviour
         if (other.CompareTag("parableProjectile"))
         {
             Destroy(other.gameObject);
-            other.GetComponent<PlayerController>().mana+=20;
-            Debug.Log("gained mana");
         }
     }
 }
