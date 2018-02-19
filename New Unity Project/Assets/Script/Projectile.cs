@@ -29,6 +29,8 @@ public class Projectile : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             Debug.Log("Player health -10");
+            Debug.Log("ADD MANA");
+            other.GetComponent<PlayerController>().mana += 20;
             if (other.GetComponent<PlayerController>().invincible == false)
             {
                 other.GetComponent<PlayerController>().health -= 10;

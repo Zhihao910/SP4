@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     private bool touchedGround;
     private bool doubleJump;
     float totalHealth = 100;
-    public float health = 100;
+    public float health;
     float totalMana = 100;
     public float mana;
     float dashCountdown;
@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
         jumpHeight = 5;
         dashCountdown = 7.0f;
         mana = 0;
+        health = 100;
     }
 
     void FixedUpdate()
@@ -50,7 +51,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(dashCountdown);
+        Debug.Log(health);
         var Horizontal = Input.GetAxis("Horizontal");
         if (touchedGround)
         {
@@ -120,6 +121,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("dash upright");
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, movementSpeed * 2);
             dashCountdown--;
+            invincible = true;
         }
         //Move Right with dash
         else if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftShift) && dashCountdown > 0)
@@ -134,6 +136,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("dash upleft");
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, movementSpeed * 2);
             dashCountdown--;
+            invincible = true;
         }
         //Move Left with dash
         else if (Input.GetKey(KeyCode.LeftArrow) && Input.GetKey(KeyCode.LeftShift) && dashCountdown > 0)
@@ -148,6 +151,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("dash up");
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, movementSpeed * 2);
             dashCountdown--;
+            invincible = true;
         }
 
         healthBar.transform.localScale = new Vector3(health / totalHealth, 1, 1);
