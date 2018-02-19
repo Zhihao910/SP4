@@ -51,26 +51,18 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var Horizontal = Input.GetAxis("Horizontal");
         if (touchedGround)
         {
             doubleJump = false;
             animator.SetInteger("States", 3);
         }
-        //change animation to jump
-        if (Input.GetKeyDown(KeyCode.Space) && Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            animator.SetInteger("States", 4);
-        }
+
         //crouch animation
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             downbtn = true;
         }
-        if(Input.GetKeyUp(KeyCode.DownArrow))
-        {
-            downbtn = false;
-        }
+        
         if (downbtn == true)
         {
             animator.SetInteger("States", 5);
@@ -78,8 +70,13 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyUp(KeyCode.DownArrow))
         {
+            downbtn = false;
+        }
+        if (Input.GetKeyUp(KeyCode.DownArrow))
+        {
             animator.SetInteger("States", 3);
         }
+
         //Jump
         if (Input.GetKeyDown(KeyCode.Space) && touchedGround)
         {
@@ -163,33 +160,7 @@ public class PlayerController : MonoBehaviour
             health = 0;
         }
 
-        if (Input.GetKeyDown(KeyCode.D) && !parryAttack)
-        {
-            parryAttack = true;
-            attackTrigger.enabled = true;
-            parryTimer = parryCooldown;
-            Debug.Log("Attack");
-            attackVisual.enabled = true;
-        }
-
-        if (parryAttack)
-        {
-            if (parryTimer > 0)
-            {
-                parryTimer -= Time.deltaTime;
-            }
-            else
-            {
-                parryAttack = false;
-                attackTrigger.enabled = false;
-                attackVisual.enabled = false;
-            }
-        }
-
-        if (mana <= 0)
-            mana = 0;
-        if (mana >= 100)
-            mana = totalMana;
+        ParryAttack();
 
         if (dashCountdown == 0)
         {
@@ -227,6 +198,33 @@ public class PlayerController : MonoBehaviour
             dashCountdown--;
             Debug.Log("RightDash" + movementSpeed);
             rightDash = false;
+        }
+    }
+   
+
+    void ParryAttack()
+    {
+        if (Input.GetKeyDown(KeyCode.D) && !parryAttack)
+        {
+            parryAttack = true;
+            attackTrigger.enabled = true;
+            attackVisual.enabled = true;
+            parryTimer = parryCooldown;
+            Debug.Log("Attack");
+        }
+
+        if (parryAttack)
+        {
+            if (parryTimer > 0)
+            {
+                parryTimer -= Time.deltaTime;
+            }
+            else
+            {
+                parryAttack = false;
+                attackTrigger.enabled = false;
+                attackVisual.enabled = false;
+            }
         }
     }
 }
