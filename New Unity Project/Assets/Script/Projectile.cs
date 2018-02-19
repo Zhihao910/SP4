@@ -29,7 +29,10 @@ public class Projectile : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             Debug.Log("Player health -10");
-            other.GetComponent<PlayerController>().health -= 10;
+            if (other.GetComponent<PlayerController>().invincible == false)
+            {
+                other.GetComponent<PlayerController>().health -= 10;
+            }
             Destroy(this.gameObject);
         }
     }
