@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MusicProjectile : MonoBehaviour {
+public class MusicProjectile : MonoBehaviour
+{
+    public AudioSource _audioSource;
 
     [SerializeField]
     AudioWrapper frontpeer;
@@ -14,28 +16,33 @@ public class MusicProjectile : MonoBehaviour {
 
     [SerializeField]
     GameObject Projectile;
+    [SerializeField]
+    GameObject ProjectileDrag;
 
     private bool spawnBass;
     private bool spawnKick;
-    private bool spawnMelody;
     private bool spawnCenter;
+    private bool spawnMelody;
     private bool spawnHigh;
     private bool spawnTwo;
     private bool spawnThree;
+
+    // List of beats
+    private List<float> bassList = new List<float>();
+    private List<float> kickList = new List<float>();
+    private List<float> centerList = new List<float>();
+    private List<float> melodyList = new List<float>();
+    private List<float> highList = new List<float>();
+    private List<float> threeList = new List<float>();
+
+    // cooldown
+    private double _coolDown;
 
     // Use this for initialization
     void Start()
     {
         frontpeer.SetAudioClip(_sample);
         frontpeer.StartPlaying();
-
-        spawnBass = false;
-        spawnKick = false;
-        spawnMelody = false;
-        spawnCenter = false;
-        spawnHigh = false;
-        spawnTwo = false;
-        spawnThree = false;
     }
 
     // Update is called once per frame
@@ -114,6 +121,8 @@ public class MusicProjectile : MonoBehaviour {
         //    spawnHigh = false;
         //}
 
+        _coolDown += Time.deltaTime;
+
         // BASS
         if (SpawnEffect._spawnBass)
         {
@@ -122,6 +131,12 @@ public class MusicProjectile : MonoBehaviour {
                 Instantiate(Projectile, new Vector2(15, 1), Quaternion.identity);
 
                 spawnBass = true;
+
+                bassList.Add(_audioSource.time);
+            }
+            else if (spawnBass)
+            {
+                Instantiate(ProjectileDrag, new Vector2(15, 1), Quaternion.identity);
             }
         }
         else
@@ -138,6 +153,10 @@ public class MusicProjectile : MonoBehaviour {
 
                 spawnKick = true;
             }
+            else if (spawnKick)
+            {
+                Instantiate(ProjectileDrag, new Vector2(15, 0), Quaternion.identity);
+            }
         }
         else
         {
@@ -147,20 +166,30 @@ public class MusicProjectile : MonoBehaviour {
         // ACTUALLY ALSO PART OF VOCALS AND INSTRUMENTS
         if (SpawnEffect._spawnCenter)
         {
-            if (SpawnEffect._spawnMelody || SpawnEffect._spawnHigh)
-            {
-                if (!spawnThree)
-                {
-                    Instantiate(Projectile, new Vector2(15, -4), Quaternion.identity);
+            //if (SpawnEffect._spawnMelody || SpawnEffect._spawnHigh)
+            //{
+            //    if (!spawnThree)
+            //    {
+            //        Instantiate(Projectile, new Vector2(15, -4), Quaternion.identity);
 
-                    spawnThree = true;
-                }
-            }
-            else if (!spawnCenter)
+            //        spawnThree = true;
+            //    }
+            //    //else
+            //    //{
+            //    //    Instantiate(ProjectileDrag, new Vector2(15, -4), Quaternion.identity);
+            //    //}
+            //}
+            if (!spawnCenter && _coolDown > 0.2)
             {
                 Instantiate(Projectile, new Vector2(15, -1), Quaternion.identity);
 
                 spawnCenter = true;
+
+                _coolDown = 0.0;
+            }
+            else if (spawnCenter)
+            {
+                Instantiate(ProjectileDrag, new Vector2(15, -1), Quaternion.identity);
             }
 
             //if (!spawnCenter)
@@ -178,20 +207,30 @@ public class MusicProjectile : MonoBehaviour {
         // VOCALS AND INSTRUMENTS
         if (SpawnEffect._spawnMelody)
         {
-            if (SpawnEffect._spawnCenter || SpawnEffect._spawnHigh)
-            {
-                if (!spawnThree)
-                {
-                    Instantiate(Projectile, new Vector2(15, -4), Quaternion.identity);
+            //if (SpawnEffect._spawnCenter || SpawnEffect._spawnHigh)
+            //{
+            //    if (!spawnThree)
+            //    {
+            //        Instantiate(Projectile, new Vector2(15, -4), Quaternion.identity);
 
-                    spawnThree = true;
-                }
-            }
-            else if (!spawnMelody)
+            //        spawnThree = true;
+            //    }
+            //    //else
+            //    //{
+            //    //    Instantiate(ProjectileDrag, new Vector2(15, -4), Quaternion.identity);
+            //    //}
+            //}
+            if (!spawnMelody && _coolDown > 0.2)
             {
                 Instantiate(Projectile, new Vector2(15, -2), Quaternion.identity);
 
                 spawnMelody = true;
+
+                _coolDown = 0.0;
+            }
+            else if (spawnMelody)
+            {
+                Instantiate(ProjectileDrag, new Vector2(15, -2), Quaternion.identity);
             }
 
             //if (!spawnMelody)
@@ -209,20 +248,30 @@ public class MusicProjectile : MonoBehaviour {
         // CHALKBOARD SCREECHING
         if (SpawnEffect._spawnHigh)
         {
-            if (SpawnEffect._spawnCenter || SpawnEffect._spawnMelody)
-            {
-                if (!spawnThree)
-                {
-                    Instantiate(Projectile, new Vector2(15, -4), Quaternion.identity);
+            //if (SpawnEffect._spawnCenter || SpawnEffect._spawnMelody)
+            //{
+            //    if (!spawnThree)
+            //    {
+            //        Instantiate(Projectile, new Vector2(15, -4), Quaternion.identity);
 
-                    spawnThree = true;
-                }
-            }
-            else if (!spawnHigh)
+            //        spawnThree = true;
+            //    }
+            //    //else
+            //    //{
+            //    //    Instantiate(ProjectileDrag, new Vector2(15, -4), Quaternion.identity);
+            //    //}
+            //}
+            if (!spawnHigh && _coolDown > 0.2)
             {
                 Instantiate(Projectile, new Vector2(15, -3), Quaternion.identity);
 
                 spawnHigh = true;
+
+                _coolDown = 0.0;
+            }
+            else if (spawnHigh)
+            {
+                Instantiate(ProjectileDrag, new Vector2(15, -3), Quaternion.identity);
             }
 
             //if (!spawnHigh)
@@ -237,10 +286,10 @@ public class MusicProjectile : MonoBehaviour {
             spawnHigh = false;
         }
 
-        if (!SpawnEffect._spawnCenter && !SpawnEffect._spawnMelody && !SpawnEffect._spawnHigh)
-        {
-            spawnThree = false;
-        }
+        //if (!SpawnEffect._spawnCenter && !SpawnEffect._spawnMelody && !SpawnEffect._spawnHigh)
+        //{
+        //    spawnThree = false;
+        //}
     }
 
     public static void Swap()

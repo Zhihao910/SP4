@@ -34,6 +34,8 @@ public class FreqBeat : MonoBehaviour
     // Highs
     public static float[][] _highs          = new float[64][];
 
+    public static List<float[]> _highList = new List<float []>();
+
     // HighsSection
     public static int _highSection;
 
@@ -49,11 +51,15 @@ public class FreqBeat : MonoBehaviour
     // Check if detection is done
     private bool _detectedFinish = false;
 
+    // After recognised note, make next note harder to detect as a beat, only if its higher
+    private float[] _offset = new float[5];
+
     // Use this for initialization
     void Start ()
     {
         //_source = gameObject.GetComponent<AudioSource>();
 
+        _highList.Add(new float[64]);
         _highSection = 0;
         _highBeat = 0;
         _highAdd = false;
@@ -62,9 +68,14 @@ public class FreqBeat : MonoBehaviour
         {
             _freqbeat[i] = false;
             _historyBufferArray[i] = new float[43];
-            _highs[i] = new float[21600];
+            //_highs[i] = new float[21600];
             // who the fuck puts a song thats 24 hours long?
             // this is enough.
+        }
+
+        for (int i = 0; i < _offset.Length; ++i)
+        {
+            _offset[i] = 1.0f;
         }
 
         //_source.pitch = 10;
@@ -79,6 +90,28 @@ public class FreqBeat : MonoBehaviour
             if (!_detectedFinish)
             {
                 _detectedFinish = true;
+
+                List<string> saver = new List<string>();
+
+                saver.Add(BPM._bpm.ToString());
+
+                //for (int i = 0; i < _highs.Length; ++i)
+                //{
+                //    for (int k = 0; k < _highs[i].Length; ++k)
+                //    {
+                //        saver.Add(_highs[i][k].ToString());
+                //    }
+                //}
+
+                for (int i = 0; i < _highList.Count; ++i)
+                {
+                    for (int k = 0; k < _highList[_highSection].Length; ++k)
+                    {
+                        saver.Add(_highList[_highSection][k].ToString());
+                    }
+                }
+
+                Saving.SaveToFile("penis.txt", saver);
 
                 //for (int i = 0; i < _highs.Length; ++i)
                 //{
@@ -124,7 +157,41 @@ public class FreqBeat : MonoBehaviour
 
             for (int i = 0; i < 64; ++i)
             {
-                if (AudioPeer._audioBandBuffer64[i] > _highs[i][_highSection])
+                //if (AudioPeer._audioBandBuffer64[i] > _highs[i][_highSection])
+                //{
+                //    if (!SpawnEffect._spawnHigh && i >= 19)
+                //    {
+                //        //print("spawn high");
+
+                //        SpawnEffect._spawnHigh = true;
+                //    }
+                //    else if (!SpawnEffect._spawnMelody && i >= 12 && i < 19)
+                //    {
+                //        //print("spawn melody");
+
+                //        SpawnEffect._spawnMelody = true;
+                //    }
+                //    else if (!SpawnEffect._spawnCenter && i >= 6 && i < 12)
+                //    {
+                //        //print("spawn center");
+
+                //        SpawnEffect._spawnCenter = true;
+                //    }
+                //    else if (!SpawnEffect._spawnKick && i >= 4 && i < 6)
+                //    {
+                //        //print("spawn kick");
+
+                //        SpawnEffect._spawnKick = true;
+                //    }
+                //    else if (!SpawnEffect._spawnBass && i < 4) // bass is 0-3 but
+                //    {                                                   // it goes in a wave
+                //        //print("spawn bass");                          // so like, yeah
+
+                //        SpawnEffect._spawnBass = true;
+                //    }
+                //}
+
+                if (AudioPeer._audioBandBuffer64[i] > _highList[_highSection][i])
                 {
                     if (!SpawnEffect._spawnHigh && i >= 19)
                     {
@@ -150,7 +217,7 @@ public class FreqBeat : MonoBehaviour
 
                         SpawnEffect._spawnKick = true;
                     }
-                    else if (!SpawnEffect._spawnBass && i > 2 && i < 4) // bass is 0-3 but
+                    else if (!SpawnEffect._spawnBass && i < 4) // bass is 0-3 but
                     {                                                   // it goes in a wave
                         //print("spawn bass");                          // so like, yeah
 
@@ -158,6 +225,67 @@ public class FreqBeat : MonoBehaviour
                     }
                 }
             }
+
+            //for (int i = 0; i < 64; ++i)
+            //{
+            //    if (i >= 6)
+            //    {
+            //        if (AudioPeer._audioBandBuffer64[i] > (_highs[i][_highSection] * _offset[0]))
+            //        {
+            //            if (!SpawnEffect._spawnHigh && i >= 19)
+            //            {
+            //                //print("spawn high");t
+            //                _offset[0] += 0.25f;
+            //                SpawnEffect._spawnHigh = true;
+            //            }
+            //            else if (!SpawnEffect._spawnMelody && i >= 12 && i < 19)
+            //            {
+            //                //print("spawn melody");
+            //                _offset[0] += 0.25f;
+            //                SpawnEffect._spawnMelody = true;
+            //            }
+            //            else if (!SpawnEffect._spawnCenter && i >= 6 && i < 12)
+            //            {
+            //                //print("spawn center");
+            //                _offset[0] += 0.25f;
+            //                SpawnEffect._spawnCenter = true;
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        if (AudioPeer._audioBandBuffer64[i] > (_highs[i][_highSection] * _offset[1]))
+            //        {
+
+            //            if (!SpawnEffect._spawnKick && i >= 4 && i < 6)
+            //            {
+            //                //print("spawn kick");
+            //                _offset[1] += 0.25f;
+
+            //                SpawnEffect._spawnKick = true;
+            //            }
+            //            else if (!SpawnEffect._spawnBass && i > 1 && i < 3)
+            //            {
+            //                _offset[1] += 0.25f;
+
+            //                SpawnEffect._spawnBass = true;
+            //            }
+            //        }
+            //    }
+            //}
+
+            //for (int k = 0; k < _offset.Length; ++k)
+            //{
+            //    if (_offset[k] > 1.0f)
+            //    {
+            //        _offset[k] -= 0.5f;
+            //    }
+
+            //    if (_offset[k] < 1.0f)
+            //    {
+            //        _offset[k] = 1.0f;
+            //    }
+            //}
         }
         else
         {
@@ -180,44 +308,46 @@ public class FreqBeat : MonoBehaviour
 
                 for (int i = 0; i < 64; ++i)
                 {
-                    if (i > 18)
-                    {
-                        _highs[i][_highSection] *= 0.8f; // 0.7
-                    }
-                    else if (i > 6)
-                    {
-                        _highs[i][_highSection] *= 0.6f; // 0.5
-                    }
-                    else if (i > 3)
-                    {
-                        _highs[i][_highSection] *= 0.7f; //0.7
-                    }
-                    else
-                    {
-                        _highs[i][_highSection] *= 0.5f; //0.5
-                    }
-
-                    //if (i > 20)
+                    //if (i > 18)
                     //{
-                    //    //_highs[i][_highSection] *= 0.6f;
-                    //    _highs[i][_highSection] *= 0.7f;
+                    //    _highs[i][_highSection] *= 0.75f; // 0.7
                     //}
-                    //else if (i > 8)
+                    //else if (i > 6)
                     //{
-                    //    //_highs[i][_highSection] *= 0.4f;
-                    //    _highs[i][_highSection] *= 0.5f;
+                    //    _highs[i][_highSection] *= 0.7f; // 0.6
+                    //}
+                    //else if (i > 3)
+                    //{
+                    //    _highs[i][_highSection] *= 0.6f; //0.7
                     //}
                     //else
                     //{
-                    //    // Bass, generally okay
-                    //    //_highs[i][_highSection] *= 2.5f;
-                    //    _highs[i][_highSection] *= 0.5f;
+                    //    _highs[i][_highSection] *= 0.5f; //0.5
                     //}
+
+
+                    if (i > 18)
+                    {
+                        _highList[_highSection][i] *= 0.75f; // 0.7
+                    }
+                    else if (i > 6)
+                    {
+                        _highList[_highSection][i] *= 0.7f; // 0.6
+                    }
+                    else if (i > 3)
+                    {
+                        _highList[_highSection][i] *= 0.6f; //0.7
+                    }
+                    else
+                    {
+                        _highList[_highSection][i] *= 0.5f; //0.5
+                    }
                 }
             }
 
             _highTime = 0.0;
-          ++_highSection;
+            _highList.Add(new float[64]);
+            ++_highSection;
         }
 
         /*
@@ -339,9 +469,14 @@ public class FreqBeat : MonoBehaviour
     {
         for (int i = 0; i < _energy.Length; ++i)
         {
-            if (_highs[i][_highSection] < _energy[i])
+            //if (_highs[i][_highSection] < _energy[i])
+            //{
+            //    _highs[i][_highSection] = _energy[i];
+            //}
+
+            if (_highList[_highSection][i] < _energy[i])
             {
-                _highs[i][_highSection] = _energy[i];
+                _highList[_highSection][i] = _energy[i];
             }
         }
     }

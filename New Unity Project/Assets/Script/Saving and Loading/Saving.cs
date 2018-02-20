@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Saving : MonoBehaviour {
-    static bool SaveToFile(string _filename, List<string> _data)
+    public static bool SaveToFile(string _filename, List<string> _data)
     {
         if(!System.IO.File.Exists(_filename))
         {
@@ -18,7 +18,7 @@ public class Saving : MonoBehaviour {
 
     public delegate bool ParserFunction(List<string> _data);
 
-    static bool LoadingFromFile(string _filename, ParserFunction _func)
+    public static bool LoadingFromFile(string _filename, ParserFunction _func)
     {
         if (!System.IO.File.Exists(_filename))
         {

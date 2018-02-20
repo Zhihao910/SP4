@@ -53,6 +53,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Debug.Log(dashCountdown);
+        var Horizontal = Input.GetAxis("Horizontal");
         if (touchedGround)
         {
             doubleJump = false;
@@ -182,29 +184,19 @@ public class PlayerController : MonoBehaviour
         }
         
         ParryAttack();
-
-        if (Input.GetKeyDown(KeyCode.D) && !parryAttack)
-        {
-            parryAttack = true;
-            attackTrigger.enabled = true;
-            parryTimer = parryCooldown;
-            Debug.Log("Attack");
-            attackVisual.enabled = true;
-        }
-
-        if (parryAttack)
-        {
-            if (parryTimer > 0)
-            {
-                parryTimer -= Time.deltaTime;
-            }
-            else
-            {
-                parryAttack = false;
-                attackTrigger.enabled = false;
-                attackVisual.enabled = false;
-            }
-        }
+        //if (parryAttack)
+        //{
+        //    if (parryTimer > 0)
+        //    {
+        //        parryTimer -= Time.deltaTime;
+        //    }
+        //    else
+        //    {
+        //        parryAttack = false;
+        //        attackTrigger.enabled = false;
+        //        attackVisual.enabled = false;
+        //    }
+        //}
 
         if (mana <= 0)
             mana = 0;

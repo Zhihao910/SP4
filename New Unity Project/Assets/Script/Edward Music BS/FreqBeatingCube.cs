@@ -79,7 +79,7 @@ public class FreqBeatingCube : MonoBehaviour
         // Just to see in what order it prints in
         //print(_band);
 
-        if (AudioPeer._audioBandBuffer64[_band] > (FreqBeat._highs[_band][FreqBeat._highSection])) // * 0.4f
+        if (AudioPeer._audioBandBuffer64[_band] > (FreqBeat._highList[FreqBeat._highSection][_band])) // * 0.4f
         {
             transform.localScale = new Vector3(
                 _originalScale.x * _scaleMultiplier,
