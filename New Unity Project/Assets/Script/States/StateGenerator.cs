@@ -29,7 +29,7 @@ public class StateGenerator : MonoBehaviour {
         BaseState.Attack att = () =>
         {
             Vector3 pos = gameObject.GetComponent<Transform>().position;
-            Vector3 target = new Vector3(-1, 1, 0);
+            Vector3 target = new Vector3(-1, -1, 0);
             Object o = Resources.Load("Prefabs/Projectile1");
             if (o == null) Debug.Log("Load failed");
             GameObject go = o as GameObject;
@@ -52,7 +52,7 @@ public class StateGenerator : MonoBehaviour {
         BaseState.Attack att2 = () =>
         {
             Vector3 pos = gameObject.GetComponent<Transform>().position;
-            Vector3 target = new Vector3(-0.75f, 1, 0);
+            Vector3 target = new Vector3(-0.75f, -1, 0);
             Object o = Resources.Load("Prefabs/Projectile1");
             if (o == null) Debug.Log("Load failed");
             GameObject go = o as GameObject;
@@ -120,7 +120,7 @@ public class StateGenerator : MonoBehaviour {
                 if (go == null) Debug.Log("Loaded object isn't GameObject");
                 GameObject newgo = Instantiate(go, pos, Quaternion.identity);
                 if (newgo == null) Debug.Log("Couldn't instantiate");
-                newgo.GetComponent<Projectile>().SetDir(new Vector3(prev + (i * mult), 1, 0));
+                newgo.GetComponent<Projectile>().SetDir(new Vector3(prev + (i * mult), -1, 0));
                 newgo.GetComponent<Projectile>().projectileSpeed = 10;
                 if (i == 0.25)
                 {
@@ -129,6 +129,75 @@ public class StateGenerator : MonoBehaviour {
                 }
                 Debug.Log(prev);
             }
+        };
+
+        for (double time = 0; time < _clip.length; time += beattime)
+        {
+            result.AddAttack(time, att);
+            result.m_audioManager = ap;
+        }
+
+        m_StateMap[_clipname] = result;
+        result.Sort();
+
+        return result;
+    }
+
+    public BaseState CreateIntroState(string _clipname, AudioClip _clip, float multiplier = 1f)
+    {
+        BaseState result = gameObject.AddComponent<BaseState>();
+        result.SetClipName(_clipname);
+        //Run adding attacks here
+
+        double beattime = 0.4918 * multiplier;//0.5357; // 0.588
+
+        BaseState.Attack att = () =>
+        {
+            for (int i = -2; i < 3; ++i)
+            {
+                gameObject.GetComponent<PlatformGenerator>().GeneratePlatform(new Vector3(i * 4, 0));
+            }
+        };
+
+        result.AddAttack(0, att);
+        result.m_audioManager = ap;
+
+        m_StateMap[_clipname] = result;
+        result.Sort();
+
+        return result;
+    }
+
+    public BaseState CreateParryState(string _clipname, AudioClip _clip, float multiplier = 1f)
+    {
+        BaseState result = gameObject.AddComponent<BaseState>();
+        result.SetClipName(_clipname);
+        //Run adding attacks here
+
+        double beattime = 0.4918 * multiplier;//0.5357; // 0.588
+        Vector3 target = new Vector3(-8, -2, transform.position.z);
+        int mult = 1;
+        int prevprev = 0;
+
+        BaseState.Attack att = () =>
+        {
+            if (prevprev != 0 && Mathf.Abs(target.x) == 8)
+                mult = -mult;
+            Vector3 pos = gameObject.GetComponent<Transform>().position;
+            Object o = Resources.Load("Prefabs/Projectile4");
+            if (o == null) Debug.Log("Load failed");
+            GameObject go = o as GameObject;
+            if (go == null) Debug.Log("Loaded object isn't GameObject");
+            GameObject newgo = Instantiate(go, pos, Quaternion.identity);
+            if (newgo == null) Debug.Log("Couldn't instantiate");
+
+            newgo.GetComponent<Projectile>().SetTarget(target);
+            newgo.GetComponent<Projectile>().SetDir((target - pos).normalized);
+
+            newgo.GetComponent<Projectile>().projectileSpeed = 1;
+            prevprev = (int)(target.x);
+            target.x += (4 * mult);
+
         };
 
         for (double time = 0; time < _clip.length; time += beattime)
