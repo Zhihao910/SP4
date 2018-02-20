@@ -206,6 +206,9 @@ public class StateGenerator : MonoBehaviour {
             result.m_audioManager = ap;
         }
 
+        result.AddAttack(_clip.length - 0.5f, GetComponent<PlatformGenerator>().TogglePlatforms);
+
+
         m_StateMap[_clipname] = result;
         result.Sort();
 
