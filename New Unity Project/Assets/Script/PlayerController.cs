@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
     private Animator animator;
@@ -23,7 +24,9 @@ public class PlayerController : MonoBehaviour
     public bool invincible = false;
     bool leftDash, rightDash;
     bool downbtn = false;
+
     bool parryAttack = false;
+    bool parryButton, jumpButton = false;
     float parryTimer = 0;
     bool facingleft = false;
     bool facingright = true;
@@ -33,6 +36,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     GameObject healthBar, manaBar;
+    [SerializeField]
+    MainGame mainGame;
 
     // Use this for initialization
     void Start()
@@ -53,8 +58,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(dashCountdown);
-        var Horizontal = Input.GetAxis("Horizontal");
         if (touchedGround)
         {
             doubleJump = false;
@@ -66,7 +69,7 @@ public class PlayerController : MonoBehaviour
         {
             downbtn = true;
         }
-        
+
         if (downbtn == true)
         {
             animator.SetInteger("States", 5);
@@ -82,9 +85,10 @@ public class PlayerController : MonoBehaviour
         }
 
         //Jump
-        if (Input.GetKeyDown(KeyCode.Space) && touchedGround&&!downbtn)
+        if ((Input.GetKeyDown(KeyCode.Space) || jumpButton) && touchedGround && !downbtn)
         {
             Jump();
+            jumpButton = false;
             animator.SetInteger("States", 4);
         }
         //change animation        
@@ -93,9 +97,10 @@ public class PlayerController : MonoBehaviour
             animator.SetInteger("States", 3);
         }
         //Jump
-        if (Input.GetKeyDown(KeyCode.Space) && !touchedGround && !doubleJump)
+        if ((Input.GetKeyDown(KeyCode.Space) || jumpButton) && !touchedGround && !doubleJump)
         {
             Jump();
+            jumpButton = false;
             doubleJump = true;
         }
 
@@ -158,7 +163,7 @@ public class PlayerController : MonoBehaviour
             invincible = true;
         }
         //dash upleft
-        else if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.LeftArrow)  && dashCountdown > 0)
+        else if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.LeftArrow) && dashCountdown > 0)
         {
             Debug.Log("dash upleft");
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, movementSpeed * 2);
@@ -184,19 +189,6 @@ public class PlayerController : MonoBehaviour
         }
         
         ParryAttack();
-        //if (parryAttack)
-        //{
-        //    if (parryTimer > 0)
-        //    {
-        //        parryTimer -= Time.deltaTime;
-        //    }
-        //    else
-        //    {
-        //        parryAttack = false;
-        //        attackTrigger.enabled = false;
-        //        attackVisual.enabled = false;
-        //    }
-        //}
 
         if (mana <= 0)
             mana = 0;
@@ -241,13 +233,14 @@ public class PlayerController : MonoBehaviour
             rightDash = false;
         }
     }
-   
+
 
     void ParryAttack()
     {
-        if (Input.GetKeyDown(KeyCode.D) && !parryAttack)
+        if ((Input.GetKeyDown(KeyCode.D) || parryButton) && !parryAttack)
         {
             parryAttack = true;
+            parryButton = false;
             attackTrigger.enabled = true;
             attackVisual.enabled = true;
             parryTimer = parryCooldown;
@@ -264,9 +257,20 @@ public class PlayerController : MonoBehaviour
             else
             {
                 parryAttack = false;
+                parryButton = false;
                 attackTrigger.enabled = false;
                 attackVisual.enabled = false;
             }
         }
+    }
+
+    public void ParryButton()
+    {
+        parryButton = true;
+    }
+
+    public void JumpButton()
+    {
+        jumpButton = true;
     }
 }
