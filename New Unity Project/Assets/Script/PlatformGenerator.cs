@@ -33,14 +33,6 @@ public class PlatformGenerator : MonoBehaviour
             stopSpawn = false;
             //GeneratePlatform();
         }
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            ToggleGround();
-        }
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            TogglePlatforms();
-        }
         UpdatePlatform();
     }
 
@@ -62,12 +54,13 @@ public class PlatformGenerator : MonoBehaviour
         {
             foreach (GameObject go in movingPlatforms)
             {
-
-                go.transform.Translate(0, 1 * Time.deltaTime, 0);
-                if (go.transform.position.y >= -10)
+                int i = 1;
+                if (go.transform.position.y >= -6)
                 {
-                    go.transform.position = new Vector3(go.transform.position.x, -10, 0);
+                    i = 0;
                 }
+                go.transform.Translate(0, i * Time.deltaTime, 0);
+                
             }
         }
         else
@@ -75,12 +68,12 @@ public class PlatformGenerator : MonoBehaviour
             foreach (GameObject go in movingPlatforms)
             {
 
-                go.transform.Translate(0, 1 * Time.deltaTime, 0);
+                go.transform.Translate(0, -1 * Time.deltaTime, 0);
                 if (go.transform.position.y <= -10)
                 {
-                    go.transform.position = new Vector3(go.transform.position.x, -10, 0);
+                    movingPlatforms.Remove(go);
+                    Destroy(go);
                 }
-                Destroy(go);
             }
         }
 
@@ -89,11 +82,10 @@ public class PlatformGenerator : MonoBehaviour
         {
             foreach (GameObject go in allSprites)
             {
-
                 go.transform.Translate(0, -1 * Time.deltaTime, 0);
                 if (go.transform.position.y < -10)
                 {
-                    go.transform.position = new Vector3(go.transform.position.x, -6, 0);
+                    go.transform.position = new Vector3(go.transform.position.x, -10, 0);
                 }
             }
         }
@@ -101,11 +93,10 @@ public class PlatformGenerator : MonoBehaviour
         {
             foreach (GameObject go in allSprites)
             {
-
-                //go.transform.Translate(0, -1 * Time.deltaTime, 0);
-                if (go.transform.position.y > -6)
+                go.transform.Translate(0, 1 * Time.deltaTime, 0);
+                if (go.transform.position.y > -4.5f)
                 {
-                    go.transform.position = new Vector3(go.transform.position.x, -6, 0);
+                    go.transform.position = new Vector3(go.transform.position.x, -4.5f, 0);
                 }
             }
         }
@@ -117,6 +108,7 @@ public class PlatformGenerator : MonoBehaviour
         GameObject newplat = Instantiate(platform[1], position, Quaternion.identity); //Create platform at different position
         movingPlatforms.Add(newplat);
         newplat.SetActive(true); //Show the platform
+        platforms = true;
     }
 
     public void ToggleGround()
