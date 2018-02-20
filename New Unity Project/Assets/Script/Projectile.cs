@@ -15,7 +15,7 @@ public class Projectile : MonoBehaviour
         lifeTime = 5;
         projectileSpeed = 5;
 
-        dir.Set(-1, 0, 0);
+        //dir.Set(-1, 0, 0);
     }
 
     // Update is called once per frame

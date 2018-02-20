@@ -38,11 +38,52 @@ public class MusicProjectile : MonoBehaviour
     // cooldown
     private double _coolDown;
 
+
+    // Time between beats
+    private double _beatTime;
+
+    // Time counting up until nextbeat
+    private double _nextBeat;
+
+    // Temp time between beats in Detect()
+    private double _tempBeatTime;
+
+    // Temp time counting for next beat in Detect()
+    private double _tempNextBeat;
+
+    // Temp beat count
+    private int _tempBeatCount;
+
+    // Used for WithinRange() cuz tempo
+    private int _beatCount;
+
+    // 4 beats
+    // what if the time signature is different?
+    // well fuck
+    private double[] _tempo = new double[4];
+
+    // secondary BPM using bass
+    private double _bpm;
+
+    // new item
+    private bool _newbpm;
+
+    Dictionary<double, int> _bpmList = new Dictionary<double, int>();
+
     // Use this for initialization
     void Start()
     {
         frontpeer.SetAudioClip(_sample);
         frontpeer.StartPlaying();
+
+        for (int i = 0; i < _tempo.Length; ++i)
+        {
+            _tempo[i] = 0;
+        }
+
+        _newbpm = false;
+
+        _bpmList.Add(128, 1);
     }
 
     // Update is called once per frame
@@ -122,13 +163,14 @@ public class MusicProjectile : MonoBehaviour
         //}
 
         _coolDown += Time.deltaTime;
+        _tempBeatTime += Time.deltaTime;
 
         // BASS
         if (SpawnEffect._spawnBass)
         {
             if (!spawnBass)
             {
-                Instantiate(Projectile, new Vector2(15, 1), Quaternion.identity);
+                Instantiate(Projectile, new Vector2(15, 1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
 
                 spawnBass = true;
 
@@ -136,7 +178,7 @@ public class MusicProjectile : MonoBehaviour
             }
             else if (spawnBass)
             {
-                Instantiate(ProjectileDrag, new Vector2(15, 1), Quaternion.identity);
+                Instantiate(ProjectileDrag, new Vector2(15, 1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
             }
         }
         else
@@ -149,13 +191,123 @@ public class MusicProjectile : MonoBehaviour
         {
             if (!spawnKick)
             {
-                Instantiate(Projectile, new Vector2(15, 0), Quaternion.identity);
+                Instantiate(Projectile, new Vector2(15, 0), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
 
                 spawnKick = true;
+
+                //print(_tempBeatTime);
+
+                if (WithinRange(_tempo[1], _tempo[0] + _tempBeatTime))
+                {
+                    //Debug.Log("OUTLIER, go back");
+
+                    _tempo[0] = _tempBeatTime + _tempo[0];
+
+                    _beatCount = _tempBeatCount + 1;
+
+                    //Debug.Log(_beatCount);
+                    //Debug.Log("CONTINUE");
+
+                    if (_beatCount >= 4)
+                    {
+                        for (int i = 0; i < 4; ++i)
+                        {
+                            _beatTime += _tempo[i];
+                        }
+                        _beatTime /= 4;
+
+                        _bpm = 60.0 / _beatTime;
+
+                        _newbpm = true;
+
+                        foreach (double i in _bpmList.Keys)
+                        {
+                            // If its similar bpm
+                            if (WithinRange(i, _bpm))
+                            {
+                                ++_bpmList[i];
+                                _newbpm = false;
+                                break;
+                            }
+                        }
+
+                        if (_newbpm)
+                        {
+                            print("Add New");
+                            _bpmList.Add(_bpm, 1);
+                        }
+                        _newbpm = false;
+
+                        print(_bpm);
+                        Debug.Log("CHANGE BPM ----------------------------------------------------------------------------------------------------------------");
+
+                        _beatCount = 1;
+                    }
+                }
+                else if (!WithinRange(_tempo[0], _tempBeatTime))
+                {
+                    _tempo[0] = _tempBeatTime;
+
+                    if (_beatCount > 1)
+                        _tempBeatCount = _beatCount;
+
+                    _beatCount = 1;
+                    //Debug.Log("CHANGE");
+
+
+                }
+                else
+                {
+                    _tempo[_beatCount] = _tempBeatTime;
+                    ++_beatCount;
+
+                    //print(_tempBeatTime);
+
+                    //Debug.Log(_beatCount);
+                    //Debug.Log("CONTINUE");
+
+                    if (_beatCount >= 4)
+                    {
+                        for (int i = 0; i < 4; ++i)
+                        {
+                            _beatTime += _tempo[i];
+                        }
+                        _beatTime /= 4;
+
+                        _bpm = 60.0 / _beatTime;
+
+                        _newbpm = true;
+
+                        foreach (double i in _bpmList.Keys)
+                        {
+                            // If its similar bpm
+                            if (WithinRange(i, _bpm))
+                            {
+                                ++_bpmList[i];
+                                _newbpm = false;
+                                break;
+                            }
+                        }
+
+                        if (_newbpm)
+                        {
+                            print("Add New");
+                            _bpmList.Add(_bpm, 1);
+                        }
+                        _newbpm = false;
+
+                        print(_bpm);
+                        Debug.Log("CHANGE BPM ----------------------------------------------------------------------------------------------------------------");
+
+                        _beatCount = 1;
+                    }
+                }
+
+                _tempBeatTime = 0.0;
             }
             else if (spawnKick)
             {
-                Instantiate(ProjectileDrag, new Vector2(15, 0), Quaternion.identity);
+                Instantiate(ProjectileDrag, new Vector2(15, 0), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
             }
         }
         else
@@ -181,7 +333,7 @@ public class MusicProjectile : MonoBehaviour
             //}
             if (!spawnCenter && _coolDown > 0.2)
             {
-                Instantiate(Projectile, new Vector2(15, -1), Quaternion.identity);
+                Instantiate(Projectile, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
 
                 spawnCenter = true;
 
@@ -189,7 +341,7 @@ public class MusicProjectile : MonoBehaviour
             }
             else if (spawnCenter)
             {
-                Instantiate(ProjectileDrag, new Vector2(15, -1), Quaternion.identity);
+                Instantiate(ProjectileDrag, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
             }
 
             //if (!spawnCenter)
@@ -222,7 +374,7 @@ public class MusicProjectile : MonoBehaviour
             //}
             if (!spawnMelody && _coolDown > 0.2)
             {
-                Instantiate(Projectile, new Vector2(15, -2), Quaternion.identity);
+                Instantiate(Projectile, new Vector2(15, -2), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
 
                 spawnMelody = true;
 
@@ -230,7 +382,7 @@ public class MusicProjectile : MonoBehaviour
             }
             else if (spawnMelody)
             {
-                Instantiate(ProjectileDrag, new Vector2(15, -2), Quaternion.identity);
+                Instantiate(ProjectileDrag, new Vector2(15, -2), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
             }
 
             //if (!spawnMelody)
@@ -263,7 +415,7 @@ public class MusicProjectile : MonoBehaviour
             //}
             if (!spawnHigh && _coolDown > 0.2)
             {
-                Instantiate(Projectile, new Vector2(15, -3), Quaternion.identity);
+                Instantiate(Projectile, new Vector2(15, -3), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
 
                 spawnHigh = true;
 
@@ -271,7 +423,7 @@ public class MusicProjectile : MonoBehaviour
             }
             else if (spawnHigh)
             {
-                Instantiate(ProjectileDrag, new Vector2(15, -3), Quaternion.identity);
+                Instantiate(ProjectileDrag, new Vector2(15, -3), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
             }
 
             //if (!spawnHigh)
@@ -290,6 +442,28 @@ public class MusicProjectile : MonoBehaviour
         //{
         //    spawnThree = false;
         //}
+
+        double mostbpm = 0;
+        int numberOf = 0;
+
+        foreach (KeyValuePair<double, int> stats in _bpmList)
+        {
+            //print("enter");
+
+            if (mostbpm == 0)
+                mostbpm = stats.Key;
+            if (numberOf == 0)
+                numberOf = stats.Value;
+
+            if (stats.Value > numberOf)
+            {
+                mostbpm = stats.Key;
+                numberOf = stats.Value;
+            }
+        }
+
+        //print("BPM SET TO:" + mostbpm);
+        //print("VALUE:" + numberOf);
     }
 
     public static void Swap()
@@ -334,5 +508,23 @@ public class MusicProjectile : MonoBehaviour
     public float TimeNow()
     {
         return frontpeer.TimeNow();
+    }
+
+    private bool WithinRange(double rangeA, double rangeB)
+    {
+        double acceptableRange = 0.1;
+
+        if ((rangeA + acceptableRange) < rangeB)
+        {
+            return false;
+        }
+        else if ((rangeA - acceptableRange) > rangeB)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 }

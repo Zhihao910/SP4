@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -80,6 +81,10 @@ public class FreqBeat : MonoBehaviour
 
         //_source.pitch = 10;
         //Time.timeScale = 10;
+
+        _detectedFinish = checkSong();
+
+        BPM._BPMdetectedFinish = _detectedFinish;
     }
 
     // Update is called once per frame
@@ -91,48 +96,43 @@ public class FreqBeat : MonoBehaviour
             {
                 _detectedFinish = true;
 
-                List<string> saver = new List<string>();
-
-                saver.Add(BPM._bpm.ToString());
-
-                //for (int i = 0; i < _highs.Length; ++i)
-                //{
-                //    for (int k = 0; k < _highs[i].Length; ++k)
-                //    {
-                //        saver.Add(_highs[i][k].ToString());
-                //    }
-                //}
-
-                for (int i = 0; i < _highList.Count; ++i)
+                if (Saving.LoadingFromFile("penis.txt", (List<string> _data) =>
                 {
-                    for (int k = 0; k < _highList[_highSection].Length; ++k)
+                    return !_data.Contains(_source.clip.name.ToString());
+                }))
+                {
+
+
+                    List<string> saver = new List<string>();
+
+                    saver.Add("<name>");
+                    saver.Add(_source.clip.name.ToString());
+                    saver.Add("</name>");
+
+                    saver.Add("<bpm>");
+                    saver.Add(BPM._bpm.ToString());
+                    saver.Add("</bpm>");
+
+                    saver.Add("<highcount>");
+                    saver.Add((_highList.Count - 1).ToString());
+                    saver.Add("</highcount>");
+
+                    saver.Add("<highs>");
+                    for (int i = 0; i < _highList.Count; ++i)
                     {
-                        saver.Add(_highList[_highSection][k].ToString());
+                        saver.Add("<c" + i.ToString() + ">");
+                        for (int k = 0; k < _highList[i].Length; ++k)
+                        {
+                            saver.Add("<v" + k.ToString() + ">");
+                            saver.Add(_highList[i][k].ToString());
+                            saver.Add("<v/" + k.ToString() + ">");
+                        }
+                        saver.Add("<c/" + i.ToString() + ">");
                     }
+                    saver.Add("</highs>");
+
+                    Saving.SaveToFile("penis.txt", saver);
                 }
-
-                Saving.SaveToFile("penis.txt", saver);
-
-                //for (int i = 0; i < _highs.Length; ++i)
-                //{
-                //    _highs[i][_highSection] *= 0.2f;
-                //    //_highs[i][_highSection] *= (0.3f + ((float)i * 0.02f));
-                //    //// AAAAAAAAAAAAAAAAAH
-                //    //// HOW DO I DO THIS?
-
-                //    //if (i > 5)
-                //    //{
-                //    //  _highs[i][_highSection] *= (Mathf.Sin((float)i * 0.36f));
-                //    //}
-                //    //else if (i > 2)
-                //    //{
-                //    //    _highs[i][_highSection] *= (Mathf.Sin((float)i * 0.2f));
-                //    //}
-                //    //else
-                //    //{
-                //    //    _highs[i][_highSection] *= 0.3f;
-                //    //}
-                //}
 
                 Debug.Log("DONE DETECTING FREQ -----------------------------------------------------------");
             }
@@ -157,42 +157,10 @@ public class FreqBeat : MonoBehaviour
 
             for (int i = 0; i < 64; ++i)
             {
-                //if (AudioPeer._audioBandBuffer64[i] > _highs[i][_highSection])
-                //{
-                //    if (!SpawnEffect._spawnHigh && i >= 19)
-                //    {
-                //        //print("spawn high");
-
-                //        SpawnEffect._spawnHigh = true;
-                //    }
-                //    else if (!SpawnEffect._spawnMelody && i >= 12 && i < 19)
-                //    {
-                //        //print("spawn melody");
-
-                //        SpawnEffect._spawnMelody = true;
-                //    }
-                //    else if (!SpawnEffect._spawnCenter && i >= 6 && i < 12)
-                //    {
-                //        //print("spawn center");
-
-                //        SpawnEffect._spawnCenter = true;
-                //    }
-                //    else if (!SpawnEffect._spawnKick && i >= 4 && i < 6)
-                //    {
-                //        //print("spawn kick");
-
-                //        SpawnEffect._spawnKick = true;
-                //    }
-                //    else if (!SpawnEffect._spawnBass && i < 4) // bass is 0-3 but
-                //    {                                                   // it goes in a wave
-                //        //print("spawn bass");                          // so like, yeah
-
-                //        SpawnEffect._spawnBass = true;
-                //    }
-                //}
-
                 if (AudioPeer._audioBandBuffer64[i] > _highList[_highSection][i])
                 {
+                    //print(_highList[_highSection][i]);
+
                     if (!SpawnEffect._spawnHigh && i >= 19)
                     {
                         //print("spawn high");
@@ -225,67 +193,6 @@ public class FreqBeat : MonoBehaviour
                     }
                 }
             }
-
-            //for (int i = 0; i < 64; ++i)
-            //{
-            //    if (i >= 6)
-            //    {
-            //        if (AudioPeer._audioBandBuffer64[i] > (_highs[i][_highSection] * _offset[0]))
-            //        {
-            //            if (!SpawnEffect._spawnHigh && i >= 19)
-            //            {
-            //                //print("spawn high");t
-            //                _offset[0] += 0.25f;
-            //                SpawnEffect._spawnHigh = true;
-            //            }
-            //            else if (!SpawnEffect._spawnMelody && i >= 12 && i < 19)
-            //            {
-            //                //print("spawn melody");
-            //                _offset[0] += 0.25f;
-            //                SpawnEffect._spawnMelody = true;
-            //            }
-            //            else if (!SpawnEffect._spawnCenter && i >= 6 && i < 12)
-            //            {
-            //                //print("spawn center");
-            //                _offset[0] += 0.25f;
-            //                SpawnEffect._spawnCenter = true;
-            //            }
-            //        }
-            //    }
-            //    else
-            //    {
-            //        if (AudioPeer._audioBandBuffer64[i] > (_highs[i][_highSection] * _offset[1]))
-            //        {
-
-            //            if (!SpawnEffect._spawnKick && i >= 4 && i < 6)
-            //            {
-            //                //print("spawn kick");
-            //                _offset[1] += 0.25f;
-
-            //                SpawnEffect._spawnKick = true;
-            //            }
-            //            else if (!SpawnEffect._spawnBass && i > 1 && i < 3)
-            //            {
-            //                _offset[1] += 0.25f;
-
-            //                SpawnEffect._spawnBass = true;
-            //            }
-            //        }
-            //    }
-            //}
-
-            //for (int k = 0; k < _offset.Length; ++k)
-            //{
-            //    if (_offset[k] > 1.0f)
-            //    {
-            //        _offset[k] -= 0.5f;
-            //    }
-
-            //    if (_offset[k] < 1.0f)
-            //    {
-            //        _offset[k] = 1.0f;
-            //    }
-            //}
         }
         else
         {
@@ -308,24 +215,6 @@ public class FreqBeat : MonoBehaviour
 
                 for (int i = 0; i < 64; ++i)
                 {
-                    //if (i > 18)
-                    //{
-                    //    _highs[i][_highSection] *= 0.75f; // 0.7
-                    //}
-                    //else if (i > 6)
-                    //{
-                    //    _highs[i][_highSection] *= 0.7f; // 0.6
-                    //}
-                    //else if (i > 3)
-                    //{
-                    //    _highs[i][_highSection] *= 0.6f; //0.7
-                    //}
-                    //else
-                    //{
-                    //    _highs[i][_highSection] *= 0.5f; //0.5
-                    //}
-
-
                     if (i > 18)
                     {
                         _highList[_highSection][i] *= 0.75f; // 0.7
@@ -340,7 +229,7 @@ public class FreqBeat : MonoBehaviour
                     }
                     else
                     {
-                        _highList[_highSection][i] *= 0.5f; //0.5
+                        _highList[_highSection][i] *= 0.42f; //0.5
                     }
                 }
             }
@@ -349,31 +238,6 @@ public class FreqBeat : MonoBehaviour
             _highList.Add(new float[64]);
             ++_highSection;
         }
-
-        /*
-        if (BPM._bpmbeat && !_highAdd)
-        {
-            _highAdd = true;
-            ++_highBeat;
-        }
-        else
-        {
-            _highAdd = false;
-        }
-
-        if (_highBeat >= 32)
-        {
-            if (!_detectedFinish)
-            {
-                for (int i = 0; i < _highs.Length; ++i)
-                {
-                    _highs[i][_highSection] *= (0.3f + ((float)i * 0.01f));
-                }
-            }
-
-            _highBeat = 0;
-            ++_highSection;
-        }*/
     }
 
 
@@ -478,6 +342,122 @@ public class FreqBeat : MonoBehaviour
             {
                 _highList[_highSection][i] = _energy[i];
             }
+        }
+    }
+
+    private bool checkSong()
+    {
+        if (Saving.LoadingFromFile("penis.txt", (List<string> _data) =>
+        {
+            // See if song exists
+            if (_data.Contains(_source.clip.name.ToString()))
+                print("Song Data found, reading now...");
+            else
+            {
+                print("couldnt find song name:" + _source.clip.name.ToString());
+
+                return false;
+            }
+
+            // FIND BPM
+            List<string> bpmData = new List<string>();
+            bpmData = _data.GetRange(_data.IndexOf("<bpm>"), (_data.IndexOf("</bpm>") - _data.IndexOf("<bpm>")));
+            bpmData.Remove("<bpm>");
+            string bpmString = "";
+            foreach (string num in bpmData)
+                bpmString += num;
+
+            //int databpm = 0;
+            //if (Int32.TryParse(bpmString, out databpm))
+            //{
+            //    BPM._bpm = databpm;
+            //}
+            //else
+            //{
+            //    print("BPM CONVERSION ERROR");
+            //    return false;
+            //}
+            BPM._bpm = Convert.ToDouble(bpmString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
+            print(BPM._bpm);
+
+            // FIND NUMBER OF SEGMENTS
+            List<string> highsegmentData = new List<string>();
+            highsegmentData = _data.GetRange(_data.IndexOf("<highcount>"), (_data.IndexOf("</highcount>") - _data.IndexOf("<highcount>")));
+            highsegmentData.Remove("<highcount>");
+            string highsegmentString = "";
+            foreach (string num in highsegmentData)
+                highsegmentString += num;
+
+            //int datasegment = 0;
+            //if (Int32.TryParse(highsegmentString, out datasegment))
+            //{
+            //    for (int i = 0; i < Int32.Parse(highsegmentString); ++i)
+            //        _highList.Add(new float[64]);
+            //}
+            //else
+            //{
+            //    print("SEGMENTED COUNT ERROR");
+            //    return false;
+            //}
+            for (int i = 0; i < (Convert.ToInt32(highsegmentString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat) - 1); ++i)
+                _highList.Add(new float[64]);
+            print(_highList.Count);
+
+            // Define out where the highs value will be found
+            //List<string> highsectionData = new List<string>();
+            List<string> highsectionData = _data.GetRange(_data.IndexOf("<highs>"), (_data.IndexOf("</highs>") - _data.IndexOf("<highs>")));
+            highsectionData.Remove("<highs>");
+
+            // FIND HIGHS
+            for (int i = 0; i < _highList.Count; ++i)
+            {
+                // Yeah okay this is getting a *bit* convoluted
+                // In the high section (from <high> to </high>
+                // find each segment of high data (0 to 63)
+                //List<string> highsectionhighsegmentData = new List<string>();
+                List<string> highsectionhighsegmentData = highsectionData.GetRange(highsectionData.IndexOf("<c" + i.ToString() + ">"), (highsectionData.IndexOf("<c/" + i.ToString() + ">") - highsectionData.IndexOf("<c" + i.ToString() + ">")));
+                highsectionhighsegmentData.Remove("<c" + i.ToString() + ">");
+
+                for (int k = 0; k < _highList[i].Length; ++k)
+                {
+                    List<string> highData = highsectionhighsegmentData.GetRange(highsectionhighsegmentData.IndexOf("<v" + k.ToString() + ">"), (highsectionhighsegmentData.IndexOf("<v/" + k.ToString() + ">") - highsectionhighsegmentData.IndexOf("<v" + k.ToString() + ">")));
+                    highData.Remove("<v" + k.ToString() + ">");
+
+                    string highString = "";
+                    foreach (string num in highData)
+                        highString += num;
+
+                    print(highString);
+
+                    //int datahighs = 0;
+                    //if (Int32.TryParse(highString, out datahighs))
+                    //{
+                    //    _highList[i][k] = Int32.Parse(highString);
+                    //}
+                    //else
+                    //{
+                    //    print("HIGH VALUE ERROR");
+                    //    return false;
+                    //}
+                    // WHY IN FRESH HELL IS EVERYTHING ELSE NICELY LABELLED "ToDouble", "ToInt" BUT FLOAT IS "TO SINGLE" ?? WHY?
+                    _highList[i][k] = Convert.ToSingle(highString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
+                    //print(_highList[i][k]);
+                }
+            }
+
+            return true;
+        }
+            ))
+        {
+            print("Successfully loaded from file.");
+            _source.Stop();
+
+            return true;
+        }
+        else
+        {
+            print("Song does not exist or error in reading file. Will detect.");
+            return false;
         }
     }
 }

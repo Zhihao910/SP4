@@ -69,7 +69,7 @@ public class BPM : MonoBehaviour
     private List<double> _bpmList = new List<double>();
 
     // Check if detection is done
-    private bool _detectedFinish = false;
+    public static bool _BPMdetectedFinish = false;
 
     // Use this for initialization
     void Start ()
@@ -148,9 +148,9 @@ public class BPM : MonoBehaviour
 
         if (!_audioSource.isPlaying)
         {
-            if (!_detectedFinish)
+            if (!_BPMdetectedFinish)
             {
-                _detectedFinish = true;
+                _BPMdetectedFinish = true;
 
                 foreach (double _bpmIndex in _bpmList)
                 {
@@ -165,7 +165,7 @@ public class BPM : MonoBehaviour
             }
         }
 
-        if (_detectedFinish)
+        if (_BPMdetectedFinish)
         {
             //Time.timeScale = 1;
             //_audioSource.pitch = 1;
@@ -425,5 +425,10 @@ public class BPM : MonoBehaviour
         {
             return true;
         }
+    }
+
+    public void SetDetectedFinish(bool _bool)
+    {
+        _BPMdetectedFinish = _bool;
     }
 }

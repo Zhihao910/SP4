@@ -11,8 +11,11 @@ public class Saving : MonoBehaviour {
         }
 
         foreach (string s in _data)
+        {
             System.IO.File.AppendAllText(_filename, s);
+            System.IO.File.AppendAllText(_filename, "\n");
 
+        }
         return true;
     }
 
