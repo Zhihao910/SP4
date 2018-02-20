@@ -31,7 +31,7 @@ public class PlatformGenerator : MonoBehaviour
         if (spawnTimer < 0 && stopSpawn)
         {
             stopSpawn = false;
-            GeneratePlatform();
+            //GeneratePlatform();
         }
         if(Input.GetKeyDown(KeyCode.P))
         {
@@ -111,9 +111,12 @@ public class PlatformGenerator : MonoBehaviour
         }
     }
 
-    public void setPos(Vector3 _Position)
+    public void GeneratePlatform(Vector3 _Position)
     {
-        pos = _Position;
+        Vector3 position = new Vector3(_Position.x - platform[1].GetComponentInChildren<BoxCollider2D>().size.x, -10, 0);
+        GameObject newplat = Instantiate(platform[1], position, Quaternion.identity); //Create platform at different position
+        movingPlatforms.Add(newplat);
+        newplat.SetActive(true); //Show the platform
     }
 
     public void ToggleGround()

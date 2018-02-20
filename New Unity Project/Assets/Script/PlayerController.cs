@@ -28,6 +28,8 @@ public class PlayerController : MonoBehaviour
     bool parryAttack = false;
     bool parryButton, jumpButton = false;
     float parryTimer = 0;
+    bool facingleft = false;
+    bool facingright = true;
     float parryCooldown = 0.3f;
     public Collider2D attackTrigger;
     public Renderer attackVisual;
@@ -83,7 +85,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //Jump
-        if ((Input.GetKeyDown(KeyCode.Space) || jumpButton) && touchedGround)
+        if ((Input.GetKeyDown(KeyCode.Space) || jumpButton) && touchedGround && !downbtn)
         {
             Jump();
             jumpButton = false;
@@ -103,21 +105,48 @@ public class PlayerController : MonoBehaviour
         }
 
         //Move Left without dash
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.LeftArrow) && !downbtn)
         {
             GetComponent<Rigidbody2D>().velocity = new Vector2(-movementSpeed, GetComponent<Rigidbody2D>().velocity.y);
-
             Debug.Log("Left" + movementSpeed);
             animator.SetInteger("States", 1);
+            facingright = false;
+            facingleft = true;
         }
         //Move Right without dash
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.RightArrow) && !downbtn)
         {
             GetComponent<Rigidbody2D>().velocity = new Vector2(movementSpeed, GetComponent<Rigidbody2D>().velocity.y);
-
+            facingright = true;
+            facingleft = false;
             Debug.Log("Right" + movementSpeed);
             animator.SetInteger("States", 2);
         }
+        //dash up
+        if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.LeftShift) && dashCountdown > 0)
+        {
+            Debug.Log("dash up");
+            GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, movementSpeed*2);
+            dashCountdown--;
+            invincible = true;
+        }
+        //dash left while idle
+       else if (facingleft == true && Input.GetKey(KeyCode.LeftShift) && dashCountdown > 0)
+        {
+            Debug.Log("dash left idle");
+            dashCountdown--;
+            invincible = true;
+            GetComponent<Rigidbody2D>().velocity = new Vector2(-movementSpeed * 1.5f, GetComponent<Rigidbody2D>().velocity.y);
+        }
+        //dash right while idle
+        else if (facingright == true && Input.GetKey(KeyCode.LeftShift) && dashCountdown > 0)
+        {
+            Debug.Log("dash right idle");
+            dashCountdown--;
+            invincible = true;
+            GetComponent<Rigidbody2D>().velocity = new Vector2(movementSpeed*1.5f, GetComponent<Rigidbody2D>().velocity.y);
+        }
+
         //dash upright
         if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftShift) && dashCountdown > 0)
         {
@@ -148,14 +177,6 @@ public class PlayerController : MonoBehaviour
             Dash();
             invincible = true;
         }
-        //dash up
-        else if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.LeftShift) && dashCountdown > 0)
-        {
-            Debug.Log("dash up");
-            GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, movementSpeed * 2);
-            dashCountdown--;
-            invincible = true;
-        }
 
         healthBar.transform.localScale = new Vector3(health / totalHealth, 1, 1);
         manaBar.transform.localScale = new Vector3(mana / totalMana, 1, 1);
@@ -166,7 +187,7 @@ public class PlayerController : MonoBehaviour
             SceneManager.LoadScene("GameOver");
             health = 0;
         }
-
+        
         ParryAttack();
 
         if (mana <= 0)
@@ -198,7 +219,7 @@ public class PlayerController : MonoBehaviour
         if (leftDash)
         {
             //Left
-            GetComponent<Rigidbody2D>().velocity -= new Vector2(movementSpeed * 10, GetComponent<Rigidbody2D>().velocity.y);
+            GetComponent<Rigidbody2D>().velocity = new Vector2(-movementSpeed * 10, GetComponent<Rigidbody2D>().velocity.y);
             dashCountdown--;
             Debug.Log("LeftDash" + movementSpeed);
             leftDash = false;
@@ -224,6 +245,7 @@ public class PlayerController : MonoBehaviour
             attackVisual.enabled = true;
             parryTimer = parryCooldown;
             Debug.Log("Attack");
+            animator.SetInteger("States", 6);
         }
 
         if (parryAttack)
