@@ -30,20 +30,20 @@ public class Playermovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(dashcountdown==0)
+        if (dashcountdown == 0)
         {
             regaindash += Time.deltaTime;
         }
-        if(regaindash>=5)
+        if (regaindash >= 5)
         {
             dashcountdown = 5;
             regaindash = 0;
         }
-        if (Input.GetKey(KeyCode.D)|| Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
             transform.position += transform.right * movementspeed * Time.deltaTime;
         }
-        if(Input.GetKey(KeyCode.RightArrow)|| Input.GetKey(KeyCode.D)&&Input.GetKey(KeyCode.LeftShift)&&dashcountdown>0)
+        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D) && Input.GetKey(KeyCode.LeftShift) && dashcountdown > 0)
         {
             transform.position += transform.right * 20 * Time.deltaTime;
             dashcountdown--;
@@ -58,7 +58,7 @@ public class Playermovement : MonoBehaviour
         {
             transform.position -= transform.right * movementspeed * Time.deltaTime;
         }
-        if (Input.GetKey(KeyCode.Space)&&transform.position.y<=0.5f)
+        if (Input.GetKey(KeyCode.Space) && transform.position.y <= 0.5f)
         {
             jumping = true;
             jump2 = false;
