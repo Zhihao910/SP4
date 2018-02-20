@@ -28,11 +28,6 @@ public class AudioPeerManager : MonoBehaviour {
     void Start()
     {
 
-        //m_audioclipmap.Add("Song", _sample);
-        //m_playqueue.Enqueue(_stateGenerator.CreateBaseState("Song", _sample));
-
-        
-
         m_audioclipmap.Add("Intro1", AudioSplitter.SplitAudio(5.8f, 20.7f - 5.8f, _sample, "Intro1"));
         m_playqueue.Enqueue(_stateGenerator.CreateIntroState("Intro1", m_audioclipmap["Intro1"],8));
         m_audioclipmap.Add("Break1", AudioSplitter.SplitAudio(20.7f, 35.6f - 20.7f, _sample, "Break1"));
@@ -45,7 +40,6 @@ public class AudioPeerManager : MonoBehaviour {
         m_audioclipmap.Add("Drop2", AudioSplitter.SplitAudio(148.1f, 178.2f - 148.1f, _sample, "Drop2"));
         m_audioclipmap.Add("Break3", AudioSplitter.SplitAudio(178.2f, _sample.length - 178.2f, _sample, "Break3"));
 
-
         m_playqueue.Enqueue(_stateGenerator.CreateParryState("Break1", m_audioclipmap["Break1"], 4));
         m_playqueue.Enqueue(_stateGenerator.CreateBaseState("Verse1", m_audioclipmap["Verse1"], 3));
         _stateGenerator.CreateBaseState("BuildUp1", m_audioclipmap["BuildUp1"], 2);
@@ -55,7 +49,6 @@ public class AudioPeerManager : MonoBehaviour {
         _stateGenerator.CreateBaseState("BuildUp2", m_audioclipmap["BuildUp2"], 2);
         _stateGenerator.CreateDropState("Drop2", m_audioclipmap["Drop2"]);
         _stateGenerator.CreateBaseState("Break3", m_audioclipmap["Break3"],4);
-
 
         m_audioclipmap.Add("Intro2", AudioSplitter.SplitAudio(1.1f, 19.7f - 1.1f, _sample2, "Intro2"));
         m_audioclipmap.Add("Verse3", AudioSplitter.SplitAudio(19.7f, 34.8f - 19.7f, _sample2, "Verse3"));
@@ -75,14 +68,25 @@ public class AudioPeerManager : MonoBehaviour {
         _stateGenerator.CreateBaseState("BuildUp4", m_audioclipmap["BuildUp4"], 2);
         _stateGenerator.CreateDropState("Drop4", m_audioclipmap["Drop4"]);
 
+        _stateGenerator.CreateParryState("BuildUp5", m_audioclipmap["BuildUp1"], 2);
+        _stateGenerator.CreateParryState("Break5", m_audioclipmap["Break2"], 4);
+        _stateGenerator.CreateParryState("Verse5", m_audioclipmap["Verse2"], 3);
+        _stateGenerator.CreateParryState("BuildUp6", m_audioclipmap["BuildUp2"], 2);
+        _stateGenerator.CreateParryState("Break6", m_audioclipmap["Break3"], 4);
+        _stateGenerator.CreateParryState("Verse6", m_audioclipmap["Verse3"], 3);
+        _stateGenerator.CreateParryState("BuildUp7", m_audioclipmap["BuildUp3"], 2);
+        _stateGenerator.CreateParryState("Break7", m_audioclipmap["Break4"], 4);
+        _stateGenerator.CreateParryState("Verse7", m_audioclipmap["Verse4"], 3);
+        _stateGenerator.CreateParryState("BuildUp8", m_audioclipmap["BuildUp4"], 2);
+
 
         for (int i = 0; i < 20; ++i)
         {
             
-            m_playqueue.Enqueue(_stateGenerator.GetState("BuildUp" + Random.Range(1, 5)));
+            m_playqueue.Enqueue(_stateGenerator.GetState("BuildUp" + Random.Range(1, 9)));
             m_playqueue.Enqueue(_stateGenerator.GetState("Drop" + Random.Range(1, 5)));
-            m_playqueue.Enqueue(_stateGenerator.GetState("Break" + Random.Range(1, 5)));
-            m_playqueue.Enqueue(_stateGenerator.GetState("Verse" + Random.Range(1, 5)));
+            m_playqueue.Enqueue(_stateGenerator.GetState("Verse" + Random.Range(1, 8)));
+            m_playqueue.Enqueue(_stateGenerator.GetState("Break" + Random.Range(1, 8)));
         }
         curr = m_playqueue.Dequeue();
         curr.Run();
@@ -93,8 +97,6 @@ public class AudioPeerManager : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        //Debug.Log(curr.GetClipName());
-
         if (swap && null != m_playqueue.Peek())
         {
             curr.StopRun();
@@ -116,41 +118,12 @@ public class AudioPeerManager : MonoBehaviour {
     {
         swap = !swap;
     }
+
     public void Play()
     {
         frontpeer.StartPlaying();
         curr.Run();
     }
-
-    //public void PrintTime()
-    //{
-    //    Debug.Log(_sample.time);
-    //}
-
-    //public void PrintIntro()
-    //{
-    //    Debug.Log("Intro");
-    //}
-
-    //public void PrintVerse()
-    //{
-    //    Debug.Log("Verse");
-    //}
-
-    //public void PrintBreak()
-    //{
-    //    Debug.Log("Break");
-    //}
-
-    //public void PrintBuildUp()
-    //{
-    //    Debug.Log("BuildUp");
-    //}
-
-    //public void PrintDrop()
-    //{
-    //    Debug.Log("Drop");
-    //}
 
     public float TimeNow()
     {

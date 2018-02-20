@@ -21,7 +21,7 @@ public class StateGenerator : MonoBehaviour {
     public BaseState CreateBaseState(string _clipname, AudioClip _clip,float multiplier = 1f)
     {
         BaseState result = gameObject.AddComponent<BaseState>();
-        result.SetClipName(_clipname);
+        result.SetClipName(_clip.name);
         //Run adding attacks here
 
         double beattime = 0.4918 * multiplier;//0.5357; // 0.588
@@ -89,7 +89,7 @@ public class StateGenerator : MonoBehaviour {
     public BaseState CreateDropState(string _clipname, AudioClip _clip, float multiplier = 1f)
     {
         BaseState result = gameObject.AddComponent<BaseState>();
-        result.SetClipName(_clipname);
+        result.SetClipName(_clip.name);
         //Run adding attacks here
 
         double beattime = 0.4918 * multiplier;//0.5357; // 0.588
@@ -146,7 +146,7 @@ public class StateGenerator : MonoBehaviour {
     public BaseState CreateIntroState(string _clipname, AudioClip _clip, float multiplier = 1f)
     {
         BaseState result = gameObject.AddComponent<BaseState>();
-        result.SetClipName(_clipname);
+        result.SetClipName(_clip.name);
         //Run adding attacks here
 
         double beattime = 0.4918 * multiplier;//0.5357; // 0.588
@@ -171,7 +171,7 @@ public class StateGenerator : MonoBehaviour {
     public BaseState CreateParryState(string _clipname, AudioClip _clip, float multiplier = 1f)
     {
         BaseState result = gameObject.AddComponent<BaseState>();
-        result.SetClipName(_clipname);
+        result.SetClipName(_clip.name);
         //Run adding attacks here
 
         double beattime = 0.4918 * multiplier;//0.5357; // 0.588
