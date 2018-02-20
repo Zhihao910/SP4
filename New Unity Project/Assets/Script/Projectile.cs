@@ -7,24 +7,33 @@ public class Projectile : MonoBehaviour
     float lifeTime;
     public float projectileSpeed;
     Vector3 dir;
-    Vector3 target;
+    Vector3 target = new Vector3(999, 999, 999);
+    protected bool hittarget = false;
 
     // Use this for initialization
-    void Start()
+    protected void Start()
     {
         lifeTime = 5;
         projectileSpeed = 5;
-
-        //dir.Set(-1, 0, 0);
     }
 
     // Update is called once per frame
-    void Update()
+    protected void Update()
     {
-        lifeTime -= Time.deltaTime;
-        transform.Translate(dir.x * projectileSpeed * Time.deltaTime, dir.y * projectileSpeed * Time.deltaTime, 0);
-        if (lifeTime <= 0)
-            Destroy(gameObject);
+        if (!hittarget)
+        {
+            lifeTime -= Time.deltaTime;
+            transform.Translate(dir.x * projectileSpeed * Time.deltaTime, dir.y * projectileSpeed * Time.deltaTime, 0);
+            if (lifeTime <= 0)
+                Destroy(gameObject);
+            if (null != target)
+            {
+                if ((target - transform.position).magnitude < 0.1f)
+                    hittarget = true;
+            }
+        }
+
+
     }
 
 
@@ -46,5 +55,10 @@ public class Projectile : MonoBehaviour
     public void SetDir(Vector3 _Dir)
     {
         dir = _Dir;
+    }
+
+    public void SetTarget(Vector3 _Target)
+    {
+        target = _Target;
     }
 }

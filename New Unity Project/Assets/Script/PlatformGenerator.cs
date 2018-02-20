@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlatformGenerator : MonoBehaviour
 {
@@ -11,10 +12,16 @@ public class PlatformGenerator : MonoBehaviour
     int numOfPlatforms = 5;
     bool stopSpawn = true;
     float spawnTimer = 3;
+    bool ground = true;
+    bool platforms = false;
+
+
+    public GameObject[] allSprites;
 
     // Use this for initialization
     void Start()
     {
+        allSprites = GameObject.FindGameObjectsWithTag("Ground");
     }
 
     // Update is called once per frame
@@ -24,7 +31,7 @@ public class PlatformGenerator : MonoBehaviour
         if (spawnTimer < 0 && stopSpawn)
         {
             stopSpawn = false;
-            GeneratePlatform();
+            //GeneratePlatform();
         }
         UpdatePlatform();
     }
@@ -38,26 +45,80 @@ public class PlatformGenerator : MonoBehaviour
             movingPlatforms.Add(Instantiate(platform[Random.Range(0, 2)], randomPosition, Quaternion.identity)); //Create platform at different position
             platform[0].SetActive(true); //Show the platform
         }
-
-        
+        platforms = true;
     }
 
     void UpdatePlatform()
     {
-        foreach (GameObject go in movingPlatforms)
+        if (platforms)
         {
-
-            go.transform.Translate(0, 1 * Time.deltaTime, 0);
-            if (go.transform.position.y >= -6)
+            foreach (GameObject go in movingPlatforms)
             {
-                go.transform.position = new Vector3(go.transform.position.x, -6, 0);
+                int i = 1;
+                if (go.transform.position.y >= -6)
+                {
+                    i = 0;
+                }
+                go.transform.Translate(0, i * Time.deltaTime, 0);
+                
+            }
+        }
+        else
+        {
+            foreach (GameObject go in movingPlatforms)
+            {
+
+                go.transform.Translate(0, -1 * Time.deltaTime, 0);
+                if (go.transform.position.y <= -10)
+                {
+                    movingPlatforms.Remove(go);
+                    Destroy(go);
+                }
+            }
+        }
+
+
+        if (!ground)
+        {
+            foreach (GameObject go in allSprites)
+            {
+                go.transform.Translate(0, -1 * Time.deltaTime, 0);
+                if (go.transform.position.y < -10)
+                {
+                    go.transform.position = new Vector3(go.transform.position.x, -10, 0);
+                }
+            }
+        }
+        else
+        {
+            foreach (GameObject go in allSprites)
+            {
+                go.transform.Translate(0, 1 * Time.deltaTime, 0);
+                if (go.transform.position.y > -4.5f)
+                {
+                    go.transform.position = new Vector3(go.transform.position.x, -4.5f, 0);
+                }
             }
         }
     }
 
-    public void setPos(Vector3 _Position)
+    public void GeneratePlatform(Vector3 _Position)
     {
-        pos = _Position;
+        Vector3 position = new Vector3(_Position.x - platform[1].GetComponentInChildren<BoxCollider2D>().size.x, -10, 0);
+        GameObject newplat = Instantiate(platform[1], position, Quaternion.identity); //Create platform at different position
+        movingPlatforms.Add(newplat);
+        newplat.SetActive(true); //Show the platform
+        platforms = true;
+    }
+
+    public void ToggleGround()
+    {
+        ground = !ground;
+    }
+
+    public void TogglePlatforms()
+    {
+        platforms = !platforms;
     }
 }
 
