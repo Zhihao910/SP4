@@ -15,7 +15,7 @@ public class SceneTransit : MonoBehaviour {
 	}
     public void ToGame()
     {
-        SceneManager.LoadScene("MainGame 1");
+        SceneManager.LoadScene("Overworld");
     }
     public void ToMainMenu()
     {
