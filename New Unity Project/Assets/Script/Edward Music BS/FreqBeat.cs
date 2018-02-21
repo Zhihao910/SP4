@@ -110,8 +110,10 @@ public class FreqBeat : MonoBehaviour
     {
         if (!_source.isPlaying)
         {
-            if (!_isbeatSaved)
+            if (!_isbeatSaved && _detectedFinish)
             {
+                _isbeatSaved = true;
+
                 _mp.saveSong();
                 Destroy(_mp);
             }
@@ -395,7 +397,7 @@ public class FreqBeat : MonoBehaviour
         if (Saving.LoadingFromFile("MusicData.txt", (List<string> _data) =>
         {
             // See if song exists
-            if (_data.Contains(_source.clip.name.ToString()))
+            if (_data.Contains("<name>" + _source.clip.name.ToString()))
                 print("Song Data found, reading now...");
             else
             {
@@ -405,7 +407,7 @@ public class FreqBeat : MonoBehaviour
             }
 
             List<string> songData = new List<string>();
-            songData = _data.GetRange(_data.IndexOf(_source.clip.name.ToString()), (_data.IndexOf(_source.clip.name.ToString() + "end") - _data.IndexOf(_source.clip.name.ToString())));
+            songData = _data.GetRange(_data.IndexOf("<name>" + _source.clip.name.ToString()), (_data.IndexOf(_source.clip.name.ToString() + "end") - _data.IndexOf("<name>" + _source.clip.name.ToString())));
 
             // FIND BPM
             List<string> bpmData = new List<string>();
