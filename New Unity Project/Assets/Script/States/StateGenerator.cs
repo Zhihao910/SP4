@@ -28,6 +28,7 @@ public class StateGenerator : MonoBehaviour {
 
         BaseState.Attack att = () =>
         {
+
             Vector3 pos = gameObject.GetComponent<Transform>().position;
             Vector3 target = new Vector3(-1, -1, 0);
             Object o = Resources.Load("Prefabs/Projectile1");
@@ -40,10 +41,12 @@ public class StateGenerator : MonoBehaviour {
             newgo.GetComponent<Projectile>().SetDir(target);
             newgo.GetComponent<Projectile>().projectileSpeed = 10 / multiplier;
 
+            
             for (int i = 0; i < 4; ++i)
             {
                 GameObject newergo = Instantiate(newgo, pos, Quaternion.identity);
                 target.x += 0.5f;
+               
                 newergo.GetComponent<Projectile>().SetDir(target);
                 newergo.GetComponent<Projectile>().projectileSpeed = 10 / multiplier;
             }
@@ -59,7 +62,7 @@ public class StateGenerator : MonoBehaviour {
             if (go == null) Debug.Log("Loaded object isn't GameObject");
             GameObject newgo = Instantiate(go, pos, Quaternion.identity);
             if (newgo == null) Debug.Log("Couldn't instantiate");
-
+            
             newgo.GetComponent<Projectile>().SetDir(target);
             newgo.GetComponent<Projectile>().projectileSpeed = 10 / multiplier;
 
@@ -67,6 +70,7 @@ public class StateGenerator : MonoBehaviour {
             {
                 GameObject newergo = Instantiate(newgo, pos, Quaternion.identity);
                 target.x += 0.5f;
+                
                 newergo.GetComponent<Projectile>().SetDir(target);
                 newergo.GetComponent<Projectile>().projectileSpeed = 10 / multiplier;
             }
@@ -191,9 +195,11 @@ public class StateGenerator : MonoBehaviour {
             GameObject newgo = Instantiate(go, pos, Quaternion.identity);
             if (newgo == null) Debug.Log("Couldn't instantiate");
 
+            GameObject parent = Instantiate(Resources.Load("Prefabs/FakeParent") as GameObject);
+            newgo.transform.parent = parent.transform;
             newgo.GetComponent<Projectile>().SetTarget(target);
             newgo.GetComponent<Projectile>().SetDir((target - pos).normalized);
-
+            newgo.GetComponent<ExplodingProjectile>().SetSplitCount(60);
             newgo.GetComponent<Projectile>().projectileSpeed = 1;
             prevprev = (int)(target.x);
             target.x += (4 * mult);

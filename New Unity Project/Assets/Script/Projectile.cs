@@ -9,6 +9,7 @@ public class Projectile : MonoBehaviour
     Vector3 dir;
     Vector3 target = new Vector3(999, 999, 999);
     protected bool hittarget = false;
+    GameObject Indicator;
 
     // Use this for initialization
     protected void Start()
@@ -25,7 +26,13 @@ public class Projectile : MonoBehaviour
             lifeTime -= Time.deltaTime;
             transform.Translate(dir.x * projectileSpeed * Time.deltaTime, dir.y * projectileSpeed * Time.deltaTime, 0);
             if (lifeTime <= 0)
-                Destroy(gameObject);
+            {
+                if (null != transform.parent)
+                    Destroy((transform.parent).gameObject);
+                else
+                    Destroy(gameObject);
+            }
+
             if (null != target)
             {
                 if ((target - transform.position).magnitude < 0.1f)
@@ -48,7 +55,10 @@ public class Projectile : MonoBehaviour
                 other.GetComponent<PlayerController>().mana = 100;
             if (other.GetComponent<PlayerController>().invincible == false)
                 other.GetComponent<PlayerController>().health -= 10;
-            Destroy(this.gameObject);
+            if (null != transform.parent)
+                Destroy((transform.parent).gameObject);
+            else
+                Destroy(gameObject);
         }
     }
 
@@ -60,5 +70,10 @@ public class Projectile : MonoBehaviour
     public void SetTarget(Vector3 _Target)
     {
         target = _Target;
+        Destroy(Indicator);
+        Indicator = Instantiate(Resources.Load("Prefabs/Indicator") as GameObject);
+        Indicator.transform.parent = gameObject.transform.parent;
+        Indicator.transform.position = _Target;
+        Indicator.SetActive(true);
     }
 }
