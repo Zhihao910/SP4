@@ -5,6 +5,8 @@ using UnityEngine;
 public class pause : MonoBehaviour
 {
     public bool paused;
+    [SerializeField]
+    AudioPeerManager _peerMan;
     // Use this for initialization
     void Start()
     {
@@ -25,10 +27,13 @@ public class pause : MonoBehaviour
         if (paused)
         {
             Time.timeScale = 0;
+            _peerMan.Pause();
         }
         else if (!paused)
         {
             Time.timeScale = 1;
+            _peerMan.UnPause();
+
         }
     }
 }

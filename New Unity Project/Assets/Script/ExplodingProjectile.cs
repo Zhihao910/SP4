@@ -7,13 +7,11 @@ public class ExplodingProjectile : Projectile {
     [SerializeField]
     GameObject proj2;
 
-    int SplitCount;
+    int SplitCount = 8;
 
     // Use this for initialization
     protected void Start () {
         base.Start();
-        SplitCount = 8;
-
     }
 	
 	// Update is called once per frame
@@ -21,7 +19,7 @@ public class ExplodingProjectile : Projectile {
         base.Update();
         if(hittarget)
         {
-            for(int i = 0; i < 360; i += 360/SplitCount)
+            for(float i = 0; i < 360; i += 360/SplitCount)
             {
                 GameObject go = Instantiate(proj2, transform.position, Quaternion.identity);
                 float rad = i * (Mathf.PI / 180);

@@ -13,7 +13,6 @@ public class PlatformGenerator : MonoBehaviour
     bool stopSpawn = true;
     float spawnTimer = 3;
     bool ground = true;
-    bool platforms = false;
 
 
     public GameObject[] allSprites;
@@ -45,39 +44,10 @@ public class PlatformGenerator : MonoBehaviour
             movingPlatforms.Add(Instantiate(platform[Random.Range(0, 2)], randomPosition, Quaternion.identity)); //Create platform at different position
             platform[0].SetActive(true); //Show the platform
         }
-        platforms = true;
     }
 
     void UpdatePlatform()
     {
-        if (platforms)
-        {
-            foreach (GameObject go in movingPlatforms)
-            {
-                int i = 1;
-                if (go.transform.position.y >= -6)
-                {
-                    i = 0;
-                }
-                go.transform.Translate(0, i * Time.deltaTime, 0);
-                
-            }
-        }
-        else
-        {
-            foreach (GameObject go in movingPlatforms)
-            {
-
-                go.transform.Translate(0, -1 * Time.deltaTime, 0);
-                if (go.transform.position.y <= -10)
-                {
-                    movingPlatforms.Remove(go);
-                    Destroy(go);
-                }
-            }
-        }
-
-
         if (!ground)
         {
             foreach (GameObject go in allSprites)
@@ -100,15 +70,28 @@ public class PlatformGenerator : MonoBehaviour
                 }
             }
         }
+
+        for (int i = movingPlatforms.Count - 1; i >= 0; --i)
+        {
+            GameObject go = movingPlatforms[i];
+            if (go.GetComponent<Platform>().despawn)
+            {
+                movingPlatforms.RemoveAt(i);
+                Destroy(go);
+            }
+        }
     }
 
-    public void GeneratePlatform(Vector3 _Position)
+    public void GeneratePlatform(Vector3 _Position, Vector3 _Target)
     {
-        Vector3 position = new Vector3(_Position.x - platform[1].GetComponentInChildren<BoxCollider2D>().size.x, -10, 0);
-        GameObject newplat = Instantiate(platform[1], position, Quaternion.identity); //Create platform at different position
+        _Target.x -= platform[1].GetComponentInChildren<BoxCollider2D>().size.x;
+        _Position.x -= platform[1].GetComponentInChildren<BoxCollider2D>().size.x;
+        GameObject newplat = Instantiate(platform[1], _Position, Quaternion.identity); //Create platform at different position
         movingPlatforms.Add(newplat);
+        newplat.GetComponent<Platform>().SetTarget(_Target);
+        newplat.GetComponent<Platform>().SetDir((_Target - _Position).normalized);
+
         newplat.SetActive(true); //Show the platform
-        platforms = true;
     }
 
     public void ToggleGround()
@@ -116,9 +99,12 @@ public class PlatformGenerator : MonoBehaviour
         ground = !ground;
     }
 
-    public void TogglePlatforms()
+    public void DespawnAll()
     {
-        platforms = !platforms;
+        foreach(GameObject go in movingPlatforms)
+        {
+            go.GetComponent<Platform>().despawn = true;
+        }
     }
 }
 
