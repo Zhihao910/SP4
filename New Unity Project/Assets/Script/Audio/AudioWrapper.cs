@@ -107,4 +107,15 @@ public class AudioWrapper : MonoBehaviour {
     {
         return _audioSource.time;
     }
+
+    public void Pause()
+    {
+        _audioSource.Pause();
+    }
+
+    public void UnPause()
+    {
+        _audioSource.UnPause();
+    }
+
 }
