@@ -12,7 +12,7 @@ sealed public class AudioPeer : MonoBehaviour
     private float[] _freqBand64 = new float[64];
     private float[] _bandBuffer64 = new float[64];
     float[] _bufferDecrease64 = new float[64];
-    float[] _freqBandHighest64 = new float[64];
+    public static float[] _freqBandHighest64 = new float[64];
 
     [HideInInspector]
     public static float[] _audioBand64 = new float[64];

@@ -2,6 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// >be me
+// >spend a week doing this
+// >also spend same week doing freq sound detection
+// >not accurate
+// >end up using external bpm script
+// >freq sound detection stupefied to sets
+// >basically fail SP cause I have nothing to show
+// >:dab:
+// >guess i'll fucking die
+
 public class BPM : MonoBehaviour
 {
     // AudioSource

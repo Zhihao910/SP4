@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,136 +36,16 @@ public class MusicProjectile : MonoBehaviour
     private List<float> highList = new List<float>();
     private List<float> threeList = new List<float>();
 
-    // cooldown
-    private double _coolDown;
-
-
-    // Time between beats
-    private double _beatTime;
-
-    // Time counting up until nextbeat
-    private double _nextBeat;
-
-    // Temp time between beats in Detect()
-    private double _tempBeatTime;
-
-    // Temp time counting for next beat in Detect()
-    private double _tempNextBeat;
-
-    // Temp beat count
-    private int _tempBeatCount;
-
-    // Used for WithinRange() cuz tempo
-    private int _beatCount;
-
-    // 4 beats
-    // what if the time signature is different?
-    // well fuck
-    private double[] _tempo = new double[4];
-
-    // secondary BPM using bass
-    private double _bpm;
-
-    // new item
-    private bool _newbpm;
-
-    Dictionary<double, int> _bpmList = new Dictionary<double, int>();
-
     // Use this for initialization
     void Start()
     {
         frontpeer.SetAudioClip(_sample);
         frontpeer.StartPlaying();
-
-        for (int i = 0; i < _tempo.Length; ++i)
-        {
-            _tempo[i] = 0;
-        }
-
-        _newbpm = false;
-
-        _bpmList.Add(128, 1);
     }
 
     // Update is called once per frame
-    void Update () {
-        //Debug.Log(curr.GetClipName());
-
-        //Vector2 randomPosition = new Vector2(15, Random.Range(-1, -5));
-
-        //// Bass + Kick
-        //if (SpawnEffect._spawnBass || SpawnEffect._spawnKick)
-        //{
-        //    if (!spawnBass)
-        //    {
-        //        Instantiate(Projectile, new Vector2(15, 0), Quaternion.identity);
-
-        //        spawnBass = true;
-        //    }
-        //}
-        //else
-        //{
-        //    spawnBass = false;
-        //}
-
-        //// Vocal + Instrument
-        //if (SpawnEffect._spawnCenter || SpawnEffect._spawnMelody)
-        //{
-        //    if (!spawnCenter)
-        //    {
-        //        if (SpawnEffect._spawnHigh)
-        //        {
-        //            if (!spawnHigh)
-        //            {
-        //                Instantiate(Projectile, new Vector2(15, -3), Quaternion.identity);
-
-        //                spawnHigh = true;
-        //            }
-        //        }
-        //        else
-        //        {
-
-        //            //Instantiate(Projectile, new Vector2(15, -2), Quaternion.identity);
-
-        //            spawnCenter = true;
-        //        }
-        //    }
-        //}
-        //else
-        //{
-        //    spawnCenter = false;
-        //}
-
-        //// CHALKBOARD SCREECHING
-        //if (SpawnEffect._spawnHigh)
-        //{
-        //    if (!spawnHigh)
-        //    {
-        //        if (SpawnEffect._spawnCenter || SpawnEffect._spawnMelody)
-        //        {
-        //            if (!spawnCenter)
-        //            {
-        //                Instantiate(Projectile, new Vector2(15, -3), Quaternion.identity);
-
-        //                spawnCenter = true;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            //Instantiate(Projectile, new Vector2(15, -4), Quaternion.identity);
-
-        //            spawnHigh = true;
-        //        }
-        //    }
-        //}
-        //else
-        //{
-        //    spawnHigh = false;
-        //}
-
-        _coolDown += Time.deltaTime;
-        _tempBeatTime += Time.deltaTime;
-
+    void Update ()
+    {
         // BASS
         if (SpawnEffect._spawnBass)
         {
@@ -195,115 +76,7 @@ public class MusicProjectile : MonoBehaviour
 
                 spawnKick = true;
 
-                //print(_tempBeatTime);
-
-                if (WithinRange(_tempo[1], _tempo[0] + _tempBeatTime))
-                {
-                    //Debug.Log("OUTLIER, go back");
-
-                    _tempo[0] = _tempBeatTime + _tempo[0];
-
-                    _beatCount = _tempBeatCount + 1;
-
-                    //Debug.Log(_beatCount);
-                    //Debug.Log("CONTINUE");
-
-                    if (_beatCount >= 4)
-                    {
-                        for (int i = 0; i < 4; ++i)
-                        {
-                            _beatTime += _tempo[i];
-                        }
-                        _beatTime /= 4;
-
-                        _bpm = 60.0 / _beatTime;
-
-                        _newbpm = true;
-
-                        foreach (double i in _bpmList.Keys)
-                        {
-                            // If its similar bpm
-                            if (WithinRange(i, _bpm))
-                            {
-                                ++_bpmList[i];
-                                _newbpm = false;
-                                break;
-                            }
-                        }
-
-                        if (_newbpm)
-                        {
-                            print("Add New");
-                            _bpmList.Add(_bpm, 1);
-                        }
-                        _newbpm = false;
-
-                        print(_bpm);
-                        Debug.Log("CHANGE BPM ----------------------------------------------------------------------------------------------------------------");
-
-                        _beatCount = 1;
-                    }
-                }
-                else if (!WithinRange(_tempo[0], _tempBeatTime))
-                {
-                    _tempo[0] = _tempBeatTime;
-
-                    if (_beatCount > 1)
-                        _tempBeatCount = _beatCount;
-
-                    _beatCount = 1;
-                    //Debug.Log("CHANGE");
-
-
-                }
-                else
-                {
-                    _tempo[_beatCount] = _tempBeatTime;
-                    ++_beatCount;
-
-                    //print(_tempBeatTime);
-
-                    //Debug.Log(_beatCount);
-                    //Debug.Log("CONTINUE");
-
-                    if (_beatCount >= 4)
-                    {
-                        for (int i = 0; i < 4; ++i)
-                        {
-                            _beatTime += _tempo[i];
-                        }
-                        _beatTime /= 4;
-
-                        _bpm = 60.0 / _beatTime;
-
-                        _newbpm = true;
-
-                        foreach (double i in _bpmList.Keys)
-                        {
-                            // If its similar bpm
-                            if (WithinRange(i, _bpm))
-                            {
-                                ++_bpmList[i];
-                                _newbpm = false;
-                                break;
-                            }
-                        }
-
-                        if (_newbpm)
-                        {
-                            print("Add New");
-                            _bpmList.Add(_bpm, 1);
-                        }
-                        _newbpm = false;
-
-                        print(_bpm);
-                        Debug.Log("CHANGE BPM ----------------------------------------------------------------------------------------------------------------");
-
-                        _beatCount = 1;
-                    }
-                }
-
-                _tempBeatTime = 0.0;
+                kickList.Add(_audioSource.time);
             }
             else if (spawnKick)
             {
@@ -318,38 +91,18 @@ public class MusicProjectile : MonoBehaviour
         // ACTUALLY ALSO PART OF VOCALS AND INSTRUMENTS
         if (SpawnEffect._spawnCenter)
         {
-            //if (SpawnEffect._spawnMelody || SpawnEffect._spawnHigh)
-            //{
-            //    if (!spawnThree)
-            //    {
-            //        Instantiate(Projectile, new Vector2(15, -4), Quaternion.identity);
-
-            //        spawnThree = true;
-            //    }
-            //    //else
-            //    //{
-            //    //    Instantiate(ProjectileDrag, new Vector2(15, -4), Quaternion.identity);
-            //    //}
-            //}
-            if (!spawnCenter && _coolDown > 0.2)
+            if (!spawnCenter)
             {
                 Instantiate(Projectile, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
 
                 spawnCenter = true;
 
-                _coolDown = 0.0;
+                centerList.Add(_audioSource.time);
             }
             else if (spawnCenter)
             {
                 Instantiate(ProjectileDrag, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
             }
-
-            //if (!spawnCenter)
-            //{
-            //    Instantiate(Projectile, new Vector2(15, -2), Quaternion.identity);
-
-            //    spawnCenter = true;
-            //}
         }
         else
         {
@@ -359,38 +112,18 @@ public class MusicProjectile : MonoBehaviour
         // VOCALS AND INSTRUMENTS
         if (SpawnEffect._spawnMelody)
         {
-            //if (SpawnEffect._spawnCenter || SpawnEffect._spawnHigh)
-            //{
-            //    if (!spawnThree)
-            //    {
-            //        Instantiate(Projectile, new Vector2(15, -4), Quaternion.identity);
-
-            //        spawnThree = true;
-            //    }
-            //    //else
-            //    //{
-            //    //    Instantiate(ProjectileDrag, new Vector2(15, -4), Quaternion.identity);
-            //    //}
-            //}
-            if (!spawnMelody && _coolDown > 0.2)
+            if (!spawnMelody)
             {
                 Instantiate(Projectile, new Vector2(15, -2), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
 
                 spawnMelody = true;
 
-                _coolDown = 0.0;
+                melodyList.Add(_audioSource.time);
             }
             else if (spawnMelody)
             {
                 Instantiate(ProjectileDrag, new Vector2(15, -2), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
             }
-
-            //if (!spawnMelody)
-            //{
-            //    Instantiate(Projectile, new Vector2(15, -3), Quaternion.identity);
-
-            //    spawnMelody = true;
-            //}
         }
         else
         {
@@ -400,70 +133,23 @@ public class MusicProjectile : MonoBehaviour
         // CHALKBOARD SCREECHING
         if (SpawnEffect._spawnHigh)
         {
-            //if (SpawnEffect._spawnCenter || SpawnEffect._spawnMelody)
-            //{
-            //    if (!spawnThree)
-            //    {
-            //        Instantiate(Projectile, new Vector2(15, -4), Quaternion.identity);
-
-            //        spawnThree = true;
-            //    }
-            //    //else
-            //    //{
-            //    //    Instantiate(ProjectileDrag, new Vector2(15, -4), Quaternion.identity);
-            //    //}
-            //}
-            if (!spawnHigh && _coolDown > 0.2)
+            if (!spawnHigh)
             {
                 Instantiate(Projectile, new Vector2(15, -3), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
 
                 spawnHigh = true;
 
-                _coolDown = 0.0;
+                highList.Add(_audioSource.time);
             }
             else if (spawnHigh)
             {
                 Instantiate(ProjectileDrag, new Vector2(15, -3), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
             }
-
-            //if (!spawnHigh)
-            //{
-            //    Instantiate(Projectile, new Vector2(15, -4), Quaternion.identity);
-
-            //    spawnHigh = true;
-            //}
         }
         else
         {
             spawnHigh = false;
         }
-
-        //if (!SpawnEffect._spawnCenter && !SpawnEffect._spawnMelody && !SpawnEffect._spawnHigh)
-        //{
-        //    spawnThree = false;
-        //}
-
-        double mostbpm = 0;
-        int numberOf = 0;
-
-        foreach (KeyValuePair<double, int> stats in _bpmList)
-        {
-            //print("enter");
-
-            if (mostbpm == 0)
-                mostbpm = stats.Key;
-            if (numberOf == 0)
-                numberOf = stats.Value;
-
-            if (stats.Value > numberOf)
-            {
-                mostbpm = stats.Key;
-                numberOf = stats.Value;
-            }
-        }
-
-        //print("BPM SET TO:" + mostbpm);
-        //print("VALUE:" + numberOf);
     }
 
     public static void Swap()
@@ -474,36 +160,6 @@ public class MusicProjectile : MonoBehaviour
     {
         frontpeer.StartPlaying();
     }
-
-    //public void PrintTime()
-    //{
-    //    Debug.Log(_sample.time);
-    //}
-
-    //public void PrintIntro()
-    //{
-    //    Debug.Log("Intro");
-    //}
-
-    //public void PrintVerse()
-    //{
-    //    Debug.Log("Verse");
-    //}
-
-    //public void PrintBreak()
-    //{
-    //    Debug.Log("Break");
-    //}
-
-    //public void PrintBuildUp()
-    //{
-    //    Debug.Log("BuildUp");
-    //}
-
-    //public void PrintDrop()
-    //{
-    //    Debug.Log("Drop");
-    //}
 
     public float TimeNow()
     {
@@ -525,6 +181,252 @@ public class MusicProjectile : MonoBehaviour
         else
         {
             return true;
+        }
+    }
+
+    public void saveSong()
+    {
+        if (Saving.LoadingFromFile("MusicData.txt", (List<string> _data) =>
+        {
+            return !_data.Contains("<FreqName>" + _audioSource.clip.name.ToString());
+        }))
+        {
+            print("saving");
+
+            List<string> saver = new List<string>();
+
+            saver.Add("<beat>");
+
+            saver.Add("<FreqName>");
+            saver.Add(_audioSource.clip.name.ToString());
+            saver.Add("</FreqName>");
+
+            saver.Add("<basscount>");
+            saver.Add((bassList.Count - 1).ToString());
+            saver.Add("</basscount>");
+
+            saver.Add("<bass>");
+            for (int i = 0; i < (bassList.Count - 1); ++i)
+            {
+                saver.Add("<ba" + i.ToString() + ">");
+                saver.Add(bassList[i].ToString());
+                saver.Add("<ba/" + i.ToString() + ">");
+            }
+            saver.Add("</bass>");
+
+            saver.Add("<kickcount>");
+            saver.Add((kickList.Count - 1).ToString());
+            saver.Add("</kickcount>");
+
+            saver.Add("<kick>");
+            for (int i = 0; i < (kickList.Count - 1); ++i)
+            {
+                saver.Add("<ki" + i.ToString() + ">");
+                saver.Add(kickList[i].ToString());
+                saver.Add("<ki/" + i.ToString() + ">");
+            }
+            saver.Add("</kick>");
+
+            saver.Add("<centercount>");
+            saver.Add((centerList.Count - 1).ToString());
+            saver.Add("</centercount>");
+
+            saver.Add("<center>");
+            for (int i = 0; i < (centerList.Count - 1); ++i)
+            {
+                saver.Add("<ce" + i.ToString() + ">");
+                saver.Add(centerList[i].ToString());
+                saver.Add("<ce/" + i.ToString() + ">");
+            }
+            saver.Add("</center>");
+
+            saver.Add("<melodycount>");
+            saver.Add((melodyList.Count - 1).ToString());
+            saver.Add("</melodycount>");
+
+            saver.Add("<melody>");
+            for (int i = 0; i < (melodyList.Count - 1); ++i)
+            {
+                saver.Add("<me" + i.ToString() + ">");
+                saver.Add(melodyList[i].ToString());
+                saver.Add("<me/" + i.ToString() + ">");
+            }
+            saver.Add("</melody>");
+
+            saver.Add("<highcount>");
+            saver.Add((highList.Count - 1).ToString());
+            saver.Add("</highcount>");
+
+            saver.Add("<high>");
+            for (int i = 0; i < (highList.Count - 1); ++i)
+            {
+                saver.Add("<hi" + i.ToString() + ">");
+                saver.Add(highList[i].ToString());
+                saver.Add("<hi/" + i.ToString() + ">");
+            }
+            saver.Add("</high>");
+
+            saver.Add("</beat>");
+
+            saver.Add(_audioSource.clip.name.ToString() + "FreqEnd");
+
+            Saving.SaveToFile("MusicData.txt", saver);
+        }
+        else
+        {
+            print("Failed to save!");
+        }
+    }
+
+    private bool checkSong()
+    {
+        if (Saving.LoadingFromFile("MusicData.txt", (List<string> _data) =>
+        {
+            // See if song exists
+            if (_data.Contains("<FreqName>" + _audioSource.clip.name.ToString()))
+                print("Song Data found, reading now...");
+            else
+            {
+                print("couldnt find song name:" + _audioSource.clip.name.ToString());
+
+                return false;
+            }
+
+            List<string> freqData = new List<string>();
+            freqData = _data.GetRange(_data.IndexOf("<FreqName>" + _audioSource.clip.name.ToString()), (_data.IndexOf(_audioSource.clip.name.ToString() + "FreqEnd") - _data.IndexOf("<FreqName>" + _audioSource.clip.name.ToString())));
+
+            // FIND BASS COUNT
+            List<string> bassSegment = new List<string>();
+            bassSegment = freqData.GetRange(freqData.IndexOf("<basscount>"), (freqData.IndexOf("</basscount>") - freqData.IndexOf("<basscount>")));
+            bassSegment.Remove("<basscount>");
+            string basssegmentString = "";
+            foreach (string num in bassSegment)
+                basssegmentString += num;
+
+            // FIND BASS
+            List<string> freqBass = freqData.GetRange(freqData.IndexOf("<bass>"), (freqData.IndexOf("</bass>") - freqData.IndexOf("<bass>")));
+            freqBass.Remove("<bass>");
+
+            for (int i = 0; i < (Convert.ToInt32(basssegmentString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat) - 1); ++i)
+            {
+                List<string> bassData = freqBass.GetRange(freqBass.IndexOf("<ba" + i.ToString() + ">"), (freqBass.IndexOf("<ba/" + i.ToString() + ">") - freqBass.IndexOf("<ba" + i.ToString() + ">")));
+                bassData.Remove("<ba" + i.ToString() + ">");
+
+                string freqString = "";
+                foreach (string num in bassData)
+                    freqString += num;
+
+                bassList.Add(Convert.ToSingle(freqString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
+            }
+
+            // FIND KICK COUNT
+            List<string> kickSegment = new List<string>();
+            kickSegment = freqData.GetRange(freqData.IndexOf("<kickcount>"), (freqData.IndexOf("</kickcount>") - freqData.IndexOf("<kickcount>")));
+            kickSegment.Remove("<kickcount>");
+            string kicksegmentString = "";
+            foreach (string num in kickSegment)
+                kicksegmentString += num;
+
+            // FIND KICK
+            List<string> freqkick = freqData.GetRange(freqData.IndexOf("<kick>"), (freqData.IndexOf("</kick>") - freqData.IndexOf("<kick>")));
+            freqkick.Remove("<kick>");
+
+            for (int i = 0; i < (Convert.ToInt32(kicksegmentString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat) - 1); ++i)
+            {
+                List<string> kickData = freqkick.GetRange(freqkick.IndexOf("<ki" + i.ToString() + ">"), (freqkick.IndexOf("<ki/" + i.ToString() + ">") - freqkick.IndexOf("<ki" + i.ToString() + ">")));
+                kickData.Remove("<ki" + i.ToString() + ">");
+
+                string freqString = "";
+                foreach (string num in kickData)
+                    freqString += num;
+
+                kickList.Add(Convert.ToSingle(freqString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
+            }
+
+            // FIND CENTER COUNT
+            List<string> centerSegment = new List<string>();
+            centerSegment = freqData.GetRange(freqData.IndexOf("<centercount>"), (freqData.IndexOf("</centercount>") - freqData.IndexOf("<centercount>")));
+            centerSegment.Remove("<centercount>");
+            string centersegmentString = "";
+            foreach (string num in centerSegment)
+                centersegmentString += num;
+
+            // FIND CENTER
+            List<string> freqcenter = freqData.GetRange(freqData.IndexOf("<center>"), (freqData.IndexOf("</center>") - freqData.IndexOf("<center>")));
+            freqcenter.Remove("<center>");
+
+            for (int i = 0; i < (Convert.ToInt32(centersegmentString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat) - 1); ++i)
+            {
+                List<string> centerData = freqcenter.GetRange(freqcenter.IndexOf("<ce" + i.ToString() + ">"), (freqcenter.IndexOf("<ce/" + i.ToString() + ">") - freqcenter.IndexOf("ce" + i.ToString() + ">")));
+                centerData.Remove("<ce" + i.ToString() + ">");
+
+                string freqString = "";
+                foreach (string num in centerData)
+                    freqString += num;
+
+                centerList.Add(Convert.ToSingle(freqString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
+            }
+
+            // FIND MELODY COUNT
+            List<string> melodySegment = new List<string>();
+            melodySegment = freqData.GetRange(freqData.IndexOf("<melodycount>"), (freqData.IndexOf("</melodycount>") - freqData.IndexOf("<melodycount>")));
+            melodySegment.Remove("<melodycount>");
+            string melodysegmentString = "";
+            foreach (string num in melodySegment)
+                melodysegmentString += num;
+
+            // FIND MELODY
+            List<string> freqmelody = freqData.GetRange(freqData.IndexOf("<melody>"), (freqData.IndexOf("</melody>") - freqData.IndexOf("<melody>")));
+            freqmelody.Remove("<melody>");
+
+            for (int i = 0; i < (Convert.ToInt32(melodysegmentString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat) - 1); ++i)
+            {
+                List<string> melodyData = freqmelody.GetRange(freqmelody.IndexOf("<me" + i.ToString() + ">"), (freqmelody.IndexOf("<me/" + i.ToString() + ">") - freqmelody.IndexOf("<me" + i.ToString() + ">")));
+                melodyData.Remove("<me" + i.ToString() + ">");
+
+                string freqString = "";
+                foreach (string num in melodyData)
+                    freqString += num;
+
+                melodyList.Add(Convert.ToSingle(freqString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
+            }
+
+            // FIND HIGH COUNT
+            List<string> highSegment = new List<string>();
+            highSegment = freqData.GetRange(freqData.IndexOf("<highcount>"), (freqData.IndexOf("</highcount>") - freqData.IndexOf("<highcount>")));
+            highSegment.Remove("<highcount>");
+            string highsegmentString = "";
+            foreach (string num in highSegment)
+                highsegmentString += num;
+
+            // FIND HIGH
+            List<string> freqhigh = freqData.GetRange(freqData.IndexOf("<high>"), (freqData.IndexOf("</high>") - freqData.IndexOf("<high>")));
+            freqhigh.Remove("<high>");
+
+            for (int i = 0; i < (Convert.ToInt32(highsegmentString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat) - 1); ++i)
+            {
+                List<string> highData = freqhigh.GetRange(freqhigh.IndexOf("<hi" + i.ToString() + ">"), (freqhigh.IndexOf("<hi/" + i.ToString() + ">") - freqhigh.IndexOf("<hi" + i.ToString() + ">")));
+                highData.Remove("<hi" + i.ToString() + ">");
+
+                string freqString = "";
+                foreach (string num in highData)
+                    freqString += num;
+
+                highList.Add(Convert.ToSingle(freqString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
+            }
+
+            return true;
+        }
+            ))
+        {
+            print("Successfully loaded from file.");
+
+            return true;
+        }
+        else
+        {
+            print("Song does not exist or error in reading file. Will detect.");
+            return false;
         }
     }
 }
