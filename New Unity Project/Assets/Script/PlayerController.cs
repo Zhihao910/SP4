@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour
     float dashCountdown;
     float regainDash = 0;
     public bool invincible = false;
+    public bool invincible2 = false;
+    float invinciblelifetime = 0;
     bool leftDash, rightDash;
     bool downbtn = false;
 
@@ -63,7 +65,16 @@ public class PlayerController : MonoBehaviour
             doubleJump = false;
             animator.SetInteger("States", 3);
         }
-
+        if (invincible2 == true)
+        {
+           invinciblelifetime += Time.deltaTime;
+        }
+        if (invinciblelifetime >= 5.0f)
+        {
+            Debug.Log("INVINCIBILITY GONE");
+            invincible2 = false;
+            invinciblelifetime = 0;
+        }
         //crouch animation
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {

@@ -46,7 +46,7 @@ public class Projectile : MonoBehaviour
             other.GetComponent<PlayerController>().mana += 20;
             if (other.GetComponent<PlayerController>().mana >= 100)
                 other.GetComponent<PlayerController>().mana = 100;
-            if (other.GetComponent<PlayerController>().invincible == false)
+            if (other.GetComponent<PlayerController>().invincible == false&&other.GetComponent<PlayerController>().invincible2==false)
                 other.GetComponent<PlayerController>().health -= 10;
             Destroy(this.gameObject);
         }
