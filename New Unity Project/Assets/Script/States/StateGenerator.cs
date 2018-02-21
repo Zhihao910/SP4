@@ -155,7 +155,7 @@ public class StateGenerator : MonoBehaviour {
         {
             for (int i = -2; i < 3; ++i)
             {
-                gameObject.GetComponent<PlatformGenerator>().GeneratePlatform(new Vector3(i * 4, 0));
+                gameObject.GetComponent<PlatformGenerator>().GeneratePlatform(new Vector3(i * 4, -10), new Vector3(i * 4, -6));
             }
         };
 
@@ -206,7 +206,7 @@ public class StateGenerator : MonoBehaviour {
             result.m_audioManager = ap;
         }
 
-        result.AddAttack(_clip.length - 0.5f, GetComponent<PlatformGenerator>().TogglePlatforms);
+        result.AddAttack(_clip.length - 0.5f, GetComponent<PlatformGenerator>().DespawnAll);
 
 
         m_StateMap[_clipname] = result;

@@ -129,4 +129,14 @@ public class AudioPeerManager : MonoBehaviour {
     {
         return frontpeer.TimeNow();
     }
+
+    public void Pause()
+    {
+        frontpeer.Pause();
+    }
+
+    public void UnPause()
+    {
+        frontpeer.UnPause();
+    }
 }
