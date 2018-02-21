@@ -14,6 +14,7 @@ public class PlatformGenerator : MonoBehaviour
     float spawnTimer = 3;
     bool ground = true;
     bool platforms = false;
+    bool despawnplatforms = false;
 
 
     public GameObject[] allSprites;
@@ -63,17 +64,24 @@ public class PlatformGenerator : MonoBehaviour
                 
             }
         }
+        else if (despawnplatforms)
+        {
+            for (int i = movingPlatforms.Count - 1; i >= 0; --i)
+            {
+                GameObject go = movingPlatforms[i];
+                movingPlatforms.RemoveAt(i);
+                Destroy(go);
+            }
+        }
         else
         {
             foreach (GameObject go in movingPlatforms)
             {
-
                 go.transform.Translate(0, -1 * Time.deltaTime, 0);
                 if (go.transform.position.y <= -10)
-                {
-                    movingPlatforms.Remove(go);
-                    Destroy(go);
-                }
+                    despawnplatforms = true;
+                else
+                    despawnplatforms = false;
             }
         }
 
@@ -109,6 +117,7 @@ public class PlatformGenerator : MonoBehaviour
         movingPlatforms.Add(newplat);
         newplat.SetActive(true); //Show the platform
         platforms = true;
+        despawnplatforms = false;
     }
 
     public void ToggleGround()
