@@ -267,7 +267,7 @@ public class MusicProjectile : MonoBehaviour
 
             saver.Add("</beat>");
 
-            saver.Add(_audioSource.clip.name.ToString() + "FreqEnd");
+            saver.Add(_audioSource.clip.name.ToString() + "FreqEnd\n");
 
             Saving.SaveToFile("MusicData.txt", saver);
         }

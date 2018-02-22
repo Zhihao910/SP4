@@ -167,7 +167,7 @@ public class FreqBeat : MonoBehaviour
                     }
                     saver.Add("</freqHighs>");
 
-                    saver.Add(_source.clip.name.ToString() + "end");
+                    saver.Add(_source.clip.name.ToString() + "end\n");
 
                     Saving.SaveToFile("MusicData.txt", saver);
                 }
