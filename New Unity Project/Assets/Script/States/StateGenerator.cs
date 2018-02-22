@@ -273,9 +273,69 @@ public class StateGenerator : MonoBehaviour {
         //    }
         //};
 
+        //Possible Keys
+        List<int> _arrowKeys = new List<int>();
+        List<bool> _outcomeKeys = new List<bool>();
+
+        int numberofKeys = 7;
+
+        for (int i = 0; i < numberofKeys; ++i)
+        {
+            _arrowKeys.Add(Random.Range(1, 4));
+        }
+
+        // 1 - Up
+        // 2 - Right
+        // 3 - Down
+        // 4 - Left
+
+        int _counter = 0;
+        int _buttonPressed = 0;
+        double _QTETime = 0.0;
+
         BaseState.Attack att = () =>
         {
+            _buttonPressed = 0;
+            _QTETime += Time.deltaTime;
 
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+                _buttonPressed = 1;
+            else if (Input.GetKeyDown(KeyCode.RightArrow))
+                _buttonPressed = 2;
+            else if (Input.GetKeyDown(KeyCode.DownArrow))
+                _buttonPressed = 3;
+            else if (Input.GetKeyDown(KeyCode.LeftArrow))
+                _buttonPressed = 4;
+
+            if (_buttonPressed == _arrowKeys[_counter])
+            {
+                //succ ess full
+                _outcomeKeys.Add(true);
+                ++_counter;
+            }
+            else
+            {
+                // If they do the same shit, why not merge them?
+                // Because what if we do different things :worry:
+
+                // Press wrong
+                if (_buttonPressed != 0)
+                {
+                    // boi you fuked up
+                    // oof ooch owie
+                    _outcomeKeys.Add(false);
+                    ++_counter;
+                }
+
+                // Out of time
+                if (_QTETime > beattime)
+                {
+                    // boi you fuked up
+                    // oof ooch owie
+                    _outcomeKeys.Add(false);
+                    ++_counter;
+                }
+            }
         };
 
         for (double time = 0; time < _clip.length; time += beattime)
