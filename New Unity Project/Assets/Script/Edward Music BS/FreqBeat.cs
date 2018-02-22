@@ -62,6 +62,8 @@ public class FreqBeat : MonoBehaviour
     [SerializeField]
     public BpmAnalyzer _ba;
 
+    public static Dictionary<string, int> _songInfo = new Dictionary<string, int>();
+
     // Use this for initialization
     void Start ()
     {
@@ -85,11 +87,6 @@ public class FreqBeat : MonoBehaviour
             _offset[i] = 1.0f;
         }
 
-        //print(_highBeat);
-
-        //_source.pitch = 10;
-        //Time.timeScale = 10;
-
         _detectedFinish = checkSong();
 
         _isbeatSaved = (Saving.LoadingFromFile("MusicData.txt", (List<string> _data) =>
@@ -97,19 +94,17 @@ public class FreqBeat : MonoBehaviour
             return _data.Contains("<FreqName>" + _source.clip.name.ToString());
         }));
 
-        //print(_isbeatSaved);
-
-        //BPM._BPMdetectedFinish = _detectedFinish;
-
-        //Detect();
-
-        _source.Play();
-
-        _ba.FindBpm();
-
-        print(_ba.GetBpm());
+        print(_isbeatSaved);
 
         _highBeat = 60.0f / _ba.GetBpm();
+
+        //if (!_detectedFinish)
+        //{
+        //    _songInfo.Add(_source.clip.name.ToString(), _ba.GetBpm());
+        //}
+
+        // this being last is essential
+        _source.Play();
     }
 
     // Update is called once per frame
@@ -138,8 +133,7 @@ public class FreqBeat : MonoBehaviour
 
                     List<string> saver = new List<string>();
 
-                    saver.Add("<name>");
-                    saver.Add(_source.clip.name.ToString());
+                    saver.Add("<name>" + _source.clip.name.ToString());
                     saver.Add("</name>");
 
                     saver.Add("<bpm>");
@@ -173,7 +167,7 @@ public class FreqBeat : MonoBehaviour
                     }
                     saver.Add("</freqHighs>");
 
-                    saver.Add(_source.clip.name.ToString() + "end");
+                    saver.Add(_source.clip.name.ToString() + "end\n");
 
                     Saving.SaveToFile("MusicData.txt", saver);
                 }
@@ -278,7 +272,7 @@ public class FreqBeat : MonoBehaviour
                     }
                     else
                     {
-                        _highList[_highSection][i] *= 0.6f; //0.5
+                        _highList[_highSection][i] *= 0.65f; //0.5
                     }
 
                     //print(AudioPeer._audioBandBuffer64[i]);
@@ -405,16 +399,27 @@ public class FreqBeat : MonoBehaviour
         {
             // See if song exists
             if (_data.Contains("<name>" + _source.clip.name.ToString()))
+            {
                 print("Song Data found, reading now...");
+            }
             else
             {
-                print("couldnt find song name:" + _source.clip.name.ToString());
-
+                print("could not find song:" + _source.clip.name.ToString());
                 return false;
             }
 
             List<string> songData = new List<string>();
             songData = _data.GetRange(_data.IndexOf("<name>" + _source.clip.name.ToString()), (_data.IndexOf(_source.clip.name.ToString() + "end") - _data.IndexOf("<name>" + _source.clip.name.ToString())));
+
+            //why the fuck did i make this function
+            //I might be mentally handicapped
+            //// FIND NAME
+            //List<string> nameData = new List<string>();
+            //nameData = songData.GetRange(songData.IndexOf("<name>" + _source.clip.name.ToString()), (songData.IndexOf(_source.clip.name.ToString() + "</name>") - songData.IndexOf("<name>" + _source.clip.name.ToString())));
+            //nameData.Remove("<name>");
+            //string nameString = "";
+            //foreach (string num in songData)
+            //    nameString += num;
 
             // FIND BPM
             List<string> bpmData = new List<string>();
@@ -424,18 +429,9 @@ public class FreqBeat : MonoBehaviour
             foreach (string num in bpmData)
                 bpmString += num;
 
-            //int databpm = 0;
-            //if (Int32.TryParse(bpmString, out databpm))
-            //{
-            //    BPM._bpm = databpm;
-            //}
-            //else
-            //{
-            //    print("BPM CONVERSION ERROR");
-            //    return false;
-            //}
-            //BPM._bpm = Convert.ToDouble(bpmString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
-            //print(BPM._bpm);
+            _songInfo.Add(_source.clip.name.ToString(), Convert.ToInt32(bpmString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
+
+            _ba.SetBpm(Convert.ToInt32(bpmString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
 
             // FIND NUMBER OF SEGMENTS
             List<string> highsegmentData = new List<string>();
@@ -445,23 +441,11 @@ public class FreqBeat : MonoBehaviour
             foreach (string num in highsegmentData)
                 highsegmentString += num;
 
-            //int datasegment = 0;
-            //if (Int32.TryParse(highsegmentString, out datasegment))
-            //{
-            //    for (int i = 0; i < Int32.Parse(highsegmentString); ++i)
-            //        _highList.Add(new float[64]);
-            //}
-            //else
-            //{
-            //    print("SEGMENTED COUNT ERROR");
-            //    return false;
-            //}
             for (int i = 0; i < (Convert.ToInt32(highsegmentString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat) - 1); ++i)
                 _highList.Add(new float[64]);
             //print(_highList.Count);
 
             // Define out where the highs value will be found
-            //List<string> highsectionData = new List<string>();
             List<string> highsectionData = songData.GetRange(songData.IndexOf("<highs>"), (songData.IndexOf("</highs>") - songData.IndexOf("<highs>")));
             highsectionData.Remove("<highs>");
 
@@ -471,7 +455,6 @@ public class FreqBeat : MonoBehaviour
                 // Yeah okay this is getting a *bit* convoluted
                 // In the high section (from <high> to </high>
                 // find each segment of high data (0 to 63)
-                //List<string> highsectionhighsegmentData = new List<string>();
                 List<string> highsectionhighsegmentData = highsectionData.GetRange(highsectionData.IndexOf("<c" + i.ToString() + ">"), (highsectionData.IndexOf("<c/" + i.ToString() + ">") - highsectionData.IndexOf("<c" + i.ToString() + ">")));
                 highsectionhighsegmentData.Remove("<c" + i.ToString() + ">");
 
@@ -484,40 +467,13 @@ public class FreqBeat : MonoBehaviour
                     foreach (string num in highData)
                         highString += num;
 
-                    //print(highString);
-
-                    //int datahighs = 0;
-                    //if (Int32.TryParse(highString, out datahighs))
-                    //{
-                    //    _highList[i][k] = Int32.Parse(highString);
-                    //}
-                    //else
-                    //{
-                    //    print("HIGH VALUE ERROR");
-                    //    return false;
-                    //}
                     // WHY IN FRESH HELL IS EVERYTHING ELSE NICELY LABELLED "ToDouble", "ToInt" BUT FLOAT IS "TO SINGLE" ?? WHY?
                     _highList[i][k] = Convert.ToSingle(highString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
                     //print(_highList[i][k]);
                 }
             }
 
-            /*
-             
-            
-                    saver.Add("<freqHighs>");
-                    for (int i = 0; i < AudioPeer._freqBandHighest64.Length; ++i)
-                    {
-                        saver.Add("<f" + i.ToString() + ">");
-                        saver.Add(AudioPeer._freqBandHighest64[i].ToString());
-                        saver.Add("<f/" + i.ToString() + ">");
-                    }
-                    saver.Add("</freqHighs>");
-
-             */
-
             // FIND FREQHIGHS
-
             List<string> freqHighs = songData.GetRange(songData.IndexOf("<freqHighs>"), (songData.IndexOf("</freqHighs>") - songData.IndexOf("<freqHighs>")));
             freqHighs.Remove("<freqHighs>");
 
