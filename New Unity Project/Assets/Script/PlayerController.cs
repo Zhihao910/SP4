@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
     public bool invincible2 = false;
     float invinciblelifetime = 0;
     bool leftDash, rightDash;
-    bool downbtn = false;
+    public bool downbtn = false;
 
     bool parryAttack = false;
     bool parryButton, jumpButton = false;
