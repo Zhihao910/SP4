@@ -204,7 +204,7 @@ public class StateGenerator : MonoBehaviour {
             newgo.transform.parent = parent.transform;
             newgo.GetComponent<Projectile>().SetTarget(target);
             newgo.GetComponent<Projectile>().SetDir((target - pos).normalized);
-            newgo.GetComponent<ExplodingProjectile>().SetSplitCount(6);
+            newgo.GetComponent<ExplodingProjectile>().SetSplitCount(8);
             newgo.GetComponent<Projectile>().projectileSpeed = 1;
             prevprev = (int)(target.x);
             target.x += (4 * mult);

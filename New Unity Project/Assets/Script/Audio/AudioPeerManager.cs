@@ -124,7 +124,7 @@ public class AudioPeerManager : MonoBehaviour {
             backpeer = ap;
             swap = !swap;
         }
-        else
+        else if (m_playqueue.Count < 0)
         {
             SceneManager.LoadScene("GameOver");
         }
