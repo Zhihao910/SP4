@@ -105,6 +105,7 @@ public class AudioPeerManager : MonoBehaviour {
         frontpeer.SetAudioClip(m_audioclipmap[curr.GetClipName()]);
 
         frontpeer.StartPlaying();
+        print(m_playqueue.Count);
     }
 
     // Update is called once per frame
@@ -124,7 +125,7 @@ public class AudioPeerManager : MonoBehaviour {
             backpeer = ap;
             swap = !swap;
         }
-        else
+        else if(m_playqueue.Count <= 0)
         {
             SceneManager.LoadScene("GameOver");
         }

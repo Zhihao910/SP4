@@ -5,9 +5,11 @@ using UnityEngine.SceneManagement;
 public class SceneTransit : MonoBehaviour {
 
 	// Use this for initialization
-	void Start () {
-		
-	}
+	void Start ()
+    {
+        Screen.orientation = ScreenOrientation.Landscape;
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
