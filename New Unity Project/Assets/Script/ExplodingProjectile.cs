@@ -24,7 +24,7 @@ public class ExplodingProjectile : Projectile {
                 GameObject go = Instantiate(proj2, transform.position, Quaternion.identity);
                 float rad = i * (Mathf.PI / 180);
                 go.GetComponent<Projectile>().SetDir((new Vector3(Mathf.Cos(rad), Mathf.Sin(rad))).normalized);
-                go.GetComponent<Projectile>().projectileSpeed = 3;
+                go.GetComponent<Projectile>().SetSpeed(3);
             }
             Destroy(gameObject);
         }

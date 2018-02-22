@@ -47,7 +47,7 @@ public class StateGenerator : MonoBehaviour {
             if (newgo == null) Debug.Log("Couldn't instantiate");
 
             newgo.GetComponent<Projectile>().SetDir(target);
-            newgo.GetComponent<Projectile>().projectileSpeed = 10 / multiplier;
+            newgo.GetComponent<Projectile>().SetSpeed(10 / multiplier);
 
             
             for (int i = 0; i < 4; ++i)
@@ -56,7 +56,7 @@ public class StateGenerator : MonoBehaviour {
                 target.x += 0.5f;
                
                 newergo.GetComponent<Projectile>().SetDir(target);
-                newergo.GetComponent<Projectile>().projectileSpeed = 10 / multiplier;
+                newergo.GetComponent<Projectile>().SetSpeed(10 / multiplier);
             }
         };
 
@@ -72,7 +72,7 @@ public class StateGenerator : MonoBehaviour {
             if (newgo == null) Debug.Log("Couldn't instantiate");
             
             newgo.GetComponent<Projectile>().SetDir(target);
-            newgo.GetComponent<Projectile>().projectileSpeed = 10 / multiplier;
+            newgo.GetComponent<Projectile>().SetSpeed(10 / multiplier);
 
             for (int i = 0; i < 3; ++i)
             {
@@ -80,7 +80,7 @@ public class StateGenerator : MonoBehaviour {
                 target.x += 0.5f;
                 
                 newergo.GetComponent<Projectile>().SetDir(target);
-                newergo.GetComponent<Projectile>().projectileSpeed = 10 / multiplier;
+                newergo.GetComponent<Projectile>().SetSpeed(10 / multiplier);
             }
         };
 
@@ -133,7 +133,7 @@ public class StateGenerator : MonoBehaviour {
                 GameObject newgo = Instantiate(go, pos, Quaternion.identity);
                 if (newgo == null) Debug.Log("Couldn't instantiate");
                 newgo.GetComponent<Projectile>().SetDir(new Vector3(prev + (i * mult), -1, 0));
-                newgo.GetComponent<Projectile>().projectileSpeed = 10;
+                newgo.GetComponent<Projectile>().SetSpeed(10);
                 if (i == 0.25)
                 {
                     prevprev = prev;
@@ -208,7 +208,7 @@ public class StateGenerator : MonoBehaviour {
             newgo.GetComponent<Projectile>().SetTarget(target);
             newgo.GetComponent<Projectile>().SetDir((target - pos).normalized);
             newgo.GetComponent<ExplodingProjectile>().SetSplitCount(8);
-            newgo.GetComponent<Projectile>().projectileSpeed = 1;
+            newgo.GetComponent<Projectile>().SetSpeed(5);
             prevprev = (int)(target.x);
             target.x += (4 * mult);
 
@@ -347,6 +347,51 @@ public class StateGenerator : MonoBehaviour {
                     ++_counter;
                 }
             }
+        };
+
+        for (double time = 0; time < _clip.length; time += beattime)
+        {
+            result.AddAttack(time, att);
+            result.m_audioManager = ap;
+        }
+
+        m_StateMap[_clipname] = result;
+        result.Sort();
+
+        return result;
+    }
+
+    // Shockwave Projectile (Drop 2 or some shit?)
+    public BaseState CreateShockwaveProjectile(string _clipname, AudioClip _clip, float multiplier = 1f)
+    {
+        BaseState result = gameObject.AddComponent<BaseState>();
+        result.SetClipName(_clip.name);
+        //Run adding attacks here
+
+        double beattime = ba.GetBeatTime() * multiplier;
+
+        Vector3 target = new Vector3(transform.position.x, -4, transform.position.z);
+
+        // uhh how do i slow down spawning omegalul
+
+        BaseState.Attack att = () =>
+        {
+            Vector3 pos = gameObject.GetComponent<Transform>().position;
+            Object o = Resources.Load("Prefabs/ProjectileShockwave");
+            if (o == null) Debug.Log("Load failed");
+            GameObject go = o as GameObject;
+            if (go == null) Debug.Log("Loaded object isn't GameObject");
+            GameObject newgo = Instantiate(go, pos, Quaternion.identity);
+            if (newgo == null) Debug.Log("Couldn't instantiate");
+
+            target.x = Random.Range(-7, 8);
+
+            GameObject parent = Instantiate(Resources.Load("Prefabs/FakeParent") as GameObject);
+            newgo.transform.parent = parent.transform;
+            newgo.GetComponent<Projectile>().SetTarget(target);
+            newgo.GetComponent<Projectile>().SetDir((target - pos).normalized);
+            newgo.GetComponent<ShockwaveProjectile>().SetHeight(5);
+            newgo.GetComponent<Projectile>().SetSpeed(5);
         };
 
         for (double time = 0; time < _clip.length; time += beattime)
