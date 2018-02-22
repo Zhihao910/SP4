@@ -29,7 +29,7 @@ public class StateGenerator : MonoBehaviour {
 
         // ba.FindBpm();
 
-        double beattime = ba.GetBeatTime() * multiplier;//0.5357; // 0.588 //0.4918
+        double beattime = 0.4918 * multiplier;//0.5357; // 0.588 //0.4918
 
         BaseState.Attack att = () =>
         {
@@ -101,7 +101,7 @@ public class StateGenerator : MonoBehaviour {
         result.SetClipName(_clip.name);
         //Run adding attacks here
 
-        double beattime = ba.GetBeatTime() * multiplier;//0.5357; // 0.588
+        double beattime = 0.4918 * multiplier;//0.5357; // 0.588
 
         Vector3 leftlimit = new Vector3(-0.75f, 1, 0);
         Vector3 rightlimit = new Vector3(0.75f, 1, 0);
@@ -158,7 +158,7 @@ public class StateGenerator : MonoBehaviour {
         result.SetClipName(_clip.name);
         //Run adding attacks here
 
-        double beattime = ba.GetBeatTime() * multiplier;//0.5357; // 0.588
+        double beattime = 0.4918 * multiplier;//0.5357; // 0.588 0.4918 
 
         BaseState.Attack att = () =>
         {
@@ -183,7 +183,7 @@ public class StateGenerator : MonoBehaviour {
         result.SetClipName(_clip.name);
         //Run adding attacks here
 
-        double beattime = ba.GetBeatTime() * multiplier;//0.5357; // 0.588
+        double beattime = 0.4918 * multiplier;//0.5357; // 0.588
         Vector3 target = new Vector3(-8, -2, transform.position.z);
         int mult = 1;
         int prevprev = 0;
@@ -204,7 +204,7 @@ public class StateGenerator : MonoBehaviour {
             newgo.transform.parent = parent.transform;
             newgo.GetComponent<Projectile>().SetTarget(target);
             newgo.GetComponent<Projectile>().SetDir((target - pos).normalized);
-            newgo.GetComponent<ExplodingProjectile>().SetSplitCount(8);
+            newgo.GetComponent<ExplodingProjectile>().SetSplitCount(6);
             newgo.GetComponent<Projectile>().projectileSpeed = 1;
             prevprev = (int)(target.x);
             target.x += (4 * mult);
@@ -234,7 +234,7 @@ public class StateGenerator : MonoBehaviour {
         result.SetClipName(_clip.name);
         //Run adding attacks here
 
-        double beattime = ba.GetBeatTime() * multiplier;
+        double beattime = 0.4918 * multiplier;
 
         //Vector3 leftlimit = new Vector3(-0.75f, 1, 0);
         //Vector3 rightlimit = new Vector3(0.75f, 1, 0);

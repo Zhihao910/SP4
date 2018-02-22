@@ -11,8 +11,9 @@ public class particles : MonoBehaviour
     public ParticleSystem movementparticle1;
     [SerializeField]
     public ParticleSystem movementparticle2;
-
+    bool leftkeypress = false;
     public Dictionary<string, ParticleSystem> storeparticle;
+
     // Use this for initialization
     void Start()
     {
@@ -22,6 +23,10 @@ public class particles : MonoBehaviour
         storeparticle.Add("moveleftparticle", movementparticle1);
         storeparticle.Add("idleparticle", movementparticle2);
     }
+    void AddParticle(string particlename, ParticleSystem particlevariable)
+    {
+        storeparticle.Add(particlename, particlevariable);
+    }
     // Update is called once per frame
     void Update()
     {
@@ -30,8 +35,15 @@ public class particles : MonoBehaviour
             ParticleSystem lol = storeparticle["moverightparticle"];
             Debug.Log(lol);
         }
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.DownArrow) && leftkeypress==true)
         {
+            movementparticle.Emit(0);
+            movementparticle1.Emit(0);
+            movementparticle2.Emit(1);
+        }
+        else if (Input.GetKey(KeyCode.RightArrow))
+        {
+            //red
             movementparticle.Emit(1);
             movementparticle2.Emit(0);
             idleparticle = true;
@@ -41,19 +53,23 @@ public class particles : MonoBehaviour
             movementparticle.Emit(0);
             idleparticle = false;
         }
-        if (Input.GetKey(KeyCode.LeftArrow))
+        else if (Input.GetKey(KeyCode.LeftArrow))
         {
             movementparticle1.Emit(1);
             idleparticle = true;
             movementparticle2.Emit(0);
+            leftkeypress = true;
         }
         else if (Input.GetKeyUp(KeyCode.LeftArrow))
         {
+            //red
             movementparticle1.Emit(0);
             idleparticle = false;
+            leftkeypress = false;
         }
-        if (idleparticle == false)
-            movementparticle2.Emit(1);
+        //green colour particle
+        //if (idleparticle == false)
+        //movementparticle2.Emit(1);
 
     }
 }
