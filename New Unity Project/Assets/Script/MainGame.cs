@@ -11,8 +11,6 @@ public class MainGame : MonoBehaviour
     Vector3 startPosition;
     [HideInInspector]
     public Vector3 direction;
-    [HideInInspector]
-    public bool moving = false;
 
 
     // Use this for initialization
@@ -35,12 +33,11 @@ public class MainGame : MonoBehaviour
     public void StartPosition()
     {
         startPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1);
-        moving = true;
     }
 
     public void Dragging()
     {
-#if UNITY_EDITOR || UNITY_WINDOWS
+#if UNITY_STANDALONE || UNITY_WEBPLAYER
         //Vector3 screenPos = UICamera.ScreenToWorldPoint(Input.mousePosition);
         Vector3 tempPosition = new Vector3(Input.mousePosition.x - startPosition.x, Input.mousePosition.y - startPosition.y, 1);
         float radius = 50;
@@ -65,6 +62,6 @@ public class MainGame : MonoBehaviour
     public void StopDrag()
     {
         Stick.rectTransform.localPosition = new Vector3(0, 0, 1);
-        moving = false;
+        direction = Vector3.zero;
     }
 }
