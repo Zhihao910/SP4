@@ -197,8 +197,7 @@ public class MusicProjectile : MonoBehaviour
 
             saver.Add("<beat>");
 
-            saver.Add("<FreqName>");
-            saver.Add(_audioSource.clip.name.ToString());
+            saver.Add("<FreqName>" + _audioSource.clip.name.ToString());
             saver.Add("</FreqName>");
 
             saver.Add("<basscount>");

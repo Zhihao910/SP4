@@ -7,6 +7,7 @@ public class Saving : MonoBehaviour {
     {
         if(!System.IO.File.Exists(_filename))
         {
+            print("Making File");
             System.IO.File.Create(_filename);
         }
 
@@ -14,7 +15,6 @@ public class Saving : MonoBehaviour {
         {
             System.IO.File.AppendAllText(_filename, s);
             System.IO.File.AppendAllText(_filename, "\n");
-
         }
         return true;
     }
@@ -25,6 +25,7 @@ public class Saving : MonoBehaviour {
     {
         if (!System.IO.File.Exists(_filename))
         {
+            print("File doesnt exist!");
             return false;
         }
 
