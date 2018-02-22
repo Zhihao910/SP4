@@ -24,11 +24,11 @@ public class PlayerController : MonoBehaviour
     public bool invincible = false;
     public bool invincible2 = false;
     float invinciblelifetime = 0;
-    bool leftDash, rightDash;
+    bool leftDash, rightDash, leftUpDash, rightUpDash, leftIdleDash, rightIdleDash;
     bool downbtn = false;
 
     bool parryAttack = false;
-    bool parryButton, jumpButton = false;
+    bool parryButton, jumpButton, dashButton = false;
     float parryTimer = 0;
     bool facingleft = false;
     bool facingright = true;
@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour
         }
         if (invincible2 == true)
         {
-           invinciblelifetime += Time.deltaTime;
+            invinciblelifetime += Time.deltaTime;
         }
         if (invinciblelifetime >= 5.0f)
         {
@@ -78,7 +78,8 @@ public class PlayerController : MonoBehaviour
             invincible2 = false;
             invinciblelifetime = 0;
         }
-        //crouch animation
+
+        //Crouch animation
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             //screenShake.ShakeCamera(1.0f, 0.3f, 0.95f);
@@ -86,113 +87,36 @@ public class PlayerController : MonoBehaviour
             downbtn = true;
         }
 
-        if (downbtn == true)
+        //Crouch animation
+        if (Input.GetKey(KeyCode.DownArrow))
         {
-            animator.SetInteger("States", 5);
-
+            downbtn = true;
+            if (downbtn)
+            {
+                animator.SetInteger("States", 5);
+            }
         }
-        if (Input.GetKeyUp(KeyCode.DownArrow))
+        else
         {
             downbtn = false;
-        }
-        if (Input.GetKeyUp(KeyCode.DownArrow))
-        {
             animator.SetInteger("States", 3);
         }
 
-        //Jump
-        if ((Input.GetKeyDown(KeyCode.Space) || jumpButton) && touchedGround && !downbtn)
-        {
-            Jump();
-            jumpButton = false;
-            animator.SetInteger("States", 4);
-        }
-        //change animation        
+        //change animation to idle state      
         if (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow))
         {
             animator.SetInteger("States", 3);
         }
-        //Jump
-        if ((Input.GetKeyDown(KeyCode.Space) || jumpButton) && !touchedGround && !doubleJump)
-        {
-            Jump();
-            jumpButton = false;
-            doubleJump = true;
-        }
 
-        //Move Left without dash
-        if (Input.GetKey(KeyCode.LeftArrow) && !downbtn)
-        {
-            GetComponent<Rigidbody2D>().velocity = new Vector2(-movementSpeed, GetComponent<Rigidbody2D>().velocity.y);
-            Debug.Log("Left" + movementSpeed);
-            animator.SetInteger("States", 1);
-            facingright = false;
-            facingleft = true;
-        }
-        //Move Right without dash
-        if (Input.GetKey(KeyCode.RightArrow) && !downbtn)
-        {
-            GetComponent<Rigidbody2D>().velocity = new Vector2(movementSpeed, GetComponent<Rigidbody2D>().velocity.y);
-            facingright = true;
-            facingleft = false;
-            Debug.Log("Right" + movementSpeed);
-            animator.SetInteger("States", 2);
-        }
         //dash up
         if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.LeftShift) && dashCountdown > 0)
         {
             Debug.Log("dash up");
-            GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, movementSpeed*1.5f);
+            GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, movementSpeed * 1.5f);
             dashCountdown--;
             invincible = true;
-        }
-        //dash left while idle
-       else if (facingleft == true && Input.GetKey(KeyCode.LeftShift) && dashCountdown > 0)
-        {
-            Debug.Log("dash left idle");
-            dashCountdown--;
-            invincible = true;
-            GetComponent<Rigidbody2D>().velocity = new Vector2(-movementSpeed * 1.5f, GetComponent<Rigidbody2D>().velocity.y);
-        }
-        //dash right while idle
-        else if (facingright == true && Input.GetKey(KeyCode.LeftShift) && dashCountdown > 0)
-        {
-            Debug.Log("dash right idle");
-            dashCountdown--;
-            invincible = true;
-            GetComponent<Rigidbody2D>().velocity = new Vector2(movementSpeed*1.5f, GetComponent<Rigidbody2D>().velocity.y);
         }
 
-        //dash upright
-        if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftShift) && dashCountdown > 0)
-        {
-            Debug.Log("dash upright");
-            GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, movementSpeed * 2);
-            dashCountdown--;
-            invincible = true;
-        }
-        //Move Right with dash
-        else if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftShift) && dashCountdown > 0)
-        {
-            rightDash = true;
-            Dash();
-            invincible = true;
-        }
-        //dash upleft
-        else if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.LeftArrow) && dashCountdown > 0)
-        {
-            Debug.Log("dash upleft");
-            GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, movementSpeed * 2);
-            dashCountdown--;
-            invincible = true;
-        }
-        //Move Left with dash
-        else if (Input.GetKey(KeyCode.LeftArrow) && Input.GetKey(KeyCode.LeftShift) && dashCountdown > 0)
-        {
-            leftDash = true;
-            Dash();
-            invincible = true;
-        }
 
         healthBar.transform.localScale = new Vector3(health / totalHealth, 1, 1);
         manaBar.transform.localScale = new Vector3(mana / totalMana, 1, 1);
@@ -203,7 +127,9 @@ public class PlayerController : MonoBehaviour
             SceneManager.LoadScene("GameOver");
             health = 0;
         }
-        
+
+        Movement();
+        Jump();
         ParryAttack();
 
         if (mana <= 0)
@@ -221,12 +147,6 @@ public class PlayerController : MonoBehaviour
             dashCountdown = 5;
             regainDash = 0;
         }
-    }
-
-    //Jump movement
-    void Jump()
-    {
-        GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
     }
 
     //Dash movement
@@ -248,8 +168,136 @@ public class PlayerController : MonoBehaviour
             Debug.Log("RightDash" + movementSpeed);
             rightDash = false;
         }
+        if (leftUpDash)
+        {
+            Debug.Log("dash upright");
+            GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, movementSpeed * 2);
+            dashCountdown--;
+            invincible = true;
+            leftUpDash = false;
+        }
+        if (rightUpDash)
+        {
+            Debug.Log("dash upright");
+            GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, movementSpeed * 2);
+            dashCountdown--;
+            invincible = true;
+            rightUpDash = false;
+        }
+        if (leftIdleDash)
+        {
+            Debug.Log("dash left idle");
+            dashCountdown--;
+            invincible = true;
+            GetComponent<Rigidbody2D>().velocity = new Vector2(-movementSpeed * 1.5f, GetComponent<Rigidbody2D>().velocity.y);
+            leftIdleDash = false;
+        }
+        if (rightIdleDash)
+        {
+            Debug.Log("dash right idle");
+            dashCountdown--;
+            invincible = true;
+            GetComponent<Rigidbody2D>().velocity = new Vector2(movementSpeed * 1.5f, GetComponent<Rigidbody2D>().velocity.y);
+            rightIdleDash = false;
+        }
     }
 
+    //Movement
+    void Movement()
+    {
+        //if (mainGame.direction.x > 0)
+        //{
+        //    //go right
+        //}
+        //if (mainGame.direction.x < 0)
+        //{
+        //    //go left
+        //} 
+
+        //Move Left
+        if ((mainGame.direction.x < 0 || Input.GetKey(KeyCode.LeftArrow)) && !downbtn)
+        {
+            GetComponent<Rigidbody2D>().velocity = new Vector2(-movementSpeed, GetComponent<Rigidbody2D>().velocity.y);
+            Debug.Log("Left" + movementSpeed);
+            animator.SetInteger("States", 1);
+            facingright = false;
+            facingleft = true;
+        }
+        //Move Left with dash
+        if (Input.GetKey(KeyCode.LeftArrow) && Input.GetKey(KeyCode.LeftShift) && dashCountdown > 0)
+        {
+            leftDash = true;
+            Dash();
+            invincible = true;
+        }
+
+        //Move Right
+        if ((mainGame.direction.x > 0 || Input.GetKey(KeyCode.RightArrow)) && !downbtn)
+        {
+            GetComponent<Rigidbody2D>().velocity = new Vector2(movementSpeed, GetComponent<Rigidbody2D>().velocity.y);
+            facingright = true;
+            facingleft = false;
+            Debug.Log("Right" + movementSpeed);
+            animator.SetInteger("States", 2);
+        }
+        //Move Right with dash
+        if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftShift) && dashCountdown > 0)
+        {
+            rightDash = true;
+            Dash();
+            invincible = true;
+        }
+
+        //dash upright
+        if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftShift) && dashCountdown > 0)
+        {
+            rightUpDash = true;
+            Dash();
+        }
+
+        //dash upleft
+        if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.LeftArrow) && dashCountdown > 0)
+        {
+            leftUpDash = true;
+            Dash();
+        }
+
+        //dash left while idle
+        if (facingleft == true && (Input.GetKey(KeyCode.LeftShift)||dashButton) && dashCountdown > 0)
+        {
+            leftIdleDash = true;
+            dashButton = false;
+            Dash();
+        }
+        //dash right while idle
+        if (facingright == true && (Input.GetKey(KeyCode.LeftShift) || dashButton) && dashCountdown > 0)
+        {
+            rightIdleDash = true;
+            dashButton = false;
+            Dash();
+        }
+    }
+
+    //Jump movement
+    void Jump()
+    {
+        //Jump
+        if ((Input.GetKeyDown(KeyCode.Space) || jumpButton) && touchedGround && !downbtn)
+        {
+
+            GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
+            jumpButton = false;
+            animator.SetInteger("States", 4);
+        }
+        //Double Jump
+        if ((Input.GetKeyDown(KeyCode.Space) || jumpButton) && !touchedGround && !doubleJump)
+        {
+            GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
+            jumpButton = false;
+            doubleJump = true;
+        }
+
+    }
 
     void ParryAttack()
     {
@@ -280,6 +328,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+#if UNITY_STANDALONE || UNITY_WEBPLAYER || UNITY_ANDROID
     public void ParryButton()
     {
         parryButton = true;
@@ -289,4 +339,10 @@ public class PlayerController : MonoBehaviour
     {
         jumpButton = true;
     }
+
+    public void DashButton()
+    {
+        dashButton = true;
+    }
+#endif
 }
