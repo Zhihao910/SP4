@@ -5,20 +5,21 @@ using UnityEngine;
 
 public class MusicProjectile : MonoBehaviour
 {
-    public AudioSource _audioSource;
+    [SerializeField]
+    AudioSource _audioSource;
 
-    [SerializeField]
-    AudioWrapper frontpeer;
-    [SerializeField]
-    AudioWrapper backpeer;
+    //[SerializeField]
+    //AudioWrapper frontpeer;
+    //[SerializeField]
+    //AudioWrapper backpeer;
 
-    [SerializeField]
-    AudioClip _sample;
+    //[SerializeField]
+    //AudioClip _sample;
 
-    [SerializeField]
-    GameObject Projectile;
-    [SerializeField]
-    GameObject ProjectileDrag;
+    //[SerializeField]
+    //GameObject Projectile;
+    //[SerializeField]
+    //GameObject ProjectileDrag;
 
     private bool spawnBass;
     private bool spawnKick;
@@ -39,8 +40,8 @@ public class MusicProjectile : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        frontpeer.SetAudioClip(_sample);
-        frontpeer.StartPlaying();
+        //frontpeer.SetAudioClip(_sample);
+        //frontpeer.StartPlaying();
     }
 
     // Update is called once per frame
@@ -51,15 +52,15 @@ public class MusicProjectile : MonoBehaviour
         {
             if (!spawnBass)
             {
-                Instantiate(Projectile, new Vector2(15, 1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+                //Instantiate(Projectile, new Vector2(15, 1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
 
-                spawnBass = true;
+                //spawnBass = true;
 
                 bassList.Add(_audioSource.time);
             }
             else if (spawnBass)
             {
-                Instantiate(ProjectileDrag, new Vector2(15, 1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+                //Instantiate(ProjectileDrag, new Vector2(15, 1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
             }
         }
         else
@@ -72,15 +73,15 @@ public class MusicProjectile : MonoBehaviour
         {
             if (!spawnKick)
             {
-                Instantiate(Projectile, new Vector2(15, 0), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+                //Instantiate(Projectile, new Vector2(15, 0), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
 
-                spawnKick = true;
+                //spawnKick = true;
 
                 kickList.Add(_audioSource.time);
             }
             else if (spawnKick)
             {
-                Instantiate(ProjectileDrag, new Vector2(15, 0), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+                //Instantiate(ProjectileDrag, new Vector2(15, 0), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
             }
         }
         else
@@ -93,15 +94,15 @@ public class MusicProjectile : MonoBehaviour
         {
             if (!spawnCenter)
             {
-                Instantiate(Projectile, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+                //Instantiate(Projectile, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
 
-                spawnCenter = true;
+                //spawnCenter = true;
 
                 centerList.Add(_audioSource.time);
             }
             else if (spawnCenter)
             {
-                Instantiate(ProjectileDrag, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+                //Instantiate(ProjectileDrag, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
             }
         }
         else
@@ -114,15 +115,15 @@ public class MusicProjectile : MonoBehaviour
         {
             if (!spawnMelody)
             {
-                Instantiate(Projectile, new Vector2(15, -2), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+                //Instantiate(Projectile, new Vector2(15, -2), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
 
-                spawnMelody = true;
+                //spawnMelody = true;
 
                 melodyList.Add(_audioSource.time);
             }
             else if (spawnMelody)
             {
-                Instantiate(ProjectileDrag, new Vector2(15, -2), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+                //Instantiate(ProjectileDrag, new Vector2(15, -2), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
             }
         }
         else
@@ -135,15 +136,15 @@ public class MusicProjectile : MonoBehaviour
         {
             if (!spawnHigh)
             {
-                Instantiate(Projectile, new Vector2(15, -3), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+                //Instantiate(Projectile, new Vector2(15, -3), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
 
-                spawnHigh = true;
+                //spawnHigh = true;
 
                 highList.Add(_audioSource.time);
             }
             else if (spawnHigh)
             {
-                Instantiate(ProjectileDrag, new Vector2(15, -3), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+                //Instantiate(ProjectileDrag, new Vector2(15, -3), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
             }
         }
         else
@@ -156,33 +157,15 @@ public class MusicProjectile : MonoBehaviour
     {
     }
 
-    public void Play()
-    {
-        frontpeer.StartPlaying();
-    }
+    //public void Play()
+    //{
+    //    frontpeer.StartPlaying();
+    //}
 
-    public float TimeNow()
-    {
-        return frontpeer.TimeNow();
-    }
-
-    private bool WithinRange(double rangeA, double rangeB)
-    {
-        double acceptableRange = 0.1;
-
-        if ((rangeA + acceptableRange) < rangeB)
-        {
-            return false;
-        }
-        else if ((rangeA - acceptableRange) > rangeB)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
+    //public float TimeNow()
+    //{
+    //    return frontpeer.TimeNow();
+    //}
 
     public void saveSong()
     {

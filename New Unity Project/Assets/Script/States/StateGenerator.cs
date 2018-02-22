@@ -12,6 +12,9 @@ public class StateGenerator : MonoBehaviour {
     [SerializeField]
     BpmAnalyzer ba; // ba black sheep
 
+    [SerializeField]
+    PlayerController pc;
+
     // Use this for initialization
     void Start () {
 	}
@@ -227,61 +230,30 @@ public class StateGenerator : MonoBehaviour {
     }
 
     // Quick Time Event
-
     public BaseState CreateQuickTimeEvent(string _clipname, AudioClip _clip, float multiplier = 1.0f)
     {
         BaseState result = gameObject.AddComponent<BaseState>();
         result.SetClipName(_clip.name);
         //Run adding attacks here
 
-        double beattime = 0.4918 * multiplier;
-
-        //Vector3 leftlimit = new Vector3(-0.75f, 1, 0);
-        //Vector3 rightlimit = new Vector3(0.75f, 1, 0);
-        //float prevprev = 0;
-        //float prev = 0.5f;
-        //float mult = -1;
-        //BaseState.Attack att = () =>
-        //{
-        //    Vector3 pos = gameObject.GetComponent<Transform>().position;
-
-        //    if (prevprev != 0 && (prev == leftlimit.x || prev == rightlimit.x))
-        //        mult = -mult;
-
-
-        //    for (float i = -0.25f; i < 0.5f; i += 0.25f)
-        //    {
-        //        Object o;
-        //        if (i == 0)
-        //            o = Resources.Load("Prefabs/Projectile2");
-        //        else
-        //            o = Resources.Load("Prefabs/Projectile1");
-
-        //        if (o == null) Debug.Log("Load failed");
-        //        GameObject go = o as GameObject;
-        //        if (go == null) Debug.Log("Loaded object isn't GameObject");
-        //        GameObject newgo = Instantiate(go, pos, Quaternion.identity);
-        //        if (newgo == null) Debug.Log("Couldn't instantiate");
-        //        newgo.GetComponent<Projectile>().SetDir(new Vector3(prev + (i * mult), -1, 0));
-        //        newgo.GetComponent<Projectile>().projectileSpeed = 10;
-        //        if (i == 0.25)
-        //        {
-        //            prevprev = prev;
-        //            prev = prev + (i * mult);
-        //        }
-        //        Debug.Log(prev);
-        //    }
-        //};
+        double beattime = ba.GetBeatTime() * multiplier;
 
         //Possible Keys
         List<int> _arrowKeys = new List<int>();
-        List<bool> _outcomeKeys = new List<bool>();
+        //List<bool> _outcomeKeys = new List<bool>();
 
         int numberofKeys = 7;
 
         for (int i = 0; i < numberofKeys; ++i)
         {
-            _arrowKeys.Add(Random.Range(1, 4));
+            // which fucking idiot
+            // thought it was a smart idea
+            // to have min and max
+            // have the min be "inclusive"
+            // BUT THE MAX IS "EXCLUSIVE"
+            // WHY?
+            // WHY ARE YOU LIKE THIS?
+            _arrowKeys.Add(Random.Range(1, 5));
         }
 
         // 1 - Up
@@ -292,27 +264,56 @@ public class StateGenerator : MonoBehaviour {
         int _counter = 0;
         int _buttonPressed = 0;
         double _QTETime = 0.0;
+        int totalDmg = 0;
 
         BaseState.Attack att = () =>
         {
+            if (_counter >= numberofKeys)
+            {
+                print("done");
+
+                return;
+            }
+
             _buttonPressed = 0;
-            _QTETime += Time.deltaTime;
+            _QTETime += Time.deltaTime * 2;
 
-            print(_arrowKeys[_counter]);
+            if (_arrowKeys[_counter] == 1)
+                print("up");
+            if (_arrowKeys[_counter] == 2)
+                print("right");
+            if (_arrowKeys[_counter] == 3)
+                print("down");
+            if (_arrowKeys[_counter] == 4)
+                print("left");
 
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-                _buttonPressed = 1;
-            else if (Input.GetKeyDown(KeyCode.RightArrow))
-                _buttonPressed = 2;
-            else if (Input.GetKeyDown(KeyCode.DownArrow))
-                _buttonPressed = 3;
-            else if (Input.GetKeyDown(KeyCode.LeftArrow))
-                _buttonPressed = 4;
+            for (int i = 1; i < 5; ++i)
+            {
+                if (pc._keys[i] > 0.0)
+                {
+                    // will this even.. get called, at all? wtf.
+                    // If newer key is pressed, OVERRIDE
+                    if (_buttonPressed != 0 && pc._keys[_buttonPressed] > pc._keys[i])
+                        continue;
+
+                    _buttonPressed = i;
+                }
+            }
+
+            for (int i = 1; i < 5; ++i)
+            {
+                pc._keys[i] = -1.0;
+            }
 
             if (_buttonPressed == _arrowKeys[_counter])
             {
                 //succ ess full
-                _outcomeKeys.Add(true);
+                print("QTE SUCCESS");
+
+                _QTETime = 0.0;
+
+                //_outcomeKeys.Add(true);
+                ++totalDmg;
                 ++_counter;
             }
             else
@@ -325,16 +326,24 @@ public class StateGenerator : MonoBehaviour {
                 {
                     // boi you fuked up
                     // oof ooch owie
-                    _outcomeKeys.Add(false);
-                    ++_counter;
-                }
+                    print("Wrong Button!");
 
-                // Out of time
-                if (_QTETime > beattime)
+                    pc.screenShake.ShakeCamera();
+                    //_outcomeKeys.Add(false);
+                    ++totalDmg;
+                    ++_counter;
+                } // Out of time
+                else if (_QTETime > beattime)
                 {
                     // boi you fuked up
                     // oof ooch owie
-                    _outcomeKeys.Add(false);
+                    print("Too slow!");
+
+                    _QTETime = 0.0;
+
+                    pc.screenShake.ShakeCamera();
+                    //_outcomeKeys.Add(false);
+                    ++totalDmg;
                     ++_counter;
                 }
             }

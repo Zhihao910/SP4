@@ -11,9 +11,9 @@ public class AudioPeerManager : MonoBehaviour {
     AudioWrapper backpeer;
 
     [SerializeField]
-    AudioClip _sample;
+    public AudioClip _sample;
     [SerializeField]
-    AudioClip _sample2;
+    public AudioClip _sample2;
 
     [SerializeField]
     StateGenerator _stateGenerator;
@@ -97,7 +97,8 @@ public class AudioPeerManager : MonoBehaviour {
         foreach(AudioClip ac in AudioSplitter.SplitClip(_sample))
         {
             m_audioclipmap.Add(ac.name, ac);
-            m_playqueue.Enqueue(_stateGenerator.CreateQuickTimeEvent(ac.name, ac));
+            m_playqueue.Enqueue(_stateGenerator.CreateBaseState(ac.name, ac));
+            //m_playqueue.Enqueue(_stateGenerator.CreateQuickTimeEvent(ac.name, ac));
         }
         curr = m_playqueue.Dequeue();
         curr.Run();

@@ -64,6 +64,9 @@ public class FreqBeat : MonoBehaviour
 
     public static Dictionary<string, int> _songInfo = new Dictionary<string, int>();
 
+    //[SerializeField]
+    //AudioPeerManager _apm; // korean apm :worry:
+
     // Use this for initialization
     void Start ()
     {
@@ -87,12 +90,17 @@ public class FreqBeat : MonoBehaviour
             _offset[i] = 1.0f;
         }
 
-        _detectedFinish = checkSong();
+        //print(_source.clip.name.ToString());
 
-        _isbeatSaved = (Saving.LoadingFromFile("MusicData.txt", (List<string> _data) =>
-        {
-            return _data.Contains("<FreqName>" + _source.clip.name.ToString());
-        }));
+        // _detectedFinish = checkSong(_apm._sample.name) && checkSong(_apm._sample2.name);
+        _detectedFinish = checkSong(_source.clip.name);
+
+        _isbeatSaved =
+            (Saving.LoadingFromFile("MusicData.txt", (List<string> _data) =>
+            {
+                return _data.Contains("<FreqName>" + _source.clip.name);
+            }
+            ));
 
         print(_isbeatSaved);
 
@@ -393,29 +401,29 @@ public class FreqBeat : MonoBehaviour
         }
     }
 
-    private bool checkSong()
+    private bool checkSong(string _name)
     {
         if (Saving.LoadingFromFile("MusicData.txt", (List<string> _data) =>
         {
             // See if song exists
-            if (_data.Contains("<name>" + _source.clip.name.ToString()))
+            if (_data.Contains("<name>" + _name))
             {
                 print("Song Data found, reading now...");
             }
             else
             {
-                print("could not find song:" + _source.clip.name.ToString());
+                print("could not find song:" + _name);
                 return false;
             }
 
             List<string> songData = new List<string>();
-            songData = _data.GetRange(_data.IndexOf("<name>" + _source.clip.name.ToString()), (_data.IndexOf(_source.clip.name.ToString() + "end") - _data.IndexOf("<name>" + _source.clip.name.ToString())));
+            songData = _data.GetRange(_data.IndexOf("<name>" + _name), (_data.IndexOf(_name + "end") - _data.IndexOf("<name>" + _name)));
 
             //why the fuck did i make this function
             //I might be mentally handicapped
             //// FIND NAME
             //List<string> nameData = new List<string>();
-            //nameData = songData.GetRange(songData.IndexOf("<name>" + _source.clip.name.ToString()), (songData.IndexOf(_source.clip.name.ToString() + "</name>") - songData.IndexOf("<name>" + _source.clip.name.ToString())));
+            //nameData = songData.GetRange(songData.IndexOf("<name>" + _name), (songData.IndexOf(_name + "</name>") - songData.IndexOf("<name>" + _name)));
             //nameData.Remove("<name>");
             //string nameString = "";
             //foreach (string num in songData)
@@ -429,7 +437,7 @@ public class FreqBeat : MonoBehaviour
             foreach (string num in bpmData)
                 bpmString += num;
 
-            _songInfo.Add(_source.clip.name.ToString(), Convert.ToInt32(bpmString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
+            _songInfo.Add(_name, Convert.ToInt32(bpmString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
 
             _ba.SetBpm(Convert.ToInt32(bpmString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
 

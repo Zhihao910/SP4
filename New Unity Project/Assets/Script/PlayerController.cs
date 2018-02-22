@@ -41,8 +41,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     MainGame mainGame;
 
-    [SerializeField]
-    ScreenShake screenShake;
+    public ScreenShake screenShake;
+    public Dictionary<int, double> _keys = new Dictionary<int, double>();
 
     // Use this for initialization
     void Start()
@@ -53,6 +53,16 @@ public class PlayerController : MonoBehaviour
         dashCountdown = 7.0f;
         mana = 0;
         health = 100;
+
+        for (int i = 1; i < 5; ++i)
+        {
+            _keys.Add(i, -1.0);
+
+            // 1 - Up
+            // 2 - Right
+            // 3 - Down
+            // 4 - Left
+        }
     }
 
     void FixedUpdate()
@@ -78,6 +88,17 @@ public class PlayerController : MonoBehaviour
             invincible2 = false;
             invinciblelifetime = 0;
         }
+        
+        // For Dictionary
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            _keys[1] = 0.3f;
+        }
+
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            _keys[2] = 0.3f;
+        }
 
         //Crouch animation
         if (Input.GetKeyDown(KeyCode.DownArrow))
@@ -85,6 +106,13 @@ public class PlayerController : MonoBehaviour
             //screenShake.ShakeCamera(1.0f, 0.3f, 0.95f);
             screenShake.ShakeCamera();
             downbtn = true;
+            _keys[3] = 0.3f;
+        }
+
+        // For Dictionary
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            _keys[4] = 0.3f;
         }
 
         //Crouch animation
@@ -117,7 +145,6 @@ public class PlayerController : MonoBehaviour
             invincible = true;
         }
 
-
         healthBar.transform.localScale = new Vector3(health / totalHealth, 1, 1);
         manaBar.transform.localScale = new Vector3(mana / totalMana, 1, 1);
 
@@ -131,6 +158,7 @@ public class PlayerController : MonoBehaviour
         Movement();
         Jump();
         ParryAttack();
+        UpdateKeys();
 
         if (mana <= 0)
             mana = 0;
@@ -218,7 +246,7 @@ public class PlayerController : MonoBehaviour
         if ((mainGame.direction.x < 0 || Input.GetKey(KeyCode.LeftArrow)) && !downbtn)
         {
             GetComponent<Rigidbody2D>().velocity = new Vector2(-movementSpeed, GetComponent<Rigidbody2D>().velocity.y);
-            Debug.Log("Left" + movementSpeed);
+            //Debug.Log("Left" + movementSpeed);
             animator.SetInteger("States", 1);
             facingright = false;
             facingleft = true;
@@ -237,7 +265,7 @@ public class PlayerController : MonoBehaviour
             GetComponent<Rigidbody2D>().velocity = new Vector2(movementSpeed, GetComponent<Rigidbody2D>().velocity.y);
             facingright = true;
             facingleft = false;
-            Debug.Log("Right" + movementSpeed);
+            //Debug.Log("Right" + movementSpeed);
             animator.SetInteger("States", 2);
         }
         //Move Right with dash
@@ -325,6 +353,17 @@ public class PlayerController : MonoBehaviour
                 attackTrigger.enabled = false;
                 attackVisual.enabled = false;
             }
+        }
+    }
+
+    void UpdateKeys()
+    {
+        for (int i = 1; i < 5; ++i)
+        {
+            if (_keys[i] > 0.0)
+                _keys[i] -= Time.deltaTime;
+            else
+                _keys[i] = -1.0;
         }
     }
 

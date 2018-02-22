@@ -11,7 +11,7 @@ public class QTEState : BaseState
 	}
 	
 	// Update is called once per frame
-	void FixedUpdate ()
+	void Update ()
     {
         if (m_Run && m_Queue.Count > 0)
         {
