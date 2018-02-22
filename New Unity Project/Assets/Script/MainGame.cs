@@ -25,8 +25,8 @@ public class MainGame : MonoBehaviour
     void Update()
     {
         Vector3 pos = Canvas.pixelRect.max;
-        pos.x *= 0.05f;
-        pos.y *= 0.05f;
+        pos.x *= 0.1f;
+        pos.y *= 0.1f;
         Joy.transform.position = pos;
     }
 

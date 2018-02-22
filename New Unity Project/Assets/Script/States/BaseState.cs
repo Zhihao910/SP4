@@ -9,15 +9,15 @@ public class BaseState : MonoBehaviour {
     public AudioPeerManager m_audioManager;
 
     [SerializeField]
-    List<KeyValuePair<double, Attack>> m_Attacks = new List<KeyValuePair<double, Attack>>();
+    protected List<KeyValuePair<double, Attack>> m_Attacks = new List<KeyValuePair<double, Attack>>();
 
-    Queue<KeyValuePair<double, Attack>> m_Queue = new Queue<KeyValuePair<double, Attack>>();
+    protected Queue<KeyValuePair<double, Attack>> m_Queue = new Queue<KeyValuePair<double, Attack>>();
     
 
     [SerializeField]
-    string m_clipname;
+    protected string m_clipname;
 
-    bool m_Run = false;
+    protected bool m_Run = false;
 
     // Use this for initialization
     void Start () {
