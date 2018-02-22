@@ -25,6 +25,12 @@ public class BpmAnalyzer : MonoBehaviour
 
         _bpmTime = 60.0f / (float)_bpm;
     }
+    
+    public void SetBpm(int _b)
+    {
+        _bpm = _b;
+        _bpmTime = 60.0f / (float)_bpm;
+    }
 
     public int GetBpm()
     {
