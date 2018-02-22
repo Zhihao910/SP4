@@ -97,7 +97,7 @@ public class AudioPeerManager : MonoBehaviour {
         foreach(AudioClip ac in AudioSplitter.SplitClip(_sample))
         {
             m_audioclipmap.Add(ac.name, ac);
-            m_playqueue.Enqueue(_stateGenerator.CreateParryState(ac.name, ac));
+            m_playqueue.Enqueue(_stateGenerator.CreateQuickTimeEvent(ac.name, ac));
         }
         curr = m_playqueue.Dequeue();
         curr.Run();
@@ -125,11 +125,7 @@ public class AudioPeerManager : MonoBehaviour {
             backpeer = ap;
             swap = !swap;
         }
-<<<<<<< HEAD
-        else if (m_playqueue.Count < 0)
-=======
         else if(m_playqueue.Count <= 0)
->>>>>>> 579f1bd61ee061f2d07432da7869e781d64c0090
         {
             SceneManager.LoadScene("GameOver");
         }

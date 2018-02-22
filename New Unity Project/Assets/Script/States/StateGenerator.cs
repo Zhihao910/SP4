@@ -298,6 +298,8 @@ public class StateGenerator : MonoBehaviour {
             _buttonPressed = 0;
             _QTETime += Time.deltaTime;
 
+            print(_arrowKeys[_counter]);
+
             if (Input.GetKeyDown(KeyCode.UpArrow))
                 _buttonPressed = 1;
             else if (Input.GetKeyDown(KeyCode.RightArrow))
