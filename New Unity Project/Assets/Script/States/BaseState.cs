@@ -33,7 +33,6 @@ public class BaseState : MonoBehaviour {
                 KeyValuePair<double, Attack> value = m_Queue.Dequeue();
                 double StartTIme = value.Key;
                 value.Value();
-
             }
         }
 	}

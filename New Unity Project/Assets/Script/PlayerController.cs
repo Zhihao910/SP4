@@ -41,6 +41,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     MainGame mainGame;
 
+    [SerializeField]
+    ScreenShake screenShake;
+
     // Use this for initialization
     void Start()
     {
@@ -78,6 +81,8 @@ public class PlayerController : MonoBehaviour
         //crouch animation
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
+            //screenShake.ShakeCamera(1.0f, 0.3f, 0.95f);
+            screenShake.ShakeCamera();
             downbtn = true;
         }
 
