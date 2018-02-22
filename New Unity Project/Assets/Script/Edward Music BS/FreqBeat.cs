@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class FreqBeat : MonoBehaviour
 {
+    [SerializeField]
     public AudioSource _source;
 
     // if there is a beat, _beated = true;
@@ -55,7 +56,11 @@ public class FreqBeat : MonoBehaviour
     // After recognised note, make next note harder to detect as a beat, only if its higher
     private float[] _offset = new float[5];
 
+    [SerializeField]
     public MusicProjectile _mp;
+
+    [SerializeField]
+    public BpmAnalyzer _ba;
 
     // Use this for initialization
     void Start ()
@@ -80,10 +85,6 @@ public class FreqBeat : MonoBehaviour
             _offset[i] = 1.0f;
         }
 
-        print(UniBpmAnalyzerExample._bpm);
-
-        _highBeat = 60.0f / UniBpmAnalyzerExample._bpm;
-
         //print(_highBeat);
 
         //_source.pitch = 10;
@@ -103,6 +104,12 @@ public class FreqBeat : MonoBehaviour
         //Detect();
 
         _source.Play();
+
+        _ba.FindBpm();
+
+        print(_ba.GetBpm());
+
+        _highBeat = 60.0f / _ba.GetBpm();
     }
 
     // Update is called once per frame
@@ -136,7 +143,7 @@ public class FreqBeat : MonoBehaviour
                     saver.Add("</name>");
 
                     saver.Add("<bpm>");
-                    saver.Add(UniBpmAnalyzerExample._bpm.ToString());
+                    saver.Add(_ba.GetBpm().ToString());
                     saver.Add("</bpm>");
 
                     saver.Add("<highcount>");

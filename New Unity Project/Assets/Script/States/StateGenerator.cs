@@ -9,6 +9,9 @@ public class StateGenerator : MonoBehaviour {
     [SerializeField]
     AudioPeerManager ap;
 
+    [SerializeField]
+    BpmAnalyzer ba; // ba black sheep
+
     // Use this for initialization
     void Start () {
 	}
@@ -24,7 +27,9 @@ public class StateGenerator : MonoBehaviour {
         result.SetClipName(_clip.name);
         //Run adding attacks here
 
-        double beattime = 0.4918 * multiplier;//0.5357; // 0.588
+        // ba.FindBpm();
+
+        double beattime = ba.GetBeatTime() * multiplier;//0.5357; // 0.588 //0.4918
 
         BaseState.Attack att = () =>
         {
@@ -96,7 +101,7 @@ public class StateGenerator : MonoBehaviour {
         result.SetClipName(_clip.name);
         //Run adding attacks here
 
-        double beattime = 0.4918 * multiplier;//0.5357; // 0.588
+        double beattime = ba.GetBeatTime() * multiplier;//0.5357; // 0.588
 
         Vector3 leftlimit = new Vector3(-0.75f, 1, 0);
         Vector3 rightlimit = new Vector3(0.75f, 1, 0);
@@ -153,7 +158,7 @@ public class StateGenerator : MonoBehaviour {
         result.SetClipName(_clip.name);
         //Run adding attacks here
 
-        double beattime = 0.4918 * multiplier;//0.5357; // 0.588
+        double beattime = ba.GetBeatTime() * multiplier;//0.5357; // 0.588
 
         BaseState.Attack att = () =>
         {
@@ -178,7 +183,7 @@ public class StateGenerator : MonoBehaviour {
         result.SetClipName(_clip.name);
         //Run adding attacks here
 
-        double beattime = 0.4918 * multiplier;//0.5357; // 0.588
+        double beattime = ba.GetBeatTime() * multiplier;//0.5357; // 0.588
         Vector3 target = new Vector3(-8, -2, transform.position.z);
         int mult = 1;
         int prevprev = 0;
@@ -214,6 +219,70 @@ public class StateGenerator : MonoBehaviour {
 
         result.AddAttack(_clip.length - 0.5f, GetComponent<PlatformGenerator>().DespawnAll);
 
+
+        m_StateMap[_clipname] = result;
+        result.Sort();
+
+        return result;
+    }
+
+    // Quick Time Event
+
+    public BaseState CreateQuickTimeEvent(string _clipname, AudioClip _clip, float multiplier = 1.0f)
+    {
+        BaseState result = gameObject.AddComponent<BaseState>();
+        result.SetClipName(_clip.name);
+        //Run adding attacks here
+
+        double beattime = ba.GetBeatTime() * multiplier;
+
+        //Vector3 leftlimit = new Vector3(-0.75f, 1, 0);
+        //Vector3 rightlimit = new Vector3(0.75f, 1, 0);
+        //float prevprev = 0;
+        //float prev = 0.5f;
+        //float mult = -1;
+        //BaseState.Attack att = () =>
+        //{
+        //    Vector3 pos = gameObject.GetComponent<Transform>().position;
+
+        //    if (prevprev != 0 && (prev == leftlimit.x || prev == rightlimit.x))
+        //        mult = -mult;
+
+
+        //    for (float i = -0.25f; i < 0.5f; i += 0.25f)
+        //    {
+        //        Object o;
+        //        if (i == 0)
+        //            o = Resources.Load("Prefabs/Projectile2");
+        //        else
+        //            o = Resources.Load("Prefabs/Projectile1");
+
+        //        if (o == null) Debug.Log("Load failed");
+        //        GameObject go = o as GameObject;
+        //        if (go == null) Debug.Log("Loaded object isn't GameObject");
+        //        GameObject newgo = Instantiate(go, pos, Quaternion.identity);
+        //        if (newgo == null) Debug.Log("Couldn't instantiate");
+        //        newgo.GetComponent<Projectile>().SetDir(new Vector3(prev + (i * mult), -1, 0));
+        //        newgo.GetComponent<Projectile>().projectileSpeed = 10;
+        //        if (i == 0.25)
+        //        {
+        //            prevprev = prev;
+        //            prev = prev + (i * mult);
+        //        }
+        //        Debug.Log(prev);
+        //    }
+        //};
+
+        BaseState.Attack att = () =>
+        {
+
+        };
+
+        for (double time = 0; time < _clip.length; time += beattime)
+        {
+            result.AddAttack(time, att);
+            result.m_audioManager = ap;
+        }
 
         m_StateMap[_clipname] = result;
         result.Sort();
