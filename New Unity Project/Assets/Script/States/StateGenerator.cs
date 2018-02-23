@@ -528,6 +528,49 @@ public class StateGenerator : MonoBehaviour {
         return result;
     }
 
+    public BaseState CreateLaserAttack(string _clipname, AudioClip _clip, float multiplier = 1f)
+    {
+        BaseState result = gameObject.AddComponent<BaseState>();
+        result.SetClipName(_clip.name);
+        //Run adding attacks here
+
+        double beattime = ba.GetBeatTime() * multiplier;
+
+        Vector3 target = new Vector3(transform.position.x, -4, transform.position.z);
+
+        // uhh how do i slow down spawning omegalul
+
+        BaseState.Attack att = () =>
+        {
+            Vector3 pos = gameObject.GetComponent<Transform>().position;
+            Object o = Resources.Load("Prefabs/laserprojectile");
+            if (o == null) Debug.Log("Load failed");
+            GameObject go = o as GameObject;
+            if (go == null) Debug.Log("Loaded object isn't GameObject");
+            GameObject newgo = Instantiate(go, pos, Quaternion.identity);
+            if (newgo == null) Debug.Log("Couldn't instantiate");
+
+            target.x = Random.Range(-7, 8);
+
+            GameObject parent = Instantiate(Resources.Load("Prefabs/FakeParent") as GameObject);
+            newgo.transform.parent = parent.transform;
+            newgo.GetComponent<Projectile>().SetTarget(target);
+            newgo.GetComponent<Projectile>().SetDir((target - pos).normalized);
+            newgo.GetComponent<Projectile>().SetSpeed(5);
+        };
+
+        for (double time = 0; time < _clip.length; time += beattime)
+        {
+            result.AddAttack(time, att);
+            result.m_audioManager = ap;
+        }
+
+        m_StateMap[_clipname] = result;
+        result.Sort();
+
+        return result;
+    }
+
     public BaseState GetState(string _clipname)
     {
         return m_StateMap[_clipname];

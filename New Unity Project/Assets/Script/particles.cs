@@ -11,7 +11,7 @@ public class particles : MonoBehaviour
     public ParticleSystem movementparticle1;
     [SerializeField]
     public ParticleSystem movementparticle2;
-    bool leftkeypress = false;
+    bool downbtn = false;
     public Dictionary<string, ParticleSystem> storeparticle;
 
     [SerializeField]
