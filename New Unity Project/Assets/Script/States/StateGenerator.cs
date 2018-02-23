@@ -227,6 +227,19 @@ public class StateGenerator : MonoBehaviour {
         int mult = 1;
         int prevprev = 0;
 
+        BaseState.Attack spawnplatforms = () =>
+        {
+            for (int i = -2; i < 3; ++i)
+            {
+                gameObject.GetComponent<PlatformGenerator>().GeneratePlatform(new Vector3(i * 4, -8), new Vector3(i * 4, -6));
+            }
+        };
+        result.AddAttack(0, spawnplatforms);
+        result.AddAttack(0.2f, gameObject.GetComponent<PlatformGenerator>().ToggleGround);
+
+        result.AddAttack(_clip.length - 0.01f, gameObject.GetComponent<PlatformGenerator>().DespawnAll);
+        result.AddAttack(_clip.length - 0.02f, gameObject.GetComponent<PlatformGenerator>().ToggleGround);
+
         BaseState.Attack att = () =>
         {
             if (prevprev != 0 && Mathf.Abs(target.x) == 8)
@@ -243,7 +256,7 @@ public class StateGenerator : MonoBehaviour {
             newgo.transform.parent = parent.transform;
             newgo.GetComponent<Projectile>().SetTarget(target);
             newgo.GetComponent<Projectile>().SetDir((target - pos).normalized);
-            newgo.GetComponent<ExplodingProjectile>().SetSplitCount(8);
+            newgo.GetComponent<ExplodingProjectile>().SetSplitCount(6);
             newgo.GetComponent<Projectile>().SetSpeed(5);
             prevprev = (int)(target.x);
             target.x += (4 * mult);
@@ -302,6 +315,9 @@ public class StateGenerator : MonoBehaviour {
         double _QTETime = 0.0;
         int totalDmg = 0;
 
+        GameObject _buttonQTE;
+        List<GameObject> _buttonList = new List<GameObject>();
+
         BaseState.Attack att = () =>
         {
             if (_counter >= numberofKeys)
@@ -311,17 +327,72 @@ public class StateGenerator : MonoBehaviour {
                 return;
             }
 
+            if (_QTETime == 0.0)
+            {
+                if (_arrowKeys[_counter] == 1)
+                {
+                    _buttonQTE = Instantiate(Resources.Load("Prefabs/ArrowUp") as GameObject);
+                    _buttonQTE.transform.parent = pc.transform;
+
+                    Vector3 _buttonPos = pc.transform.position;
+                    Vector2 _randPos = Random.insideUnitCircle;
+                    _buttonPos += new Vector3(_randPos.x, _randPos.y);
+                    ++_buttonPos.y;
+                    _buttonQTE.transform.position = _buttonPos;
+
+                    _buttonList.Add(_buttonQTE);
+
+                    //Destroy(_buttonQTE, (float)beattime);
+                }
+                if (_arrowKeys[_counter] == 2)
+                {
+                    _buttonQTE = Instantiate(Resources.Load("Prefabs/ArrowRight") as GameObject);
+                    _buttonQTE.transform.parent = pc.transform;
+
+                    Vector3 _buttonPos = pc.transform.position;
+                    Vector2 _randPos = Random.insideUnitCircle;
+                    _buttonPos += new Vector3(_randPos.x, _randPos.y);
+                    ++_buttonPos.y;
+                    _buttonQTE.transform.position = _buttonPos;
+
+                    _buttonList.Add(_buttonQTE);
+
+                    //Destroy(_buttonQTE, (float)beattime);
+                }
+                if (_arrowKeys[_counter] == 3)
+                {
+                    _buttonQTE = Instantiate(Resources.Load("Prefabs/ArrowDown") as GameObject);
+                    _buttonQTE.transform.parent = pc.transform;
+
+                    Vector3 _buttonPos = pc.transform.position;
+                    Vector2 _randPos = Random.insideUnitCircle;
+                    _buttonPos += new Vector3(_randPos.x, _randPos.y);
+                    ++_buttonPos.y;
+                    _buttonQTE.transform.position = _buttonPos;
+
+                    _buttonList.Add(_buttonQTE);
+
+                    //Destroy(_buttonQTE, (float)beattime);
+                }
+                if (_arrowKeys[_counter] == 4)
+                {
+                    _buttonQTE = Instantiate(Resources.Load("Prefabs/ArrowLeft") as GameObject);
+                    _buttonQTE.transform.parent = pc.transform;
+
+                    Vector3 _buttonPos = pc.transform.position;
+                    Vector2 _randPos = Random.insideUnitCircle;
+                    _buttonPos += new Vector3(_randPos.x, _randPos.y);
+                    ++_buttonPos.y;
+                    _buttonQTE.transform.position = _buttonPos;
+
+                    _buttonList.Add(_buttonQTE);
+
+                    //Destroy(_buttonQTE, (float)beattime);
+                }
+            }
+
             _buttonPressed = 0;
             _QTETime += Time.deltaTime * 2;
-
-            if (_arrowKeys[_counter] == 1)
-                print("up");
-            if (_arrowKeys[_counter] == 2)
-                print("right");
-            if (_arrowKeys[_counter] == 3)
-                print("down");
-            if (_arrowKeys[_counter] == 4)
-                print("left");
 
             for (int i = 1; i < 5; ++i)
             {
@@ -347,6 +418,8 @@ public class StateGenerator : MonoBehaviour {
                 print("QTE SUCCESS");
 
                 _QTETime = 0.0;
+                Destroy(_buttonList[0]);
+                _buttonList.Remove(_buttonList[0]);
 
                 //_outcomeKeys.Add(true);
                 ++totalDmg;
@@ -364,6 +437,10 @@ public class StateGenerator : MonoBehaviour {
                     // oof ooch owie
                     print("Wrong Button!");
 
+                    _QTETime = 0.0;
+                    Destroy(_buttonList[0]);
+                    _buttonList.Remove(_buttonList[0]);
+
                     pc.screenShake.ShakeCamera();
                     //_outcomeKeys.Add(false);
                     ++totalDmg;
@@ -376,6 +453,8 @@ public class StateGenerator : MonoBehaviour {
                     print("Too slow!");
 
                     _QTETime = 0.0;
+                    Destroy(_buttonList[0]);
+                    _buttonList.Remove(_buttonList[0]);
 
                     pc.screenShake.ShakeCamera();
                     //_outcomeKeys.Add(false);
@@ -397,7 +476,7 @@ public class StateGenerator : MonoBehaviour {
         return result;
     }
 
-    // Shockwave Projectile (Drop 2 or some shit?)
+    // Shockwave Projectile
     public BaseState CreateShockwaveProjectile(string _clipname, AudioClip _clip, float multiplier = 8.0f)
     {
         BaseState result = gameObject.AddComponent<BaseState>();
@@ -410,8 +489,6 @@ public class StateGenerator : MonoBehaviour {
             //target.x = pos.x;
         //gameObject.GetComponent<Transform>().position.Set(Random.Range(-7, 8), gameObject.GetComponent<Transform>().position.y, gameObject.GetComponent<Transform>().position.z);
         Vector3 target = new Vector3(transform.position.x, -4, transform.position.z);
-
-        // uhh how do i slow down spawning omegalul
 
         BaseState.Attack att = () =>
         {
