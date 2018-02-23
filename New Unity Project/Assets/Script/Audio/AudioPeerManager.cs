@@ -97,7 +97,7 @@ public class AudioPeerManager : MonoBehaviour {
         foreach(AudioClip ac in AudioSplitter.SplitClip(_sample))
         {
             m_audioclipmap.Add(ac.name, ac);
-            m_playqueue.Enqueue(_stateGenerator.CreateShockwaveProjectile(ac.name, ac));
+            m_playqueue.Enqueue(_stateGenerator.CreateShockwaveProjectile(ac.name, ac, 8));
             //m_playqueue.Enqueue(_stateGenerator.CreateQuickTimeEvent(ac.name, ac));
         }
         curr = m_playqueue.Dequeue();

@@ -10,8 +10,8 @@ public class Projectile : MonoBehaviour
     Vector3 target = new Vector3(999, 999, 999);
     protected bool hittarget = false;
     GameObject Indicator;
-    int _waveHeight = 0;
-    float _sinAngle = 1.0f;
+    //int _waveHeight = 0;
+    //float _sinAngle = 1.0f;
 
     // Use this for initialization
     protected void Start()
@@ -27,16 +27,30 @@ public class Projectile : MonoBehaviour
         if (!hittarget)
         {
             lifeTime -= Time.deltaTime;
+            transform.Translate(dir.x * projectileSpeed * Time.deltaTime, dir.y * projectileSpeed * Time.deltaTime, 0);
 
-            if (_waveHeight == 0)
-            {
-                transform.Translate(dir.x * projectileSpeed * Time.deltaTime, dir.y * projectileSpeed * Time.deltaTime, 0);
-            }
-            else
-            {
-                _sinAngle += (0.025f * _waveHeight);
-                transform.Translate(dir.x * projectileSpeed * Time.deltaTime, Mathf.Sin(_sinAngle) / 90, 0);
-            }
+            //if (_waveHeight != 0)
+            //{
+            //    transform.localScale += new Vector3(0, _waveHeight, 0);
+            //}
+
+            //if (_waveHeight == 0)
+            //{
+            //    transform.Translate(dir.x * projectileSpeed * Time.deltaTime, dir.y * projectileSpeed * Time.deltaTime, 0);
+            //}
+            //else
+            //{
+            //    //_sinAngle += (0.025f * _waveHeight);
+            //    //transform.Translate(dir.x * projectileSpeed * Time.deltaTime, Mathf.Sin(_sinAngle) / 90, 0);
+            //    transform.Translate(dir.x * projectileSpeed * Time.deltaTime, dir.y * projectileSpeed * Time.deltaTime, 0);
+
+            //    if (_sinAngle < 1.5)
+            //    {
+            //        print("spawn");
+            //        transform.localScale += new Vector3(0,20,0);
+            //        _sinAngle += 1.0f;
+            //    }
+            //}
 
             if (lifeTime <= 0)
             {
@@ -93,8 +107,8 @@ public class Projectile : MonoBehaviour
         projectileSpeed = _projSpeed;
     }
 
-    public void SetHeight(int _height)
-    {
-        _waveHeight = _height;
-    }
+    //public void SetHeight(int _height)
+    //{
+    //    _waveHeight = _height;
+    //}
 }
