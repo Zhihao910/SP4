@@ -6,6 +6,17 @@ public class StateGenerator : MonoBehaviour {
 
     static Dictionary<string, BaseState> m_StateMap = new Dictionary<string, BaseState>();
 
+    public enum GenerateType
+    {
+        BASESTATE,
+        DROPSTATE,
+        INTROSTATE,
+        PARRYSTATE,
+        QUICKTIMEEVENTSTATE,
+        SHOCKWAVESTATE,
+        NUMSTATE,//Default
+    };
+
     [SerializeField]
     AudioPeerManager ap;
 
@@ -15,14 +26,39 @@ public class StateGenerator : MonoBehaviour {
     [SerializeField]
     PlayerController pc;
 
+    delegate BaseState GenerateFunc(string _clipname, AudioClip _clip, float _multiplier = 1f);
+    Dictionary<GenerateType, GenerateFunc> _GenerateDictionary = new Dictionary<GenerateType, GenerateFunc>();
+
+    void Awake()
+    {
+        _GenerateDictionary.Add(GenerateType.BASESTATE, CreateBaseState);
+        _GenerateDictionary.Add(GenerateType.DROPSTATE, CreateDropState);
+        _GenerateDictionary.Add(GenerateType.INTROSTATE, CreateIntroState);
+        _GenerateDictionary.Add(GenerateType.PARRYSTATE, CreateParryState);
+        _GenerateDictionary.Add(GenerateType.QUICKTIMEEVENTSTATE, CreateQuickTimeEvent);
+        _GenerateDictionary.Add(GenerateType.SHOCKWAVESTATE, CreateShockwaveProjectile);
+    }
+
     // Use this for initialization
     void Start () {
-	}
-	
-	// Update is called once per frame
-	void Update () {
+        
+    }
+
+    // Update is called once per frame
+    void Update () {
 		
 	}
+
+    public BaseState GenerateState(GenerateType _type, string _clipname, AudioClip _clip, float _multiplier = 1f)
+    {
+        if(_type == GenerateType.NUMSTATE)
+        {
+            GenerateType g = (GenerateType)Random.Range((int)GenerateType.BASESTATE, (int)GenerateType.SHOCKWAVESTATE);
+            print(g);
+            return _GenerateDictionary[g](_clipname, _clip, _multiplier);
+        }
+        return _GenerateDictionary[_type](_clipname, _clip, _multiplier);
+    }
 
     public BaseState CreateBaseState(string _clipname, AudioClip _clip,float multiplier = 1f)
     {
