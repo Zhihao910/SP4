@@ -75,6 +75,9 @@ public class Projectile : MonoBehaviour
         {
             Debug.Log("Player health -10");
             Debug.Log("ADD MANA");
+
+            GetComponent<particles>().ApplyParticle(gameObject, "hitParticle", 0.5f, 1, false);
+
             other.GetComponent<PlayerController>().mana += 20;
             if (other.GetComponent<PlayerController>().mana >= 100)
                 other.GetComponent<PlayerController>().mana = 100;
@@ -84,6 +87,9 @@ public class Projectile : MonoBehaviour
                 Destroy((transform.parent).gameObject);
             else
                 Destroy(gameObject);
+
+            GetComponent<SpriteRenderer>().enabled = false;
+            GetComponent<BoxCollider2D>().enabled = false;
         }
     }
 
