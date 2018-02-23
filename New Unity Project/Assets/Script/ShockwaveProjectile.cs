@@ -2,50 +2,136 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShockwaveProjectile : Projectile {
-
+public class ShockwaveProjectile : Projectile
+{
     [SerializeField]
     GameObject _shockwave;
 
-    int height = 5;
+    [SerializeField]
+    GameObject _screenShake;
+
+    // Number of waves to make
+    int _waves = 5;
+    // Speed of projectile
+    int _speed = 5;
+    // Tallest point of wave
+    int _top = -1;
+    // Affect scale of projectile, also used to count spawning up
+    int _height = 0;
+    // Needed to spawn two highest points in event of even
+    bool _isEven = false;
+    // Begin Spawning shockwaves when true
+    bool _spawnShockwave = false;
+    // Time counter
+    double _spawnTime = 0.0;
+    // Time between each wave
+    double timeToSpawn;
+    // Once beyond the top, start reducing height of wave
+    bool _pastTop = false;
 
     // Use this for initialization
-    protected void Start () {
+    protected void Start ()
+    {
+        _screenShake = GameObject.FindGameObjectWithTag("ScreenShake");
+        timeToSpawn = ((_speed * Time.deltaTime) / _shockwave.transform.localScale.x);
         base.Start();
     }
 	
 	// Update is called once per frame
-	protected void Update () {
+	protected void Update ()
+    {
         base.Update();
-        if(hittarget)
+
+        // Means it hasnt been set at all
+        if (_top == -1)
         {
-            //for(float i = 0; i < 2; i += 360/SplitCount)
-            //{
-            //    GameObject go = Instantiate(proj2, transform.position, Quaternion.identity);
-            //    float rad = i * (Mathf.PI / 180);
-            //    go.GetComponent<Projectile>().SetDir((new Vector3(Mathf.Cos(rad), Mathf.Sin(rad))).normalized);
-            //    go.GetComponent<Projectile>().projectileSpeed = 3;
-            //}
-
-            for (int i = 0; i < height; ++i)
+            if (_waves == 0)
             {
-                GameObject left = Instantiate(_shockwave, transform.position, Quaternion.identity);
-                left.GetComponent<Projectile>().SetDir(new Vector3(-1, 0));
-                left.GetComponent<Projectile>().SetSpeed(5);
-                left.GetComponent<Projectile>().SetHeight(i);
-
-                GameObject right = Instantiate(_shockwave, transform.position, Quaternion.identity);
-                right.GetComponent<Projectile>().SetDir(new Vector3(1, 0));
-                right.GetComponent<Projectile>().SetSpeed(5);
-                right.GetComponent<Projectile>().SetHeight(i);
+                print("Number of waves is zero!");
             }
 
-            Destroy(gameObject);
+            if ((_waves % 2) == 1)
+            {
+                // Odd
+                _top = (_waves / 2);
+            }
+            else
+            {
+                // Even
+                _top = (_waves / 2) - 1;
+                _isEven = true;
+            }
+        }
+
+        if (hittarget)
+        {
+            float _multiplier = ((float)_waves * 0.2f);
+
+            // BWAAAAAAAAAAAAAAAH
+            _screenShake.GetComponent<ScreenShake>().ShakeCamera(0.5f * _multiplier, 0.3f * _multiplier, 0.95f);
+
+            _spawnShockwave = true;
+            gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        }
+
+        if (_spawnShockwave)
+        {
+            _spawnTime += Time.deltaTime;
+
+            //print(_spawnTime);
+            //print(timeToSpawn);
+            //print(left.GetComponent<Projectile>().transform.localScale);
+
+            if (_spawnTime > timeToSpawn)
+            {
+                Vector3 moveUp = new Vector3(0, _height);
+
+                // movmeup * 0.33f ( 0.165)
+                // += moveup (* 0.5f)
+
+                GameObject left = Instantiate(_shockwave, transform.position + (moveUp * 0.33f), Quaternion.identity);
+                left.GetComponent<Projectile>().SetDir(new Vector3(-1, 0));
+                left.GetComponent<Projectile>().SetSpeed(_speed);
+                left.GetComponent<Projectile>().transform.localScale += moveUp;
+                left.GetComponent<BoxCollider2D>().enabled = true;
+
+                GameObject right = Instantiate(_shockwave, transform.position + (moveUp * 0.33f), Quaternion.identity);
+                right.GetComponent<Projectile>().SetDir(new Vector3(1, 0));
+                right.GetComponent<Projectile>().SetSpeed(_speed);
+                right.GetComponent<Projectile>().transform.localScale += moveUp;
+                right.GetComponent<BoxCollider2D>().enabled = true;
+
+                // This took way longer than i'd like
+                if (!_pastTop)
+                    ++_height;
+                else
+                    --_height;
+
+                if (_height > _top)
+                {
+                    _pastTop = true;
+
+                    if (_isEven)
+                        _height -= 1;
+                    else
+                        _height -= 2;
+                }
+
+
+                _spawnTime = 0.0;
+            }
+
+            if (_height < 0)
+            {
+                // Done spawning
+                print("poof!");
+                Destroy(gameObject);
+            }
         }
 	}
 
-    public void SetHeight(int _height)
+    public void SetWaves(int waves)
     {
-        height = _height;
+        _waves = waves;
     }
 }

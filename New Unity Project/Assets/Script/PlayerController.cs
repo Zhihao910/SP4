@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviour
     public Collider2D attackTrigger;
     public Renderer attackVisual;
 
+    Vector3 lastPosition, currentPosition;
+
     [SerializeField]
     GameObject healthBar, manaBar;
     [SerializeField]
@@ -77,6 +79,7 @@ public class PlayerController : MonoBehaviour
         {
             doubleJump = false;
             animator.SetInteger("States", 3);
+            currentPosition = transform.position;
         }
         if (invincible2 == true)
         {
@@ -174,6 +177,14 @@ public class PlayerController : MonoBehaviour
         {
             dashCountdown = 5;
             regainDash = 0;
+        }
+
+        //Player Fall off screen, Reset back to previous position
+        lastPosition = currentPosition;
+        if (!touchedGround && transform.position.y <= -5)
+        {
+            transform.position = lastPosition;
+            health -= 5;
         }
     }
 
