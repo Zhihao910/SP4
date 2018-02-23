@@ -87,6 +87,8 @@ public class particles : MonoBehaviour
     {
         GameObject newparticle = Instantiate(_ParticleMap[_particlename]);
         newparticle.transform.parent = _parent.transform;
+        newparticle.transform.position = _parent.transform.position;
+
         ParticleSystem.MainModule main = newparticle.GetComponent<ParticleSystem>().main;
         main.startLifetime = _lifetime;
         main.startSpeed = _speed;

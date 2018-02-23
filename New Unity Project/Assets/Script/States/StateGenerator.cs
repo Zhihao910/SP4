@@ -227,6 +227,19 @@ public class StateGenerator : MonoBehaviour {
         int mult = 1;
         int prevprev = 0;
 
+        BaseState.Attack spawnplatforms = () =>
+        {
+            for (int i = -2; i < 3; ++i)
+            {
+                gameObject.GetComponent<PlatformGenerator>().GeneratePlatform(new Vector3(i * 4, -8), new Vector3(i * 4, -6));
+            }
+        };
+        result.AddAttack(0, spawnplatforms);
+        result.AddAttack(0.2f, gameObject.GetComponent<PlatformGenerator>().ToggleGround);
+
+        result.AddAttack(_clip.length - 0.01f, gameObject.GetComponent<PlatformGenerator>().DespawnAll);
+        result.AddAttack(_clip.length - 0.02f, gameObject.GetComponent<PlatformGenerator>().ToggleGround);
+
         BaseState.Attack att = () =>
         {
             if (prevprev != 0 && Mathf.Abs(target.x) == 8)
@@ -243,7 +256,7 @@ public class StateGenerator : MonoBehaviour {
             newgo.transform.parent = parent.transform;
             newgo.GetComponent<Projectile>().SetTarget(target);
             newgo.GetComponent<Projectile>().SetDir((target - pos).normalized);
-            newgo.GetComponent<ExplodingProjectile>().SetSplitCount(8);
+            newgo.GetComponent<ExplodingProjectile>().SetSplitCount(6);
             newgo.GetComponent<Projectile>().SetSpeed(5);
             prevprev = (int)(target.x);
             target.x += (4 * mult);

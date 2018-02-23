@@ -100,7 +100,7 @@ public class AudioPeerManager : MonoBehaviour {
                 m_audioclipmap.Add(ac.name, ac);
                 //Playtest one
                 //m_playqueue.Enqueue(_stateGenerator.GenerateState(StateGenerator.GenerateType.NUMSTATE, ac.name, ac)); _audioclipmap.Add(ac.name, ac);
-                m_playqueue.Enqueue(_stateGenerator.CreateShockwaveProjectile(ac.name, ac, 8));
+                m_playqueue.Enqueue(_stateGenerator.CreateParryState(ac.name, ac, 8));
                 //m_playqueue.Enqueue(_stateGenerator.CreateQuickTimeEvent(ac.name, ac));
             }
         }
