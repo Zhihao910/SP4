@@ -14,6 +14,10 @@ public class particles : MonoBehaviour
     bool leftkeypress = false;
     public Dictionary<string, ParticleSystem> storeparticle;
 
+    [SerializeField]
+    GameObject[] Particles;
+    Dictionary<string, GameObject> _ParticleMap;
+
     // Use this for initialization
     void Start()
     {
@@ -22,6 +26,12 @@ public class particles : MonoBehaviour
         storeparticle.Add("moverightparticle", movementparticle);
         storeparticle.Add("moveleftparticle", movementparticle1);
         storeparticle.Add("idleparticle", movementparticle2);
+
+        foreach(GameObject go in Particles)
+        {
+            _ParticleMap.Add(go.name, go);
+        }
+
     }
     void AddParticle(string particlename, ParticleSystem particlevariable)
     {
@@ -33,7 +43,7 @@ public class particles : MonoBehaviour
         if (storeparticle.ContainsKey("moverightparticle"))
         {
             ParticleSystem lol = storeparticle["moverightparticle"];
-            Debug.Log(lol);
+            //Debug.Log(lol);
         }
         if (Input.GetKey(KeyCode.DownArrow) && leftkeypress==true)
         {
@@ -71,5 +81,15 @@ public class particles : MonoBehaviour
         //if (idleparticle == false)
         //movementparticle2.Emit(1);
 
+    }
+
+    public void ApplyParticle(GameObject _parent, string _particlename, float _lifetime = 0.1f, float _speed = 1f, bool _loop = false)
+    {
+        GameObject newparticle = Instantiate(_ParticleMap[_particlename]);
+        newparticle.transform.parent = _parent.transform;
+        ParticleSystem.MainModule main = newparticle.GetComponent<ParticleSystem>().main;
+        main.startLifetime = _lifetime;
+        main.startSpeed = _speed;
+        main.loop = _loop;
     }
 }
