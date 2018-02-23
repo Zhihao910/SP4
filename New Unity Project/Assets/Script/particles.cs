@@ -11,7 +11,7 @@ public class particles : MonoBehaviour
     public ParticleSystem movementparticle1;
     [SerializeField]
     public ParticleSystem movementparticle2;
-    bool leftkeypress = false;
+    bool downbtn = false;
     public Dictionary<string, ParticleSystem> storeparticle;
 
     [SerializeField]
@@ -40,18 +40,15 @@ public class particles : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (storeparticle.ContainsKey("moverightparticle"))
+        if (Input.GetKey(KeyCode.DownArrow))
         {
-            ParticleSystem lol = storeparticle["moverightparticle"];
-            //Debug.Log(lol);
+            downbtn = true;
         }
-        if (Input.GetKey(KeyCode.DownArrow) && leftkeypress==true)
+        if(Input.GetKeyUp(KeyCode.UpArrow))
         {
-            movementparticle.Emit(0);
-            movementparticle1.Emit(0);
-            movementparticle2.Emit(1);
+            downbtn = false;
         }
-        else if (Input.GetKey(KeyCode.RightArrow))
+         if (Input.GetKey(KeyCode.RightArrow)&&downbtn==false)
         {
             //red
             movementparticle.Emit(1);
@@ -63,19 +60,17 @@ public class particles : MonoBehaviour
             movementparticle.Emit(0);
             idleparticle = false;
         }
-        else if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.LeftArrow) && downbtn == false)
         {
             movementparticle1.Emit(1);
             idleparticle = true;
             movementparticle2.Emit(0);
-            leftkeypress = true;
         }
         else if (Input.GetKeyUp(KeyCode.LeftArrow))
         {
             //red
             movementparticle1.Emit(0);
             idleparticle = false;
-            leftkeypress = false;
         }
         //green colour particle
         //if (idleparticle == false)
