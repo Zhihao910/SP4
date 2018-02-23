@@ -8,9 +8,10 @@ public class StateGenerator : MonoBehaviour {
 
     public enum GenerateType
     {
+        INTROSTATE,
+
         BASESTATE,
         DROPSTATE,
-        INTROSTATE,
         PARRYSTATE,
         QUICKTIMEEVENTSTATE,
         SHOCKWAVESTATE,
@@ -53,7 +54,7 @@ public class StateGenerator : MonoBehaviour {
     {
         if(_type == GenerateType.NUMSTATE)
         {
-            GenerateType g = (GenerateType)Random.Range((int)GenerateType.BASESTATE, (int)GenerateType.SHOCKWAVESTATE);
+            GenerateType g = (GenerateType)Random.Range((int)GenerateType.BASESTATE, (int)GenerateType.NUMSTATE);
             print(g);
             return _GenerateDictionary[g](_clipname, _clip, _multiplier);
         }
@@ -476,7 +477,7 @@ public class StateGenerator : MonoBehaviour {
         return result;
     }
 
-    // Shockwave Projectile
+    // Shockwave Projectile (Drop 2 or some shit?)
     public BaseState CreateShockwaveProjectile(string _clipname, AudioClip _clip, float multiplier = 8.0f)
     {
         BaseState result = gameObject.AddComponent<BaseState>();
@@ -489,6 +490,8 @@ public class StateGenerator : MonoBehaviour {
             //target.x = pos.x;
         //gameObject.GetComponent<Transform>().position.Set(Random.Range(-7, 8), gameObject.GetComponent<Transform>().position.y, gameObject.GetComponent<Transform>().position.z);
         Vector3 target = new Vector3(transform.position.x, -4, transform.position.z);
+
+        // uhh how do i slow down spawning omegalul
 
         BaseState.Attack att = () =>
         {
