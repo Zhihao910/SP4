@@ -185,7 +185,7 @@ public class PlayerController : MonoBehaviour
             //Left
             GetComponent<Rigidbody2D>().velocity = new Vector2(-movementSpeed * 10, GetComponent<Rigidbody2D>().velocity.y);
             dashCountdown--;
-            Debug.Log("LeftDash" + movementSpeed);
+            //Debug.Log("LeftDash" + movementSpeed);
             leftDash = false;
         }
         if (rightDash)
@@ -193,12 +193,12 @@ public class PlayerController : MonoBehaviour
             //Right
             GetComponent<Rigidbody2D>().velocity = new Vector2(movementSpeed * 10, GetComponent<Rigidbody2D>().velocity.y);
             dashCountdown--;
-            Debug.Log("RightDash" + movementSpeed);
+           // Debug.Log("RightDash" + movementSpeed);
             rightDash = false;
         }
         if (leftUpDash)
         {
-            Debug.Log("dash upright");
+            //Debug.Log("dash upright");
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, movementSpeed * 2);
             dashCountdown--;
             invincible = true;
@@ -206,7 +206,7 @@ public class PlayerController : MonoBehaviour
         }
         if (rightUpDash)
         {
-            Debug.Log("dash upright");
+            //Debug.Log("dash upright");
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, movementSpeed * 2);
             dashCountdown--;
             invincible = true;
@@ -214,7 +214,7 @@ public class PlayerController : MonoBehaviour
         }
         if (leftIdleDash)
         {
-            Debug.Log("dash left idle");
+            //Debug.Log("dash left idle");
             dashCountdown--;
             invincible = true;
             GetComponent<Rigidbody2D>().velocity = new Vector2(-movementSpeed * 1.5f, GetComponent<Rigidbody2D>().velocity.y);
@@ -222,7 +222,7 @@ public class PlayerController : MonoBehaviour
         }
         if (rightIdleDash)
         {
-            Debug.Log("dash right idle");
+            //Debug.Log("dash right idle");
             dashCountdown--;
             invincible = true;
             GetComponent<Rigidbody2D>().velocity = new Vector2(movementSpeed * 1.5f, GetComponent<Rigidbody2D>().velocity.y);
