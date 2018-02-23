@@ -398,7 +398,7 @@ public class StateGenerator : MonoBehaviour {
     }
 
     // Shockwave Projectile (Drop 2 or some shit?)
-    public BaseState CreateShockwaveProjectile(string _clipname, AudioClip _clip, float multiplier = 1f)
+    public BaseState CreateShockwaveProjectile(string _clipname, AudioClip _clip, float multiplier = 8.0f)
     {
         BaseState result = gameObject.AddComponent<BaseState>();
         result.SetClipName(_clip.name);
@@ -406,6 +406,9 @@ public class StateGenerator : MonoBehaviour {
 
         double beattime = ba.GetBeatTime() * multiplier;
 
+        //            Vector3 pos = new Vector3(Random.Range(-7, 8), 8);
+            //target.x = pos.x;
+        //gameObject.GetComponent<Transform>().position.Set(Random.Range(-7, 8), gameObject.GetComponent<Transform>().position.y, gameObject.GetComponent<Transform>().position.z);
         Vector3 target = new Vector3(transform.position.x, -4, transform.position.z);
 
         // uhh how do i slow down spawning omegalul
@@ -413,21 +416,24 @@ public class StateGenerator : MonoBehaviour {
         BaseState.Attack att = () =>
         {
             Vector3 pos = gameObject.GetComponent<Transform>().position;
+            pos.y = 9;
+            pos.x = Random.Range(-7, 8);
+            target.x = pos.x;
+
             Object o = Resources.Load("Prefabs/ProjectileShockwave");
             if (o == null) Debug.Log("Load failed");
             GameObject go = o as GameObject;
             if (go == null) Debug.Log("Loaded object isn't GameObject");
             GameObject newgo = Instantiate(go, pos, Quaternion.identity);
-            if (newgo == null) Debug.Log("Couldn't instantiate");
-
-            target.x = Random.Range(-7, 8);
+            if (newgo == null) Debug.Log("Couldn't instantiate");;
 
             GameObject parent = Instantiate(Resources.Load("Prefabs/FakeParent") as GameObject);
             newgo.transform.parent = parent.transform;
             newgo.GetComponent<Projectile>().SetTarget(target);
             newgo.GetComponent<Projectile>().SetDir((target - pos).normalized);
-            newgo.GetComponent<ShockwaveProjectile>().SetHeight(5);
-            newgo.GetComponent<Projectile>().SetSpeed(5);
+            newgo.GetComponent<ShockwaveProjectile>().SetWaves(5);
+            newgo.GetComponent<Projectile>().SetSpeed(10);
+            newgo.GetComponent<Projectile>().transform.localScale *= 2;
         };
 
         for (double time = 0; time < _clip.length; time += beattime)
