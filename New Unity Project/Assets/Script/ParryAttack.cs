@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class ParryAttack : MonoBehaviour
 {
+    AudioSource audio;
+
     // Use this for initialization
     void Start()
     {
-
+        audio = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -20,6 +22,7 @@ public class ParryAttack : MonoBehaviour
         if (other.CompareTag("parableProjectile"))
         {
             Destroy(other.gameObject);
+            audio.Play();
         }
     }
 }
