@@ -12,7 +12,9 @@ public class PlatformGenerator : MonoBehaviour
     int numOfPlatforms = 5;
     bool stopSpawn = true;
     float spawnTimer = 3;
-    bool ground = true;
+
+    [SerializeField]
+    bool ground;
 
 
     public GameObject[] allSprites;
@@ -21,18 +23,15 @@ public class PlatformGenerator : MonoBehaviour
     void Start()
     {
         allSprites = GameObject.FindGameObjectsWithTag("Ground");
+        ground = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        spawnTimer -= Time.deltaTime;
-        if (spawnTimer < 0 && stopSpawn)
-        {
-            stopSpawn = false;
-            //GeneratePlatform();
-        }
         UpdatePlatform();
+        if (Input.GetKeyDown(KeyCode.I))
+            ToggleGround();
     }
 
     void GeneratePlatform()
@@ -53,13 +52,13 @@ public class PlatformGenerator : MonoBehaviour
             foreach (GameObject go in allSprites)
             {
                 go.transform.Translate(0, -1 * Time.deltaTime, 0);
-                if (go.transform.position.y < -10)
+                if (go.transform.position.y < -10f)
                 {
-                    go.transform.position = new Vector3(go.transform.position.x, -10, 0);
+                    go.transform.position = new Vector3(go.transform.position.x, -10f, 0);
                 }
             }
         }
-        else
+        else if(ground)
         {
             foreach (GameObject go in allSprites)
             {
@@ -96,6 +95,7 @@ public class PlatformGenerator : MonoBehaviour
 
     public void ToggleGround()
     {
+        print("wew");
         ground = !ground;
     }
 
