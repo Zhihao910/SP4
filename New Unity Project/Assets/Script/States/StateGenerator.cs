@@ -338,7 +338,7 @@ public class StateGenerator : MonoBehaviour {
                     Vector3 _buttonPos = pc.transform.position;
                     Vector2 _randPos = Random.insideUnitCircle;
                     _buttonPos += new Vector3(_randPos.x, _randPos.y);
-                    ++_buttonPos.y;
+                    _buttonPos.y += 2;
                     _buttonQTE.transform.position = _buttonPos;
 
                     _buttonList.Add(_buttonQTE);
@@ -353,7 +353,7 @@ public class StateGenerator : MonoBehaviour {
                     Vector3 _buttonPos = pc.transform.position;
                     Vector2 _randPos = Random.insideUnitCircle;
                     _buttonPos += new Vector3(_randPos.x, _randPos.y);
-                    ++_buttonPos.y;
+                    _buttonPos.y += 2;
                     _buttonQTE.transform.position = _buttonPos;
 
                     _buttonList.Add(_buttonQTE);
@@ -368,7 +368,7 @@ public class StateGenerator : MonoBehaviour {
                     Vector3 _buttonPos = pc.transform.position;
                     Vector2 _randPos = Random.insideUnitCircle;
                     _buttonPos += new Vector3(_randPos.x, _randPos.y);
-                    ++_buttonPos.y;
+                    _buttonPos.y += 2;
                     _buttonQTE.transform.position = _buttonPos;
 
                     _buttonList.Add(_buttonQTE);
@@ -383,7 +383,7 @@ public class StateGenerator : MonoBehaviour {
                     Vector3 _buttonPos = pc.transform.position;
                     Vector2 _randPos = Random.insideUnitCircle;
                     _buttonPos += new Vector3(_randPos.x, _randPos.y);
-                    ++_buttonPos.y;
+                    _buttonPos.y += 2;
                     _buttonQTE.transform.position = _buttonPos;
 
                     _buttonList.Add(_buttonQTE);
@@ -480,6 +480,7 @@ public class StateGenerator : MonoBehaviour {
     // Shockwave Projectile (Drop 2 or some shit?)
     public BaseState CreateShockwaveProjectile(string _clipname, AudioClip _clip, float multiplier = 8.0f)
     {
+        multiplier = 8.0f;
         BaseState result = gameObject.AddComponent<BaseState>();
         result.SetClipName(_clip.name);
         //Run adding attacks here

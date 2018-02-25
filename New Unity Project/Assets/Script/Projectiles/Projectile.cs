@@ -13,12 +13,16 @@ public class Projectile : MonoBehaviour
     //int _waveHeight = 0;
     //float _sinAngle = 1.0f;
 
+    //[SerializeField]
+    //GameObject _feedback;
+
     // Use this for initialization
     protected void Start()
     {
         //lifeTime = 5;
         //projectileSpeed = 5;
         //_waveHeight = 0;
+        //_feedback = GameObject.FindGameObjectWithTag("Feedback");
     }
 
     // Update is called once per frame
@@ -54,6 +58,12 @@ public class Projectile : MonoBehaviour
 
             if (lifeTime <= 0)
             {
+                //if (this.CompareTag("parableProjectile"))
+                //{
+                //    print("pop");
+                //    _feedback.GetComponent<Feedback>().Create("ParryFail", this.transform.localPosition);
+                //}
+
                 if (null != transform.parent)
                     Destroy((transform.parent).gameObject);
                 else
