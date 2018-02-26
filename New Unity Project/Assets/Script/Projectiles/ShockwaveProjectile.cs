@@ -7,8 +7,7 @@ public class ShockwaveProjectile : Projectile
     [SerializeField]
     GameObject _shockwave;
 
-    [SerializeField]
-    GameObject _screenShake;
+    private GameObject _screenShake;
 
     // Number of waves to make
     int _waves = 5;

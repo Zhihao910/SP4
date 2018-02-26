@@ -6,8 +6,7 @@ public class ParryAttack : MonoBehaviour
 {
     AudioSource audio;
 
-    [SerializeField]
-    GameObject _feedback;
+    private GameObject _feedback;
 
     // Use this for initialization
     void Start()
