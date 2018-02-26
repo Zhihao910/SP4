@@ -6,10 +6,14 @@ public class ParryAttack : MonoBehaviour
 {
     AudioSource audio;
 
+    [SerializeField]
+    GameObject _feedback;
+
     // Use this for initialization
     void Start()
     {
         audio = GetComponent<AudioSource>();
+        _feedback = GameObject.FindGameObjectWithTag("Feedback");
     }
 
     // Update is called once per frame
@@ -21,8 +25,10 @@ public class ParryAttack : MonoBehaviour
     {
         if (other.CompareTag("parableProjectile"))
         {
+            _feedback.GetComponent<Feedback>().Create("ParryPass", other.gameObject.transform.localPosition);
             Destroy(other.gameObject);
             audio.Play();
+
         }
     }
 }

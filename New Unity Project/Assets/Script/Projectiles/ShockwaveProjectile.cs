@@ -68,7 +68,7 @@ public class ShockwaveProjectile : Projectile
             float _multiplier = ((float)_waves * 0.2f);
 
             // BWAAAAAAAAAAAAAAAH
-            _screenShake.GetComponent<ScreenShake>().ShakeCamera(0.5f * _multiplier, 0.3f * _multiplier, 0.95f);
+            _screenShake.GetComponent<ScreenShake>().ShakeCamera(0.1f * _multiplier, 0.3f * _multiplier, 0.95f);
 
             _spawnShockwave = true;
             gameObject.GetComponent<BoxCollider2D>().enabled = false;

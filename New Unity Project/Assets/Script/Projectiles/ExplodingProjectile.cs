@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExplodingProjectile : Projectile {
+public class ExplodingProjectile : Projectile
+{
 
     [SerializeField]
     GameObject proj2;
@@ -10,12 +11,14 @@ public class ExplodingProjectile : Projectile {
     int SplitCount = 8;
 
     // Use this for initialization
-    protected void Start () {
+    protected void Start ()
+    {
         base.Start();
     }
 	
 	// Update is called once per frame
-	protected void Update () {
+	protected void Update ()
+    {
         base.Update();
         if(hittarget)
         {
