@@ -329,8 +329,9 @@ public class StateGenerator : MonoBehaviour
         int _buttonPressed = 0;
         double _QTETime = 0.0;
         int totalDmg = 0;
-        double quarterTime = (beattime * 0.25);
+        double quarterTime = (beattime * 0.2);
         double warnTime = 0.0;
+        int _countdown = 0;
 
         GameObject _buttonQTE;
         List<GameObject> _buttonList = new List<GameObject>();
@@ -346,8 +347,24 @@ public class StateGenerator : MonoBehaviour
             if (_QTETime > warnTime)
             {
                 // TODO
+
+                if (_countdown == 0)
+                {
+                    print("ready");
+                }
+                else
+                {
+                    print(_countdown);
+                }
+
+                ++_countdown;
                 // warns at 0, 1, 2, 3 (4 is end)
                 warnTime += quarterTime;
+
+                if (_countdown == 5)
+                {
+                    _QTETime = 0.0;
+                }
             }
         };
 
