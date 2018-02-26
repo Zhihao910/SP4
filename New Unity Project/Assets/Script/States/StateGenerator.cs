@@ -480,6 +480,7 @@ public class StateGenerator : MonoBehaviour {
     // Shockwave Projectile (Drop 2 or some shit?)
     public BaseState CreateShockwaveProjectile(string _clipname, AudioClip _clip, float multiplier = 8.0f)
     {
+        multiplier = 8.0f;
         BaseState result = gameObject.AddComponent<BaseState>();
         result.SetClipName(_clip.name);
         //Run adding attacks here
