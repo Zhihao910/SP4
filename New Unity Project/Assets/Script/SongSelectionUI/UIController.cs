@@ -32,7 +32,6 @@ public class UIController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 #if UNITY_STANDALONE || UNITY_WEBPLAYER
-        print(index);
         if ((Input.GetKeyDown(KeyCode.LeftArrow)))
         {
             if (--index < 0)

@@ -11,7 +11,7 @@ public class SongManager : MonoBehaviour {
     Dictionary<string, AudioClip> m_audioclipmap = new Dictionary<string, AudioClip>();
 
     // Use this for initialization
-    void Start () {
+    void Awake () {
 	    foreach(string s in GetComponent<UIController>().songs)
         {
             m_audioclipmap.Add(s, (Resources.Load("Audio/" + s) as AudioClip));
