@@ -24,7 +24,7 @@ public class ParryAttack : MonoBehaviour
     {
         if (other.CompareTag("parableProjectile"))
         {
-            _feedback.GetComponent<Feedback>().Create("ParryPass", other.gameObject.transform.localPosition);
+            _feedback.GetComponent<Feedback>().CreateImage("ParryPass", other.gameObject.transform.position);
             Destroy(other.gameObject);
             audio.Play();
 

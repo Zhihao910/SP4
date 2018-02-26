@@ -319,6 +319,13 @@ public class StateGenerator : MonoBehaviour {
         GameObject _buttonQTE;
         List<GameObject> _buttonList = new List<GameObject>();
 
+        GameObject _feedback = GameObject.FindGameObjectWithTag("Feedback");
+
+        BaseState.Attack warn = () =>
+        {
+            print("yo some shit boutta happen");
+        };
+
         BaseState.Attack att = () =>
         {
             if (_counter >= numberofKeys)
@@ -418,6 +425,11 @@ public class StateGenerator : MonoBehaviour {
                 //succ ess full
                 print("QTE SUCCESS");
 
+                // spawn a tick above player head
+                // con-fookin-gratis
+                // you pressed a button
+                _feedback.GetComponent<Feedback>().CreateImage("ParryPass", pc.transform.position + new Vector3(0, 1));
+
                 _QTETime = 0.0;
                 Destroy(_buttonList[0]);
                 _buttonList.Remove(_buttonList[0]);
@@ -438,6 +450,9 @@ public class StateGenerator : MonoBehaviour {
                     // oof ooch owie
                     print("Wrong Button!");
 
+                    // how are you so bad
+                    _feedback.GetComponent<Feedback>().CreateImage("ParryFail", pc.transform.position + new Vector3(0, 1));
+
                     _QTETime = 0.0;
                     Destroy(_buttonList[0]);
                     _buttonList.Remove(_buttonList[0]);
@@ -453,6 +468,9 @@ public class StateGenerator : MonoBehaviour {
                     // oof ooch owie
                     print("Too slow!");
 
+                    // how are you so bad
+                    _feedback.GetComponent<Feedback>().CreateImage("ParryFail", pc.transform.position + new Vector3(0, 1));
+
                     _QTETime = 0.0;
                     Destroy(_buttonList[0]);
                     _buttonList.Remove(_buttonList[0]);
@@ -465,7 +483,9 @@ public class StateGenerator : MonoBehaviour {
             }
         };
 
-        for (double time = 0; time < _clip.length; time += beattime)
+        result.AddAttack(0.0, warn);
+
+        for (double time = beattime; time < _clip.length; time += beattime)
         {
             result.AddAttack(time, att);
             result.m_audioManager = ap;
