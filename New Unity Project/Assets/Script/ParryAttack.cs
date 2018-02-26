@@ -23,7 +23,14 @@ public class ParryAttack : MonoBehaviour
         {
             _feedback.GetComponent<Feedback>().CreateImage("ParryPass", other.gameObject.transform.position);
             _feedback.GetComponent<Feedback>().CreateAudio("Pass");
-            Destroy(other.gameObject); 
+
+            //this.GetComponent<PlayerController>().mana += 10;
+            gameObject.GetComponentInParent<PlayerController>().mana += 10;
+
+
+            //other.gameObject.SetActive(false);
+            Destroy(other.gameObject);
+            //Destroy(other);
         }
     }
 }

@@ -27,8 +27,8 @@ public class Feedback : MonoBehaviour
     // Create an object. _name doesnt need "Prefabs/". Lifetime default is 1.0f.
     public bool CreateImage(string _name, Vector3 _pos, float _lifetime = 1.0f)
     {
-        print("made!");
-        print(_pos);
+        //print("made!");
+        //print(_pos);
         GameObject _temp = Instantiate(Resources.Load("Prefabs/" + _name) as GameObject);
         _temp.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
 

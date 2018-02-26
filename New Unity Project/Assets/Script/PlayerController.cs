@@ -36,6 +36,10 @@ public class PlayerController : MonoBehaviour
     public Collider2D attackTrigger;
     public Renderer attackVisual;
 
+    // THIS ISN'T EVEN MY FINAL FORM
+    public bool _crescendo = false;
+    // actually it is
+
     Vector3 lastPosition, currentPosition;
 
     [SerializeField]
@@ -157,10 +161,24 @@ public class PlayerController : MonoBehaviour
         ParryAttack();
         UpdateKeys();
 
+        // MANA DRAIN
+        mana -= 0.05f;
+        // cause like... its actually a sound/music bar thing
+        // and uhh.. sound energy is lost to surrounding, amirite?
+        // I'm not a scientist. This is a game.
+
         if (mana <= 0)
+        {
             mana = 0;
+            _crescendo = false;
+        }
+
         if (mana >= 100)
-            mana = totalMana;
+        {
+            //mana = totalMana;
+            mana = 0;
+            _crescendo = true;
+        }
 
         if (dashCountdown == 0)
         {
