@@ -69,6 +69,7 @@ public class ShockwaveProjectile : Projectile
             float _multiplier = ((float)_waves * 0.2f);
 
             _feedback.GetComponent<Feedback>().CreateImage("ParryFail", gameObject.transform.position);
+            _feedback.GetComponent<Feedback>().CreateAudio("Fail");
 
             // BWAAAAAAAAAAAAAAAH
             _screenShake.GetComponent<ScreenShake>().ShakeCamera(0.1f * _multiplier, 0.3f * _multiplier, 0.95f);

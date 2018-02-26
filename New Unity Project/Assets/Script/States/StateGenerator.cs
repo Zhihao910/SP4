@@ -443,6 +443,7 @@ public class StateGenerator : MonoBehaviour
                 // con-fookin-gratis
                 // you pressed a button
                 _feedback.GetComponent<Feedback>().CreateImage("ParryPass", pc.transform.position + new Vector3(0, 1));
+                _feedback.GetComponent<Feedback>().CreateAudio("Pass");
 
                 _QTETime = 0.0;
                 Destroy(_buttonList[0]);
@@ -466,6 +467,7 @@ public class StateGenerator : MonoBehaviour
 
                     // how are you so bad
                     _feedback.GetComponent<Feedback>().CreateImage("ParryFail", pc.transform.position + new Vector3(0, 1));
+                    _feedback.GetComponent<Feedback>().CreateAudio("Fail");
 
                     _QTETime = 0.0;
                     Destroy(_buttonList[0]);
@@ -484,6 +486,7 @@ public class StateGenerator : MonoBehaviour
 
                     // how are you so bad
                     _feedback.GetComponent<Feedback>().CreateImage("ParryFail", pc.transform.position + new Vector3(0, 1));
+                    _feedback.GetComponent<Feedback>().CreateAudio("Fail");
 
                     _QTETime = 0.0;
                     Destroy(_buttonList[0]);
