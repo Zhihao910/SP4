@@ -39,6 +39,11 @@ public class MusicProjectile : MonoBehaviour
     bool detected = false;
     private List<float> threeList = new List<float>();
 
+    void Awake()
+    {
+        _audioSource.clip = Resources.Load("Audio/" + PlayerPrefs.GetString("Song")) as AudioClip;
+    }
+
     // Use this for initialization
     void Start()
     {

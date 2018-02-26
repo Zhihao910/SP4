@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BaseState1 : BaseState {
-    enum Type
+    public enum Type
     {
         BASS_TYPE,
         KICK_TYPE,
@@ -31,9 +31,9 @@ public class BaseState1 : BaseState {
         base.FixedUpdate();
 	}
 
-    public void AddAttack(int _go,Attack _function)
+    public void AddAttack(Type _go,Attack _function)
     {
-        _attacks[_go] = _function;
+        _attacks[(int)_go] = _function;
     }
 
     public void PushAttacksIntoList()

@@ -26,6 +26,19 @@ public class AudioPeerManager : MonoBehaviour
 
     BaseState curr;
 
+    string song;
+
+    private List<float> bassList = new List<float>();
+    private List<float> kickList = new List<float>();
+    private List<float> highList = new List<float>();
+
+    void Awake()
+    {
+        song = PlayerPrefs.GetString("Song");
+        _sample = Resources.Load("Audio/" + song) as AudioClip;
+        
+    }
+
     // Use this for initialization
     void Start()
     {
@@ -101,7 +114,9 @@ public class AudioPeerManager : MonoBehaviour
                 //m_playqueue.Enqueue(_stateGenerator.GenerateState(StateGenerator.GenerateType.NUMSTATE, ac.name, ac)); _audioclipmap.Add(ac.name, ac);
                 // TODO look at laser attack
                 //m_playqueue.Enqueue(_stateGenerator.CreateLaserAttack(ac.name, ac, 8));
-                m_playqueue.Enqueue(_stateGenerator.GenerateState(StateGenerator.GenerateType.NUMSTATE, ac.name, ac));
+                m_playqueue.Enqueue(_stateGenerator.GenerateState(StateGenerator.GenerateType.MULTISTATE, ac.name, ac));
+                //m_playqueue.Enqueue(_stateGenerator.CreateBlindAttack(ac.name, ac, 8));
+                //m_playqueue.Enqueue(_stateGenerator.GenerateState(StateGenerator.GenerateType.NUMSTATE, ac.name, ac));
                 //m_playqueue.Enqueue(_stateGenerator.CreateParryState(ac.name, ac, 8));
                 //m_playqueue.Enqueue(_stateGenerator.CreateQuickTimeEvent(ac.name, ac));
             }

@@ -16,6 +16,7 @@ public class StateGenerator : MonoBehaviour
         PARRYSTATE,
         QUICKTIMEEVENTSTATE,
         SHOCKWAVESTATE,
+        MULTISTATE,
         LAZERSTATE,
         NUMSTATE,//Default
     };
@@ -40,6 +41,7 @@ public class StateGenerator : MonoBehaviour
         _GenerateDictionary.Add(GenerateType.PARRYSTATE, CreateParryState);
         _GenerateDictionary.Add(GenerateType.QUICKTIMEEVENTSTATE, CreateQuickTimeEvent);
         _GenerateDictionary.Add(GenerateType.SHOCKWAVESTATE, CreateShockwaveProjectile);
+        //_GenerateDictionary.Add(GenerateType.MULTISTATE, MultiHighState);
         _GenerateDictionary.Add(GenerateType.LAZERSTATE, CreateLaserAttack);
 
     }

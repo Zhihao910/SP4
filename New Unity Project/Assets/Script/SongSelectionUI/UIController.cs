@@ -20,7 +20,7 @@ public class UIController : MonoBehaviour {
             }
             return true;
         });
-
+        _songmanager.Init();
     }
 
     // Use this for initialization
