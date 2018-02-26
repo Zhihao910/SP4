@@ -125,7 +125,7 @@ public class ShockwaveProjectile : Projectile
             {
                 // Done spawning
                 print("poof!");
-                Destroy(gameObject);
+                Destroy(transform.parent.gameObject);
             }
         }
 	}

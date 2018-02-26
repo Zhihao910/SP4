@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseState1 : MonoBehaviour {
-
-    public delegate void Attack();
-
+public class BaseState1 : BaseState {
     enum Type
     {
         BASS_TYPE,
@@ -22,6 +19,10 @@ public class BaseState1 : MonoBehaviour {
     string m_clipname;
 
     bool m_Run = false;
+
+    private List<float> bassList = new List<float>();
+    private List<float> kickList = new List<float>();
+    private List<float> threeList = new List<float>();
 
     // Use this for initialization
     void Start () {
