@@ -95,12 +95,12 @@ public class FreqBeat : MonoBehaviour
         // _detectedFinish = checkSong(_apm._sample.name) && checkSong(_apm._sample2.name);
         _detectedFinish = checkSong(_source.clip.name);
 
-        _isbeatSaved =
-            (Saving.LoadingFromFile("MusicData.txt", (List<string> _data) =>
-            {
-                return _data.Contains("<FreqName>" + _source.clip.name);
-            }
-            ));
+        _isbeatSaved = _mp.checkSong();
+            //(Saving.LoadingFromFile("MusicData.txt", (List<string> _data) =>
+            //{
+            //    return _data.Contains("<FreqName>" + _source.clip.name);
+            //}
+            //));
 
         print(_isbeatSaved);
 
@@ -268,19 +268,31 @@ public class FreqBeat : MonoBehaviour
                 {
                     if (i > 18)
                     {
-                        _highList[_highSection][i] *= 0.75f; // 0.7
+                        if (_highList[_highSection][i] > 0.4f)
+                            _highList[_highSection][i] *= 0.75f; // 0.75
+                        else
+                            _highList[_highSection][i] *= 0.9f;
                     }
                     else if (i > 6)
                     {
-                        _highList[_highSection][i] *= 0.7f; // 0.6
+                        if (_highList[_highSection][i] > 0.4f)
+                            _highList[_highSection][i] *= 0.7f; // 0.7
+                        else
+                            _highList[_highSection][i] *= 0.85f;
                     }
                     else if (i > 3)
                     {
-                        _highList[_highSection][i] *= 0.55f; //0.7
+                        if (_highList[_highSection][i] > 0.4f)
+                            _highList[_highSection][i] *= 0.55f; // 0.55
+                        else
+                            _highList[_highSection][i] *= 0.8f;
                     }
                     else
                     {
-                        _highList[_highSection][i] *= 0.65f; //0.5
+                        if (_highList[_highSection][i] > 0.4f)
+                            _highList[_highSection][i] *= 0.65f; // 0.65
+                        else
+                            _highList[_highSection][i] *= 0.8f;
                     }
 
                     //print(AudioPeer._audioBandBuffer64[i]);

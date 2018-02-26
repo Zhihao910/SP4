@@ -289,7 +289,7 @@ public class StateGenerator : MonoBehaviour {
         double beattime = ba.GetBeatTime() * multiplier;
 
         //Possible Keys
-        List<int> _arrowKeys = new List<int>();
+        List<int> _InputKeys = new List<int>();
         //List<bool> _outcomeKeys = new List<bool>();
 
         int numberofKeys = 7;
@@ -303,7 +303,7 @@ public class StateGenerator : MonoBehaviour {
             // BUT THE MAX IS "EXCLUSIVE"
             // WHY?
             // WHY ARE YOU LIKE THIS?
-            _arrowKeys.Add(Random.Range(1, 5));
+            _InputKeys.Add(Random.Range(1, 5));
         }
 
         // 1 - Up
@@ -315,6 +315,8 @@ public class StateGenerator : MonoBehaviour {
         int _buttonPressed = 0;
         double _QTETime = 0.0;
         int totalDmg = 0;
+        double quarterTime = (beattime * 0.25);
+        double warnTime = 0.0;
 
         GameObject _buttonQTE;
         List<GameObject> _buttonList = new List<GameObject>();
@@ -324,6 +326,15 @@ public class StateGenerator : MonoBehaviour {
         BaseState.Attack warn = () =>
         {
             print("yo some shit boutta happen");
+
+            _QTETime += Time.deltaTime;
+
+            if (_QTETime > warnTime)
+            {
+                // TODO
+                // warns at 0, 1, 2, 3 (4 is end)
+                warnTime += quarterTime;
+            }
         };
 
         BaseState.Attack att = () =>
@@ -337,7 +348,7 @@ public class StateGenerator : MonoBehaviour {
 
             if (_QTETime == 0.0)
             {
-                if (_arrowKeys[_counter] == 1)
+                if (_InputKeys[_counter] == 1)
                 {
                     _buttonQTE = Instantiate(Resources.Load("Prefabs/KeyboardQ") as GameObject);
                     _buttonQTE.transform.parent = pc.transform;
@@ -352,7 +363,7 @@ public class StateGenerator : MonoBehaviour {
 
                     //Destroy(_buttonQTE, (float)beattime);
                 }
-                if (_arrowKeys[_counter] == 2)
+                if (_InputKeys[_counter] == 2)
                 {
                     _buttonQTE = Instantiate(Resources.Load("Prefabs/KeyboardW") as GameObject);
                     _buttonQTE.transform.parent = pc.transform;
@@ -367,7 +378,7 @@ public class StateGenerator : MonoBehaviour {
 
                     //Destroy(_buttonQTE, (float)beattime);
                 }
-                if (_arrowKeys[_counter] == 3)
+                if (_InputKeys[_counter] == 3)
                 {
                     _buttonQTE = Instantiate(Resources.Load("Prefabs/KeyboardE") as GameObject);
                     _buttonQTE.transform.parent = pc.transform;
@@ -382,7 +393,7 @@ public class StateGenerator : MonoBehaviour {
 
                     //Destroy(_buttonQTE, (float)beattime);
                 }
-                if (_arrowKeys[_counter] == 4)
+                if (_InputKeys[_counter] == 4)
                 {
                     _buttonQTE = Instantiate(Resources.Load("Prefabs/KeyboardR") as GameObject);
                     _buttonQTE.transform.parent = pc.transform;
@@ -420,7 +431,7 @@ public class StateGenerator : MonoBehaviour {
                 pc._keys[i] = -1.0;
             }
 
-            if (_buttonPressed == _arrowKeys[_counter])
+            if (_buttonPressed == _InputKeys[_counter])
             {
                 //succ ess full
                 print("QTE SUCCESS");
