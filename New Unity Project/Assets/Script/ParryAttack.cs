@@ -4,14 +4,11 @@ using UnityEngine;
 
 public class ParryAttack : MonoBehaviour
 {
-    AudioSource audio;
-
     private GameObject _feedback;
 
     // Use this for initialization
     void Start()
     {
-        audio = GetComponent<AudioSource>();
         _feedback = GameObject.FindGameObjectWithTag("Feedback");
     }
 
@@ -25,9 +22,8 @@ public class ParryAttack : MonoBehaviour
         if (other.CompareTag("parableProjectile"))
         {
             _feedback.GetComponent<Feedback>().CreateImage("ParryPass", other.gameObject.transform.position);
-            Destroy(other.gameObject);
-            audio.Play();
-
+            _feedback.GetComponent<Feedback>().CreateAudio("Pass");
+            Destroy(other.gameObject); 
         }
     }
 }

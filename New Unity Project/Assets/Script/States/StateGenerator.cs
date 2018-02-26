@@ -329,8 +329,9 @@ public class StateGenerator : MonoBehaviour
         int _buttonPressed = 0;
         double _QTETime = 0.0;
         int totalDmg = 0;
-        double quarterTime = (beattime * 0.25);
+        double quarterTime = (beattime * 0.2);
         double warnTime = 0.0;
+        int _countdown = 0;
 
         GameObject _buttonQTE;
         List<GameObject> _buttonList = new List<GameObject>();
@@ -346,8 +347,24 @@ public class StateGenerator : MonoBehaviour
             if (_QTETime > warnTime)
             {
                 // TODO
+
+                if (_countdown == 0)
+                {
+                    print("ready");
+                }
+                else
+                {
+                    print(_countdown);
+                }
+
+                ++_countdown;
                 // warns at 0, 1, 2, 3 (4 is end)
                 warnTime += quarterTime;
+
+                if (_countdown == 5)
+                {
+                    _QTETime = 0.0;
+                }
             }
         };
 
@@ -454,6 +471,7 @@ public class StateGenerator : MonoBehaviour
                 // con-fookin-gratis
                 // you pressed a button
                 _feedback.GetComponent<Feedback>().CreateImage("ParryPass", pc.transform.position + new Vector3(0, 1));
+                _feedback.GetComponent<Feedback>().CreateAudio("Pass");
 
                 _QTETime = 0.0;
                 Destroy(_buttonList[0]);
@@ -477,6 +495,7 @@ public class StateGenerator : MonoBehaviour
 
                     // how are you so bad
                     _feedback.GetComponent<Feedback>().CreateImage("ParryFail", pc.transform.position + new Vector3(0, 1));
+                    _feedback.GetComponent<Feedback>().CreateAudio("Fail");
 
                     _QTETime = 0.0;
                     Destroy(_buttonList[0]);
@@ -495,6 +514,7 @@ public class StateGenerator : MonoBehaviour
 
                     // how are you so bad
                     _feedback.GetComponent<Feedback>().CreateImage("ParryFail", pc.transform.position + new Vector3(0, 1));
+                    _feedback.GetComponent<Feedback>().CreateAudio("Fail");
 
                     _QTETime = 0.0;
                     Destroy(_buttonList[0]);
@@ -599,9 +619,6 @@ public class StateGenerator : MonoBehaviour
             if (go == null) Debug.Log("Loaded object isn't GameObject");
             GameObject newgo = Instantiate(go, target, Quaternion.identity);
             if (newgo == null) Debug.Log("Couldn't instantiate");
-
-
-            newgo.GetComponent<Projectile>().SetTarget(target);
         };
 
 
