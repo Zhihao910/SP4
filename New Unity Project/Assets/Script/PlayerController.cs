@@ -93,29 +93,32 @@ public class PlayerController : MonoBehaviour
         }
         
         // For Dictionary
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             _keys[1] = 0.3f;
         }
 
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKeyDown(KeyCode.W))
         {
             _keys[2] = 0.3f;
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            _keys[3] = 0.3f;
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            _keys[4] = 0.3f;
         }
 
         //Crouch animation
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             //screenShake.ShakeCamera(1.0f, 0.3f, 0.95f);
-            screenShake.ShakeCamera();
+            //screenShake.ShakeCamera();
             downbtn = true;
-            _keys[3] = 0.3f;
-        }
-
-        // For Dictionary
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            _keys[4] = 0.3f;
         }
 
         //Crouch animation

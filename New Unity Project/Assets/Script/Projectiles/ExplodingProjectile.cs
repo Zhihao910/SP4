@@ -2,24 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExplodingProjectile : Projectile {
+public class ExplodingProjectile : Projectile
+{
 
     [SerializeField]
     GameObject proj2;
 
+    private GameObject _feedback;
+
     int SplitCount = 8;
 
     // Use this for initialization
-    protected void Start () {
+    protected void Start ()
+    {
+        _feedback = GameObject.FindGameObjectWithTag("Feedback");
         base.Start();
     }
 	
 	// Update is called once per frame
-	protected void Update () {
+	protected void Update ()
+    {
         base.Update();
         if(hittarget)
         {
-            for(float i = 0; i < 360; i += 360/SplitCount)
+            _feedback.GetComponent<Feedback>().CreateImage("ParryFail", gameObject.transform.position);
+
+            for (float i = 0; i < 360; i += 360/SplitCount)
             {
                 GameObject go = Instantiate(proj2, transform.position, Quaternion.identity);
                 float rad = i * (Mathf.PI / 180);

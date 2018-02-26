@@ -13,12 +13,16 @@ public class Projectile : MonoBehaviour
     //int _waveHeight = 0;
     //float _sinAngle = 1.0f;
 
+    //[SerializeField]
+    //private GameObject _feedback;
+
     // Use this for initialization
     protected void Start()
     {
         //lifeTime = 5;
         //projectileSpeed = 5;
         //_waveHeight = 0;
+        //_feedback = GameObject.FindGameObjectWithTag("Feedback");
     }
 
     // Update is called once per frame
