@@ -21,6 +21,7 @@ public class ParryAttack : MonoBehaviour
     {
         if (other.CompareTag("parableProjectile"))
         {
+            print("Parried!");
             _feedback.GetComponent<Feedback>().CreateImage("ParryPass", other.gameObject.transform.position);
             _feedback.GetComponent<Feedback>().CreateAudio("Pass");
 
@@ -29,8 +30,11 @@ public class ParryAttack : MonoBehaviour
 
 
             //other.gameObject.SetActive(false);
+            if (other.transform.parent)
+            {
+                Destroy(other.gameObject.transform.parent.gameObject);
+            }
             Destroy(other.gameObject);
-            //Destroy(other);
         }
     }
 }

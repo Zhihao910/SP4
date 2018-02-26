@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class AudioPeerManager : MonoBehaviour {
-
-    [SerializeField]
-    AudioWrapper frontpeer;
+public class AudioPeerManager : MonoBehaviour
+{
+    public AudioWrapper frontpeer;
     [SerializeField]
     AudioWrapper backpeer;
 
