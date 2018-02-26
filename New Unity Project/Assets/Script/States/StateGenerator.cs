@@ -332,7 +332,7 @@ public class StateGenerator : MonoBehaviour {
             {
                 if (_arrowKeys[_counter] == 1)
                 {
-                    _buttonQTE = Instantiate(Resources.Load("Prefabs/ArrowUp") as GameObject);
+                    _buttonQTE = Instantiate(Resources.Load("Prefabs/KeyboardQ") as GameObject);
                     _buttonQTE.transform.parent = pc.transform;
 
                     Vector3 _buttonPos = pc.transform.position;
@@ -347,7 +347,7 @@ public class StateGenerator : MonoBehaviour {
                 }
                 if (_arrowKeys[_counter] == 2)
                 {
-                    _buttonQTE = Instantiate(Resources.Load("Prefabs/ArrowRight") as GameObject);
+                    _buttonQTE = Instantiate(Resources.Load("Prefabs/KeyboardW") as GameObject);
                     _buttonQTE.transform.parent = pc.transform;
 
                     Vector3 _buttonPos = pc.transform.position;
@@ -362,7 +362,7 @@ public class StateGenerator : MonoBehaviour {
                 }
                 if (_arrowKeys[_counter] == 3)
                 {
-                    _buttonQTE = Instantiate(Resources.Load("Prefabs/ArrowDown") as GameObject);
+                    _buttonQTE = Instantiate(Resources.Load("Prefabs/KeyboardE") as GameObject);
                     _buttonQTE.transform.parent = pc.transform;
 
                     Vector3 _buttonPos = pc.transform.position;
@@ -377,7 +377,7 @@ public class StateGenerator : MonoBehaviour {
                 }
                 if (_arrowKeys[_counter] == 4)
                 {
-                    _buttonQTE = Instantiate(Resources.Load("Prefabs/ArrowLeft") as GameObject);
+                    _buttonQTE = Instantiate(Resources.Load("Prefabs/KeyboardR") as GameObject);
                     _buttonQTE.transform.parent = pc.transform;
 
                     Vector3 _buttonPos = pc.transform.position;
