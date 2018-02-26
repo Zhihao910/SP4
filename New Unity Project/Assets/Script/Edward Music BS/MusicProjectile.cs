@@ -52,9 +52,6 @@ public class MusicProjectile : MonoBehaviour
         if (detected)
             return;
 
-        if (checkSong())
-            detected = true;
-
         // BASS
         if (SpawnEffect._spawnBass)
         {
@@ -462,12 +459,13 @@ public class MusicProjectile : MonoBehaviour
             ))
         {
             print("Successfully loaded from file.");
-
+            detected = true;
             return true;
         }
         else
         {
             print("Song does not exist or error in reading file. Will detect.");
+            detected = false;
             return false;
         }
     }
