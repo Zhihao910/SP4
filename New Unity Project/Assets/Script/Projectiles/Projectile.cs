@@ -78,14 +78,14 @@ public class Projectile : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("Player health -10");
-            Debug.Log("ADD MANA");
+            //Debug.Log("ADD MANA");
 
             GetComponent<particles>().ApplyParticle(gameObject, "hitParticle", 0.5f, 1, false);
 
-            other.GetComponent<PlayerController>().mana += 20;
-            if (other.GetComponent<PlayerController>().mana >= 100)
-                other.GetComponent<PlayerController>().mana = 100;
-            if (other.GetComponent<PlayerController>().invincible == false&&other.GetComponent<PlayerController>().invincible2==false)
+            //other.GetComponent<PlayerController>().mana += 20;
+            //if (other.GetComponent<PlayerController>().mana >= 100)
+            //    other.GetComponent<PlayerController>().mana = 100;
+            if (other.GetComponent<PlayerController>().invincible == false && other.GetComponent<PlayerController>().invincible2==false)
                 other.GetComponent<PlayerController>().health -= 10;
             if (null != transform.parent)
                 Destroy((transform.parent).gameObject);

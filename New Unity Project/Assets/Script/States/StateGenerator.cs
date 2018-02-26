@@ -16,6 +16,7 @@ public class StateGenerator : MonoBehaviour
         PARRYSTATE,
         QUICKTIMEEVENTSTATE,
         SHOCKWAVESTATE,
+        LAZERSTATE,
         NUMSTATE,//Default
     };
 
@@ -39,6 +40,8 @@ public class StateGenerator : MonoBehaviour
         _GenerateDictionary.Add(GenerateType.PARRYSTATE, CreateParryState);
         _GenerateDictionary.Add(GenerateType.QUICKTIMEEVENTSTATE, CreateQuickTimeEvent);
         _GenerateDictionary.Add(GenerateType.SHOCKWAVESTATE, CreateShockwaveProjectile);
+        _GenerateDictionary.Add(GenerateType.LAZERSTATE, CreateLaserAttack);
+
     }
 
     // Use this for initialization
@@ -306,7 +309,7 @@ public class StateGenerator : MonoBehaviour
         List<int> _InputKeys = new List<int>();
         //List<bool> _outcomeKeys = new List<bool>();
 
-        int numberofKeys = 7;
+        int numberofKeys = 14;
 
         for (int i = 0; i < numberofKeys; ++i)
         {
@@ -329,8 +332,8 @@ public class StateGenerator : MonoBehaviour
         int _buttonPressed = 0;
         double _QTETime = 0.0;
         int totalDmg = 0;
-        double quarterTime = (beattime * 0.2);
-        double warnTime = 0.0;
+        double fifthTime = (beattime * 0.19);
+        float warnTime = (float)(beattime * 1.6);
         int _countdown = 0;
 
         GameObject _buttonQTE;
@@ -340,31 +343,25 @@ public class StateGenerator : MonoBehaviour
 
         BaseState.Attack warn = () =>
         {
-            print("yo some shit boutta happen");
+            ++_countdown;
 
-            _QTETime += Time.deltaTime;
-
-            if (_QTETime > warnTime)
+            switch (_countdown)
             {
-                // TODO
-
-                if (_countdown == 0)
-                {
-                    print("ready");
-                }
-                else
-                {
-                    print(_countdown);
-                }
-
-                ++_countdown;
-                // warns at 0, 1, 2, 3 (4 is end)
-                warnTime += quarterTime;
-
-                if (_countdown == 5)
-                {
-                    _QTETime = 0.0;
-                }
+                case 1:
+                    _feedback.GetComponent<Feedback>().CreateImage("CountReady", new Vector3(0, 0), warnTime);
+                    break;
+                case 2:
+                    _feedback.GetComponent<Feedback>().CreateImage("CountThree", new Vector3(0, 0), warnTime);
+                    break;
+                case 3:
+                    _feedback.GetComponent<Feedback>().CreateImage("CountTwo", new Vector3(0, 0), warnTime);
+                    break;
+                case 4:
+                    _feedback.GetComponent<Feedback>().CreateImage("CountOne", new Vector3(0, 0), warnTime);
+                    break;
+                case 5:
+                    _feedback.GetComponent<Feedback>().CreateImage("CountGo", new Vector3(0, 0), warnTime);
+                    break;
             }
         };
 
@@ -442,7 +439,7 @@ public class StateGenerator : MonoBehaviour
             }
 
             _buttonPressed = 0;
-            _QTETime += Time.deltaTime * 2;
+            _QTETime += Time.deltaTime * 8;
 
             for (int i = 1; i < 5; ++i)
             {
@@ -528,13 +525,28 @@ public class StateGenerator : MonoBehaviour
             }
         };
 
-        result.AddAttack(0.0, warn);
+        BaseState.Attack clear = () =>
+        {
+            while (_buttonList.Count != 0)
+            {
+                Destroy(_buttonList[0]);
+                _buttonList.Remove(_buttonList[0]);
+            }
+        };
 
-        for (double time = beattime; time < _clip.length; time += beattime)
+        for (double time = 0; time < (beattime * 8); time += (double)warnTime)
+        {
+            result.AddAttack(time, warn);
+            result.m_audioManager = ap;
+        }
+
+        for (double time = (beattime * 8); time < (_clip.length - 0.2f); time += beattime)
         {
             result.AddAttack(time, att);
             result.m_audioManager = ap;
         }
+
+        result.AddAttack((_clip.length - 0.2f), clear);
 
         m_StateMap[_clipname] = result;
         result.Sort();
@@ -609,7 +621,7 @@ public class StateGenerator : MonoBehaviour
 
         // uhh how do i slow down spawning omegalul
 
-        target.y = Random.Range(-1, 5f);
+        target.y = Random.Range(-1, -5f);
         target2.y = target.y;
         BaseState.Attack warn = () =>
         {
