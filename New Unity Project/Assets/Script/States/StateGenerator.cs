@@ -53,7 +53,7 @@ public class StateGenerator : MonoBehaviour
 
     }
 
-    public BaseState GenerateState(GenerateType _type, string _clipname, AudioClip _clip, float _multiplier = 1f)
+    public BaseState GenerateState(GenerateType _type, string _clipname, AudioClip _clip, float _multiplier)
     {
         if (_type == GenerateType.NUMSTATE)
         {
@@ -62,6 +62,17 @@ public class StateGenerator : MonoBehaviour
             return _GenerateDictionary[g](_clipname, _clip, _multiplier);
         }
         return _GenerateDictionary[_type](_clipname, _clip, _multiplier);
+    }
+
+    public BaseState GenerateState(GenerateType _type, string _clipname, AudioClip _clip)
+    {
+        if (_type == GenerateType.NUMSTATE)
+        {
+            GenerateType g = (GenerateType)Random.Range((int)GenerateType.BASESTATE, (int)GenerateType.NUMSTATE);
+            print(g);
+            return _GenerateDictionary[g](_clipname, _clip);
+        }
+        return _GenerateDictionary[_type](_clipname, _clip);
     }
 
     public BaseState CreateBaseState(string _clipname, AudioClip _clip, float multiplier = 1f)

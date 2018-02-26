@@ -35,7 +35,7 @@ public class ExplodingProjectile : Projectile
                 go.GetComponent<Projectile>().SetDir((new Vector3(Mathf.Cos(rad), Mathf.Sin(rad))).normalized);
                 go.GetComponent<Projectile>().SetSpeed(3);
             }
-            Destroy(gameObject);
+            Destroy(transform.parent.gameObject);
         }
 	}
 

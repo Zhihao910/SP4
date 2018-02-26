@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseState1 : MonoBehaviour {
-
-    public delegate void Attack();
-
+public class BaseState1 : BaseState {
     enum Type
     {
         BASS_TYPE,
@@ -14,14 +11,15 @@ public class BaseState1 : MonoBehaviour {
         TYPE_NUM,
     };
 
-    public AudioPeerManager m_audioManager;
-
     Attack[] _attacks = new Attack[(int)(Type.TYPE_NUM)];
 
-    [SerializeField]
-    string m_clipname;
+    private List<float>[] beatList = new List<float>[(int)(Type.TYPE_NUM)];
 
-    bool m_Run = false;
+    void Awake()
+    {
+        for (int i = 0; i < (int)Type.TYPE_NUM; ++i)
+            beatList[i] = new List<float>();
+    }
 
     // Use this for initialization
     void Start () {
@@ -30,12 +28,7 @@ public class BaseState1 : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        foreach(Attack a in _attacks)
-        {
-            //Condition
-            //if()
-            //a();
-        }
+        base.FixedUpdate();
 	}
 
     public void AddAttack(int _go,Attack _function)
@@ -43,19 +36,15 @@ public class BaseState1 : MonoBehaviour {
         _attacks[_go] = _function;
     }
 
-
-    public string GetClipName()
+    public void PushAttacksIntoList()
     {
-        return m_clipname;
-    }
-
-    public void SetClipName(string _clipname)
-    {
-        m_clipname = _clipname;
-    }
-
-    public void StopRun()
-    {
-        m_Run = false;
+        for (int i = 0; i < (int)Type.TYPE_NUM; ++i)
+        {
+            foreach (float f in beatList[i])
+            {
+                m_Attacks.Add(new KeyValuePair<double, Attack>((double)f, _attacks[i]));
+            }
+        }
+        Sort();
     }
 }
