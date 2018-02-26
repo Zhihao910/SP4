@@ -332,13 +332,13 @@ public class StateGenerator : MonoBehaviour {
             {
                 if (_arrowKeys[_counter] == 1)
                 {
-                    _buttonQTE = Instantiate(Resources.Load("Prefabs/ArrowUp") as GameObject);
+                    _buttonQTE = Instantiate(Resources.Load("Prefabs/KeyboardQ") as GameObject);
                     _buttonQTE.transform.parent = pc.transform;
 
                     Vector3 _buttonPos = pc.transform.position;
                     Vector2 _randPos = Random.insideUnitCircle;
                     _buttonPos += new Vector3(_randPos.x, _randPos.y);
-                    ++_buttonPos.y;
+                    _buttonPos.y += 2;
                     _buttonQTE.transform.position = _buttonPos;
 
                     _buttonList.Add(_buttonQTE);
@@ -347,13 +347,13 @@ public class StateGenerator : MonoBehaviour {
                 }
                 if (_arrowKeys[_counter] == 2)
                 {
-                    _buttonQTE = Instantiate(Resources.Load("Prefabs/ArrowRight") as GameObject);
+                    _buttonQTE = Instantiate(Resources.Load("Prefabs/KeyboardW") as GameObject);
                     _buttonQTE.transform.parent = pc.transform;
 
                     Vector3 _buttonPos = pc.transform.position;
                     Vector2 _randPos = Random.insideUnitCircle;
                     _buttonPos += new Vector3(_randPos.x, _randPos.y);
-                    ++_buttonPos.y;
+                    _buttonPos.y += 2;
                     _buttonQTE.transform.position = _buttonPos;
 
                     _buttonList.Add(_buttonQTE);
@@ -362,13 +362,13 @@ public class StateGenerator : MonoBehaviour {
                 }
                 if (_arrowKeys[_counter] == 3)
                 {
-                    _buttonQTE = Instantiate(Resources.Load("Prefabs/ArrowDown") as GameObject);
+                    _buttonQTE = Instantiate(Resources.Load("Prefabs/KeyboardE") as GameObject);
                     _buttonQTE.transform.parent = pc.transform;
 
                     Vector3 _buttonPos = pc.transform.position;
                     Vector2 _randPos = Random.insideUnitCircle;
                     _buttonPos += new Vector3(_randPos.x, _randPos.y);
-                    ++_buttonPos.y;
+                    _buttonPos.y += 2;
                     _buttonQTE.transform.position = _buttonPos;
 
                     _buttonList.Add(_buttonQTE);
@@ -377,13 +377,13 @@ public class StateGenerator : MonoBehaviour {
                 }
                 if (_arrowKeys[_counter] == 4)
                 {
-                    _buttonQTE = Instantiate(Resources.Load("Prefabs/ArrowLeft") as GameObject);
+                    _buttonQTE = Instantiate(Resources.Load("Prefabs/KeyboardR") as GameObject);
                     _buttonQTE.transform.parent = pc.transform;
 
                     Vector3 _buttonPos = pc.transform.position;
                     Vector2 _randPos = Random.insideUnitCircle;
                     _buttonPos += new Vector3(_randPos.x, _randPos.y);
-                    ++_buttonPos.y;
+                    _buttonPos.y += 2;
                     _buttonQTE.transform.position = _buttonPos;
 
                     _buttonList.Add(_buttonQTE);
@@ -480,6 +480,7 @@ public class StateGenerator : MonoBehaviour {
     // Shockwave Projectile (Drop 2 or some shit?)
     public BaseState CreateShockwaveProjectile(string _clipname, AudioClip _clip, float multiplier = 8.0f)
     {
+        multiplier = 8.0f;
         BaseState result = gameObject.AddComponent<BaseState>();
         result.SetClipName(_clip.name);
         //Run adding attacks here

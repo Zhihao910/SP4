@@ -21,7 +21,7 @@ public class Platform : MonoBehaviour {
         pos = transform.position;
         if (!hittarget)
         {
-            print((target - transform.position).magnitude);
+            //print((target - transform.position).magnitude);
             transform.Translate(dir.x * projectileSpeed * Time.deltaTime, dir.y * projectileSpeed * Time.deltaTime, 0);
             if (null != target)
             {
