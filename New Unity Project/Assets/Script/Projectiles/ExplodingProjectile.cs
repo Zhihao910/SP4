@@ -26,6 +26,7 @@ public class ExplodingProjectile : Projectile
         if(hittarget)
         {
             _feedback.GetComponent<Feedback>().CreateImage("ParryFail", gameObject.transform.position);
+            _feedback.GetComponent<Feedback>().CreateAudio("Fail");
 
             for (float i = 0; i < 360; i += 360/SplitCount)
             {

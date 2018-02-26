@@ -4,11 +4,19 @@ using UnityEngine;
 
 public class Feedback : MonoBehaviour
 {
+    [SerializeField]
+    AudioSource _audioSource;
+
+    [SerializeField]
+    AudioClip _pass;
+    [SerializeField]
+    AudioClip _fail;
+
     // Use this for initialization
     void Start ()
     {
-		
-	}
+        _audioSource = GetComponent<AudioSource>();
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -30,7 +38,7 @@ public class Feedback : MonoBehaviour
 
         Destroy(_temp, _lifetime);
 
-        return false;
+        return true;
     }
 
     // Use this if you want it to follow something
@@ -43,6 +51,26 @@ public class Feedback : MonoBehaviour
 
         Destroy(_temp, _lifetime);
 
-        return false;
+        return true;
+    }
+
+    public bool CreateAudio(string _name)
+    {
+        if (_audioSource.isPlaying)
+            _audioSource.Stop();
+
+        switch (_name)
+        {
+            case "Pass":
+                _audioSource.clip = _pass;
+                _audioSource.Play();
+                break;
+            case "Fail":
+                _audioSource.clip = _fail;
+                _audioSource.Play();
+                break;
+        }
+
+        return true;
     }
 }
