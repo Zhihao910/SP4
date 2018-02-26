@@ -25,7 +25,7 @@ public class BaseState : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void FixedUpdate () {
+	protected void FixedUpdate () {
         if (m_Run && m_Queue.Count > 0)
         {
             if (m_Queue.Peek().Key <= m_audioManager.TimeNow())

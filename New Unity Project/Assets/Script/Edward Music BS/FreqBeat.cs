@@ -81,7 +81,7 @@ public class FreqBeat : MonoBehaviour
             _freqbeat[i] = false;
             _historyBufferArray[i] = new float[43];
             //_highs[i] = new float[21600];
-            // who the fuck puts a song thats 24 hours long?
+            // who the fuck puts a song thats 24 hours long? ok
             // this is enough.
         }
 

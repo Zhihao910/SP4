@@ -260,7 +260,7 @@ public class MusicProjectile : MonoBehaviour
         }
     }
 
-    private bool checkSong()
+    public bool checkSong()
     {
         if (Saving.LoadingFromFile("MusicData.txt", (List<string> _data) =>
         {
