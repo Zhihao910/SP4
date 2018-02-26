@@ -16,10 +16,10 @@ public class MusicProjectile : MonoBehaviour
     //[SerializeField]
     //AudioClip _sample;
 
-    //[SerializeField]
-    //GameObject Projectile;
-    //[SerializeField]
-    //GameObject ProjectileDrag;
+    [SerializeField]
+    GameObject Projectile;
+    [SerializeField]
+    GameObject ProjectileDrag;
 
     private bool spawnBass;
     private bool spawnKick;
@@ -35,6 +35,8 @@ public class MusicProjectile : MonoBehaviour
     private List<float> centerList = new List<float>();
     private List<float> melodyList = new List<float>();
     private List<float> highList = new List<float>();
+
+    bool detected = false;
     private List<float> threeList = new List<float>();
 
     // Use this for initialization
@@ -47,20 +49,24 @@ public class MusicProjectile : MonoBehaviour
     // Update is called once per frame
     void Update ()
     {
+        if (detected)
+            return;
+
+        if (checkSong())
+            detected = true;
+
         // BASS
         if (SpawnEffect._spawnBass)
         {
             if (!spawnBass)
             {
-                //Instantiate(Projectile, new Vector2(15, 1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
-
-                //spawnBass = true;
-
+                spawnBass = true;
+                Instantiate(Projectile, new Vector2(15, 1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
                 bassList.Add(_audioSource.time);
             }
             else if (spawnBass)
             {
-                //Instantiate(ProjectileDrag, new Vector2(15, 1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+                Instantiate(ProjectileDrag, new Vector2(15, 1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
             }
         }
         else
@@ -73,15 +79,13 @@ public class MusicProjectile : MonoBehaviour
         {
             if (!spawnKick)
             {
-                //Instantiate(Projectile, new Vector2(15, 0), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
-
-                //spawnKick = true;
-
+                spawnKick = true;
+                Instantiate(Projectile, new Vector2(15, 0), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
                 kickList.Add(_audioSource.time);
             }
             else if (spawnKick)
             {
-                //Instantiate(ProjectileDrag, new Vector2(15, 0), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+                Instantiate(ProjectileDrag, new Vector2(15, 0), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
             }
         }
         else
@@ -89,20 +93,18 @@ public class MusicProjectile : MonoBehaviour
             spawnKick = false;
         }
 
-        // ACTUALLY ALSO PART OF VOCALS AND INSTRUMENTS
-        if (SpawnEffect._spawnCenter)
+        // All 3
+        if (SpawnEffect._spawnCenter || SpawnEffect._spawnMelody || SpawnEffect._spawnHigh)
         {
             if (!spawnCenter)
             {
-                //Instantiate(Projectile, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
-
-                //spawnCenter = true;
-
-                centerList.Add(_audioSource.time);
+                spawnCenter = true;
+                Instantiate(Projectile, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+                threeList.Add(_audioSource.time);
             }
             else if (spawnCenter)
             {
-                //Instantiate(ProjectileDrag, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+                Instantiate(ProjectileDrag, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
             }
         }
         else
@@ -110,47 +112,68 @@ public class MusicProjectile : MonoBehaviour
             spawnCenter = false;
         }
 
-        // VOCALS AND INSTRUMENTS
-        if (SpawnEffect._spawnMelody)
-        {
-            if (!spawnMelody)
-            {
-                //Instantiate(Projectile, new Vector2(15, -2), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+        //// ACTUALLY ALSO PART OF VOCALS AND INSTRUMENTS
+        //if (SpawnEffect._spawnCenter)
+        //{
+        //    if (!spawnCenter)
+        //    {
+        //        //Instantiate(Projectile, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
 
-                //spawnMelody = true;
+        //        //spawnCenter = true;
 
-                melodyList.Add(_audioSource.time);
-            }
-            else if (spawnMelody)
-            {
-                //Instantiate(ProjectileDrag, new Vector2(15, -2), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
-            }
-        }
-        else
-        {
-            spawnMelody = false;
-        }
+        //        centerList.Add(_audioSource.time);
+        //    }
+        //    else if (spawnCenter)
+        //    {
+        //        //Instantiate(ProjectileDrag, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+        //    }
+        //}
+        //else
+        //{
+        //    spawnCenter = false;
+        //}
 
-        // CHALKBOARD SCREECHING
-        if (SpawnEffect._spawnHigh)
-        {
-            if (!spawnHigh)
-            {
-                //Instantiate(Projectile, new Vector2(15, -3), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+        //// VOCALS AND INSTRUMENTS
+        //if (SpawnEffect._spawnMelody)
+        //{
+        //    if (!spawnMelody)
+        //    {
+        //        //Instantiate(Projectile, new Vector2(15, -2), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
 
-                //spawnHigh = true;
+        //        //spawnMelody = true;
 
-                highList.Add(_audioSource.time);
-            }
-            else if (spawnHigh)
-            {
-                //Instantiate(ProjectileDrag, new Vector2(15, -3), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
-            }
-        }
-        else
-        {
-            spawnHigh = false;
-        }
+        //        melodyList.Add(_audioSource.time);
+        //    }
+        //    else if (spawnMelody)
+        //    {
+        //        //Instantiate(ProjectileDrag, new Vector2(15, -2), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+        //    }
+        //}
+        //else
+        //{
+        //    spawnMelody = false;
+        //}
+
+        //// CHALKBOARD SCREECHING
+        //if (SpawnEffect._spawnHigh)
+        //{
+        //    if (!spawnHigh)
+        //    {
+        //        //Instantiate(Projectile, new Vector2(15, -3), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+
+        //        //spawnHigh = true;
+
+        //        highList.Add(_audioSource.time);
+        //    }
+        //    else if (spawnHigh)
+        //    {
+        //        //Instantiate(ProjectileDrag, new Vector2(15, -3), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+        //    }
+        //}
+        //else
+        //{
+        //    spawnHigh = false;
+        //}
     }
 
     public static void Swap()
@@ -209,44 +232,57 @@ public class MusicProjectile : MonoBehaviour
             }
             saver.Add("</kick>");
 
-            saver.Add("<centercount>");
-            saver.Add((centerList.Count - 1).ToString());
-            saver.Add("</centercount>");
+            saver.Add("<threecount>");
+            saver.Add((threeList.Count - 1).ToString());
+            saver.Add("</threecount>");
 
-            saver.Add("<center>");
-            for (int i = 0; i < (centerList.Count - 1); ++i)
+            saver.Add("<three>");
+            for (int i = 0; i < (threeList.Count - 1); ++i)
             {
-                saver.Add("<ce" + i.ToString() + ">");
-                saver.Add(centerList[i].ToString());
-                saver.Add("<ce/" + i.ToString() + ">");
+                saver.Add("<tre" + i.ToString() + ">");
+                saver.Add(threeList[i].ToString());
+                saver.Add("<tre/" + i.ToString() + ">");
             }
-            saver.Add("</center>");
+            saver.Add("</three>");
 
-            saver.Add("<melodycount>");
-            saver.Add((melodyList.Count - 1).ToString());
-            saver.Add("</melodycount>");
+            //saver.Add("<centercount>");
+            //saver.Add((centerList.Count - 1).ToString());
+            //saver.Add("</centercount>");
 
-            saver.Add("<melody>");
-            for (int i = 0; i < (melodyList.Count - 1); ++i)
-            {
-                saver.Add("<me" + i.ToString() + ">");
-                saver.Add(melodyList[i].ToString());
-                saver.Add("<me/" + i.ToString() + ">");
-            }
-            saver.Add("</melody>");
+            //saver.Add("<center>");
+            //for (int i = 0; i < (centerList.Count - 1); ++i)
+            //{
+            //    saver.Add("<ce" + i.ToString() + ">");
+            //    saver.Add(centerList[i].ToString());
+            //    saver.Add("<ce/" + i.ToString() + ">");
+            //}
+            //saver.Add("</center>");
 
-            saver.Add("<highcount>");
-            saver.Add((highList.Count - 1).ToString());
-            saver.Add("</highcount>");
+            //saver.Add("<melodycount>");
+            //saver.Add((melodyList.Count - 1).ToString());
+            //saver.Add("</melodycount>");
 
-            saver.Add("<high>");
-            for (int i = 0; i < (highList.Count - 1); ++i)
-            {
-                saver.Add("<hi" + i.ToString() + ">");
-                saver.Add(highList[i].ToString());
-                saver.Add("<hi/" + i.ToString() + ">");
-            }
-            saver.Add("</high>");
+            //saver.Add("<melody>");
+            //for (int i = 0; i < (melodyList.Count - 1); ++i)
+            //{
+            //    saver.Add("<me" + i.ToString() + ">");
+            //    saver.Add(melodyList[i].ToString());
+            //    saver.Add("<me/" + i.ToString() + ">");
+            //}
+            //saver.Add("</melody>");
+
+            //saver.Add("<highcount>");
+            //saver.Add((highList.Count - 1).ToString());
+            //saver.Add("</highcount>");
+
+            //saver.Add("<high>");
+            //for (int i = 0; i < (highList.Count - 1); ++i)
+            //{
+            //    saver.Add("<hi" + i.ToString() + ">");
+            //    saver.Add(highList[i].ToString());
+            //    saver.Add("<hi/" + i.ToString() + ">");
+            //}
+            //saver.Add("</high>");
 
             saver.Add("</beat>");
 
@@ -325,77 +361,101 @@ public class MusicProjectile : MonoBehaviour
                 kickList.Add(Convert.ToSingle(freqString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
             }
 
-            // FIND CENTER COUNT
-            List<string> centerSegment = new List<string>();
-            centerSegment = freqData.GetRange(freqData.IndexOf("<centercount>"), (freqData.IndexOf("</centercount>") - freqData.IndexOf("<centercount>")));
-            centerSegment.Remove("<centercount>");
-            string centersegmentString = "";
-            foreach (string num in centerSegment)
-                centersegmentString += num;
+            // FIND THREE COUNT
+            List<string> threeSegment = new List<string>();
+            threeSegment = freqData.GetRange(freqData.IndexOf("<threecount>"), (freqData.IndexOf("</threecount>") - freqData.IndexOf("<threecount>")));
+            threeSegment.Remove("<threecount>");
+            string threesegmentString = "";
+            foreach (string num in threeSegment)
+                threesegmentString += num;
 
-            // FIND CENTER
-            List<string> freqcenter = freqData.GetRange(freqData.IndexOf("<center>"), (freqData.IndexOf("</center>") - freqData.IndexOf("<center>")));
-            freqcenter.Remove("<center>");
+            // FIND THREE
+            List<string> freqthree = freqData.GetRange(freqData.IndexOf("<three>"), (freqData.IndexOf("</three>") - freqData.IndexOf("<three>")));
+            freqthree.Remove("<three>");
 
-            for (int i = 0; i < (Convert.ToInt32(centersegmentString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat) - 1); ++i)
+            for (int i = 0; i < (Convert.ToInt32(threesegmentString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat) - 1); ++i)
             {
-                List<string> centerData = freqcenter.GetRange(freqcenter.IndexOf("<ce" + i.ToString() + ">"), (freqcenter.IndexOf("<ce/" + i.ToString() + ">") - freqcenter.IndexOf("ce" + i.ToString() + ">")));
-                centerData.Remove("<ce" + i.ToString() + ">");
+                List<string> threeData = freqthree.GetRange(freqthree.IndexOf("<tre" + i.ToString() + ">"), (freqthree.IndexOf("<tre/" + i.ToString() + ">") - freqthree.IndexOf("<tre" + i.ToString() + ">")));
+                threeData.Remove("<tre" + i.ToString() + ">");
 
                 string freqString = "";
-                foreach (string num in centerData)
+                foreach (string num in threeData)
                     freqString += num;
 
-                centerList.Add(Convert.ToSingle(freqString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
+                threeList.Add(Convert.ToSingle(freqString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
             }
 
-            // FIND MELODY COUNT
-            List<string> melodySegment = new List<string>();
-            melodySegment = freqData.GetRange(freqData.IndexOf("<melodycount>"), (freqData.IndexOf("</melodycount>") - freqData.IndexOf("<melodycount>")));
-            melodySegment.Remove("<melodycount>");
-            string melodysegmentString = "";
-            foreach (string num in melodySegment)
-                melodysegmentString += num;
+            //// FIND CENTER COUNT
+            //List<string> centerSegment = new List<string>();
+            //centerSegment = freqData.GetRange(freqData.IndexOf("<centercount>"), (freqData.IndexOf("</centercount>") - freqData.IndexOf("<centercount>")));
+            //centerSegment.Remove("<centercount>");
+            //string centersegmentString = "";
+            //foreach (string num in centerSegment)
+            //    centersegmentString += num;
 
-            // FIND MELODY
-            List<string> freqmelody = freqData.GetRange(freqData.IndexOf("<melody>"), (freqData.IndexOf("</melody>") - freqData.IndexOf("<melody>")));
-            freqmelody.Remove("<melody>");
+            //// FIND CENTER
+            //List<string> freqcenter = freqData.GetRange(freqData.IndexOf("<center>"), (freqData.IndexOf("</center>") - freqData.IndexOf("<center>")));
+            //freqcenter.Remove("<center>");
 
-            for (int i = 0; i < (Convert.ToInt32(melodysegmentString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat) - 1); ++i)
-            {
-                List<string> melodyData = freqmelody.GetRange(freqmelody.IndexOf("<me" + i.ToString() + ">"), (freqmelody.IndexOf("<me/" + i.ToString() + ">") - freqmelody.IndexOf("<me" + i.ToString() + ">")));
-                melodyData.Remove("<me" + i.ToString() + ">");
+            //for (int i = 0; i < (Convert.ToInt32(centersegmentString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat) - 1); ++i)
+            //{
+            //    List<string> centerData = freqcenter.GetRange(freqcenter.IndexOf("<ce" + i.ToString() + ">"), (freqcenter.IndexOf("<ce/" + i.ToString() + ">") - freqcenter.IndexOf("ce" + i.ToString() + ">")));
+            //    centerData.Remove("<ce" + i.ToString() + ">");
 
-                string freqString = "";
-                foreach (string num in melodyData)
-                    freqString += num;
+            //    string freqString = "";
+            //    foreach (string num in centerData)
+            //        freqString += num;
 
-                melodyList.Add(Convert.ToSingle(freqString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
-            }
+            //    centerList.Add(Convert.ToSingle(freqString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
+            //}
 
-            // FIND HIGH COUNT
-            List<string> highSegment = new List<string>();
-            highSegment = freqData.GetRange(freqData.IndexOf("<highcount>"), (freqData.IndexOf("</highcount>") - freqData.IndexOf("<highcount>")));
-            highSegment.Remove("<highcount>");
-            string highsegmentString = "";
-            foreach (string num in highSegment)
-                highsegmentString += num;
+            //// FIND MELODY COUNT
+            //List<string> melodySegment = new List<string>();
+            //melodySegment = freqData.GetRange(freqData.IndexOf("<melodycount>"), (freqData.IndexOf("</melodycount>") - freqData.IndexOf("<melodycount>")));
+            //melodySegment.Remove("<melodycount>");
+            //string melodysegmentString = "";
+            //foreach (string num in melodySegment)
+            //    melodysegmentString += num;
 
-            // FIND HIGH
-            List<string> freqhigh = freqData.GetRange(freqData.IndexOf("<high>"), (freqData.IndexOf("</high>") - freqData.IndexOf("<high>")));
-            freqhigh.Remove("<high>");
+            //// FIND MELODY
+            //List<string> freqmelody = freqData.GetRange(freqData.IndexOf("<melody>"), (freqData.IndexOf("</melody>") - freqData.IndexOf("<melody>")));
+            //freqmelody.Remove("<melody>");
 
-            for (int i = 0; i < (Convert.ToInt32(highsegmentString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat) - 1); ++i)
-            {
-                List<string> highData = freqhigh.GetRange(freqhigh.IndexOf("<hi" + i.ToString() + ">"), (freqhigh.IndexOf("<hi/" + i.ToString() + ">") - freqhigh.IndexOf("<hi" + i.ToString() + ">")));
-                highData.Remove("<hi" + i.ToString() + ">");
+            //for (int i = 0; i < (Convert.ToInt32(melodysegmentString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat) - 1); ++i)
+            //{
+            //    List<string> melodyData = freqmelody.GetRange(freqmelody.IndexOf("<me" + i.ToString() + ">"), (freqmelody.IndexOf("<me/" + i.ToString() + ">") - freqmelody.IndexOf("<me" + i.ToString() + ">")));
+            //    melodyData.Remove("<me" + i.ToString() + ">");
 
-                string freqString = "";
-                foreach (string num in highData)
-                    freqString += num;
+            //    string freqString = "";
+            //    foreach (string num in melodyData)
+            //        freqString += num;
 
-                highList.Add(Convert.ToSingle(freqString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
-            }
+            //    melodyList.Add(Convert.ToSingle(freqString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
+            //}
+
+            //// FIND HIGH COUNT
+            //List<string> highSegment = new List<string>();
+            //highSegment = freqData.GetRange(freqData.IndexOf("<highcount>"), (freqData.IndexOf("</highcount>") - freqData.IndexOf("<highcount>")));
+            //highSegment.Remove("<highcount>");
+            //string highsegmentString = "";
+            //foreach (string num in highSegment)
+            //    highsegmentString += num;
+
+            //// FIND HIGH
+            //List<string> freqhigh = freqData.GetRange(freqData.IndexOf("<high>"), (freqData.IndexOf("</high>") - freqData.IndexOf("<high>")));
+            //freqhigh.Remove("<high>");
+
+            //for (int i = 0; i < (Convert.ToInt32(highsegmentString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat) - 1); ++i)
+            //{
+            //    List<string> highData = freqhigh.GetRange(freqhigh.IndexOf("<hi" + i.ToString() + ">"), (freqhigh.IndexOf("<hi/" + i.ToString() + ">") - freqhigh.IndexOf("<hi" + i.ToString() + ">")));
+            //    highData.Remove("<hi" + i.ToString() + ">");
+
+            //    string freqString = "";
+            //    foreach (string num in highData)
+            //        freqString += num;
+
+            //    highList.Add(Convert.ToSingle(freqString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
+            //}
 
             return true;
         }

@@ -17,11 +17,12 @@ public class Feedback : MonoBehaviour
 	}
 
     // Create an object. _name doesnt need "Prefabs/". Lifetime default is 1.0f.
-    public bool Create(string _name, Vector3 _pos, float _lifetime = 1.0f)
+    public bool CreateImage(string _name, Vector3 _pos, float _lifetime = 1.0f)
     {
         print("made!");
         print(_pos);
         GameObject _temp = Instantiate(Resources.Load("Prefabs/" + _name) as GameObject);
+        _temp.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
 
         _pos.z = -1;
 
@@ -33,7 +34,7 @@ public class Feedback : MonoBehaviour
     }
 
     // Use this if you want it to follow something
-    public bool Create(string _name, GameObject _go, float _lifetime = 1.0f)
+    public bool CreateImage(string _name, GameObject _go, float _lifetime = 1.0f)
     {
         // I'm not sure what I'm doing here tbh fam
         GameObject _temp = Instantiate(Resources.Load("Prefabs/" + _name) as GameObject);

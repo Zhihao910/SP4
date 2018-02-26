@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateGenerator : MonoBehaviour {
+public class StateGenerator : MonoBehaviour
+{
 
     static Dictionary<string, BaseState> m_StateMap = new Dictionary<string, BaseState>();
 
@@ -41,18 +42,20 @@ public class StateGenerator : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start () {
-        
+    void Start()
+    {
+
     }
 
     // Update is called once per frame
-    void Update () {
-		
-	}
+    void Update()
+    {
+
+    }
 
     public BaseState GenerateState(GenerateType _type, string _clipname, AudioClip _clip, float _multiplier)
     {
-        if(_type == GenerateType.NUMSTATE)
+        if (_type == GenerateType.NUMSTATE)
         {
             GenerateType g = (GenerateType)Random.Range((int)GenerateType.BASESTATE, (int)GenerateType.NUMSTATE);
             print(g);
@@ -61,6 +64,7 @@ public class StateGenerator : MonoBehaviour {
         return _GenerateDictionary[_type](_clipname, _clip, _multiplier);
     }
 
+<<<<<<< HEAD
     public BaseState GenerateState(GenerateType _type, string _clipname, AudioClip _clip)
     {
         if (_type == GenerateType.NUMSTATE)
@@ -73,6 +77,9 @@ public class StateGenerator : MonoBehaviour {
     }
 
     public BaseState CreateBaseState(string _clipname, AudioClip _clip,float multiplier = 4f)
+=======
+    public BaseState CreateBaseState(string _clipname, AudioClip _clip, float multiplier = 1f)
+>>>>>>> 873ed5e067cb9d5b0307bce2d54bbce0e2526527
     {
         BaseState result = gameObject.AddComponent<BaseState>();
         result.SetClipName(_clip.name);
@@ -97,12 +104,12 @@ public class StateGenerator : MonoBehaviour {
             newgo.GetComponent<Projectile>().SetDir(target);
             newgo.GetComponent<Projectile>().SetSpeed(10 / multiplier);
 
-            
+
             for (int i = 0; i < 4; ++i)
             {
                 GameObject newergo = Instantiate(newgo, pos, Quaternion.identity);
                 target.x += 0.5f;
-               
+
                 newergo.GetComponent<Projectile>().SetDir(target);
                 newergo.GetComponent<Projectile>().SetSpeed(10 / multiplier);
             }
@@ -118,7 +125,7 @@ public class StateGenerator : MonoBehaviour {
             if (go == null) Debug.Log("Loaded object isn't GameObject");
             GameObject newgo = Instantiate(go, pos, Quaternion.identity);
             if (newgo == null) Debug.Log("Couldn't instantiate");
-            
+
             newgo.GetComponent<Projectile>().SetDir(target);
             newgo.GetComponent<Projectile>().SetSpeed(10 / multiplier);
 
@@ -126,7 +133,7 @@ public class StateGenerator : MonoBehaviour {
             {
                 GameObject newergo = Instantiate(newgo, pos, Quaternion.identity);
                 target.x += 0.5f;
-                
+
                 newergo.GetComponent<Projectile>().SetDir(target);
                 newergo.GetComponent<Projectile>().SetSpeed(10 / multiplier);
             }
@@ -136,7 +143,7 @@ public class StateGenerator : MonoBehaviour {
         for (double time = 0; time < _clip.length; time += beattime)
         {
             result.AddAttack(time, att);
-            result.AddAttack(time + beattime/2, att2);
+            result.AddAttack(time + beattime / 2, att2);
 
             result.m_audioManager = ap;
         }
@@ -171,7 +178,7 @@ public class StateGenerator : MonoBehaviour {
             {
                 Object o;
                 if (i == 0)
-                   o = Resources.Load("Prefabs/Projectile2");
+                    o = Resources.Load("Prefabs/Projectile2");
                 else
                     o = Resources.Load("Prefabs/Projectile1");
 
@@ -300,7 +307,7 @@ public class StateGenerator : MonoBehaviour {
         double beattime = ba.GetBeatTime() * multiplier;
 
         //Possible Keys
-        List<int> _arrowKeys = new List<int>();
+        List<int> _InputKeys = new List<int>();
         //List<bool> _outcomeKeys = new List<bool>();
 
         int numberofKeys = 7;
@@ -314,7 +321,7 @@ public class StateGenerator : MonoBehaviour {
             // BUT THE MAX IS "EXCLUSIVE"
             // WHY?
             // WHY ARE YOU LIKE THIS?
-            _arrowKeys.Add(Random.Range(1, 5));
+            _InputKeys.Add(Random.Range(1, 5));
         }
 
         // 1 - Up
@@ -326,9 +333,27 @@ public class StateGenerator : MonoBehaviour {
         int _buttonPressed = 0;
         double _QTETime = 0.0;
         int totalDmg = 0;
+        double quarterTime = (beattime * 0.25);
+        double warnTime = 0.0;
 
         GameObject _buttonQTE;
         List<GameObject> _buttonList = new List<GameObject>();
+
+        GameObject _feedback = GameObject.FindGameObjectWithTag("Feedback");
+
+        BaseState.Attack warn = () =>
+        {
+            print("yo some shit boutta happen");
+
+            _QTETime += Time.deltaTime;
+
+            if (_QTETime > warnTime)
+            {
+                // TODO
+                // warns at 0, 1, 2, 3 (4 is end)
+                warnTime += quarterTime;
+            }
+        };
 
         BaseState.Attack att = () =>
         {
@@ -341,7 +366,7 @@ public class StateGenerator : MonoBehaviour {
 
             if (_QTETime == 0.0)
             {
-                if (_arrowKeys[_counter] == 1)
+                if (_InputKeys[_counter] == 1)
                 {
                     _buttonQTE = Instantiate(Resources.Load("Prefabs/KeyboardQ") as GameObject);
                     _buttonQTE.transform.parent = pc.transform;
@@ -356,7 +381,7 @@ public class StateGenerator : MonoBehaviour {
 
                     //Destroy(_buttonQTE, (float)beattime);
                 }
-                if (_arrowKeys[_counter] == 2)
+                if (_InputKeys[_counter] == 2)
                 {
                     _buttonQTE = Instantiate(Resources.Load("Prefabs/KeyboardW") as GameObject);
                     _buttonQTE.transform.parent = pc.transform;
@@ -371,7 +396,7 @@ public class StateGenerator : MonoBehaviour {
 
                     //Destroy(_buttonQTE, (float)beattime);
                 }
-                if (_arrowKeys[_counter] == 3)
+                if (_InputKeys[_counter] == 3)
                 {
                     _buttonQTE = Instantiate(Resources.Load("Prefabs/KeyboardE") as GameObject);
                     _buttonQTE.transform.parent = pc.transform;
@@ -386,7 +411,7 @@ public class StateGenerator : MonoBehaviour {
 
                     //Destroy(_buttonQTE, (float)beattime);
                 }
-                if (_arrowKeys[_counter] == 4)
+                if (_InputKeys[_counter] == 4)
                 {
                     _buttonQTE = Instantiate(Resources.Load("Prefabs/KeyboardR") as GameObject);
                     _buttonQTE.transform.parent = pc.transform;
@@ -424,10 +449,15 @@ public class StateGenerator : MonoBehaviour {
                 pc._keys[i] = -1.0;
             }
 
-            if (_buttonPressed == _arrowKeys[_counter])
+            if (_buttonPressed == _InputKeys[_counter])
             {
                 //succ ess full
                 print("QTE SUCCESS");
+
+                // spawn a tick above player head
+                // con-fookin-gratis
+                // you pressed a button
+                _feedback.GetComponent<Feedback>().CreateImage("ParryPass", pc.transform.position + new Vector3(0, 1));
 
                 _QTETime = 0.0;
                 Destroy(_buttonList[0]);
@@ -449,6 +479,9 @@ public class StateGenerator : MonoBehaviour {
                     // oof ooch owie
                     print("Wrong Button!");
 
+                    // how are you so bad
+                    _feedback.GetComponent<Feedback>().CreateImage("ParryFail", pc.transform.position + new Vector3(0, 1));
+
                     _QTETime = 0.0;
                     Destroy(_buttonList[0]);
                     _buttonList.Remove(_buttonList[0]);
@@ -464,6 +497,9 @@ public class StateGenerator : MonoBehaviour {
                     // oof ooch owie
                     print("Too slow!");
 
+                    // how are you so bad
+                    _feedback.GetComponent<Feedback>().CreateImage("ParryFail", pc.transform.position + new Vector3(0, 1));
+
                     _QTETime = 0.0;
                     Destroy(_buttonList[0]);
                     _buttonList.Remove(_buttonList[0]);
@@ -476,7 +512,9 @@ public class StateGenerator : MonoBehaviour {
             }
         };
 
-        for (double time = 0; time < _clip.length; time += beattime)
+        result.AddAttack(0.0, warn);
+
+        for (double time = beattime; time < _clip.length; time += beattime)
         {
             result.AddAttack(time, att);
             result.m_audioManager = ap;
@@ -499,7 +537,7 @@ public class StateGenerator : MonoBehaviour {
         double beattime = ba.GetBeatTime() * multiplier;
 
         //            Vector3 pos = new Vector3(Random.Range(-7, 8), 8);
-            //target.x = pos.x;
+        //target.x = pos.x;
         //gameObject.GetComponent<Transform>().position.Set(Random.Range(-7, 8), gameObject.GetComponent<Transform>().position.y, gameObject.GetComponent<Transform>().position.z);
         Vector3 target = new Vector3(transform.position.x, -4, transform.position.z);
 
@@ -517,7 +555,7 @@ public class StateGenerator : MonoBehaviour {
             GameObject go = o as GameObject;
             if (go == null) Debug.Log("Loaded object isn't GameObject");
             GameObject newgo = Instantiate(go, pos, Quaternion.identity);
-            if (newgo == null) Debug.Log("Couldn't instantiate");;
+            if (newgo == null) Debug.Log("Couldn't instantiate"); ;
 
             GameObject parent = Instantiate(Resources.Load("Prefabs/FakeParent") as GameObject);
             newgo.transform.parent = parent.transform;
@@ -548,32 +586,57 @@ public class StateGenerator : MonoBehaviour {
 
         double beattime = ba.GetBeatTime() * multiplier;
 
-        Vector3 target = new Vector3(transform.position.x, -4, transform.position.z);
+        Vector3 target = new Vector3(-8.5f, transform.position.y, transform.position.z);
+        Vector3 target2=new Vector3(-12f, transform.position.y, transform.position.z);
+
+        bool alternate = false;
 
         // uhh how do i slow down spawning omegalul
 
+        target.y = Random.Range(-1, 5f);
+        target2.y = target.y;
+        BaseState.Attack warn = () =>
+        {
+            Object o = Resources.Load("Prefabs/Indicator");
+            if (o == null) Debug.Log("Load failed");
+            GameObject go = o as GameObject;
+            if (go == null) Debug.Log("Loaded object isn't GameObject");
+            GameObject newgo = Instantiate(go, target, Quaternion.identity);
+            if (newgo == null) Debug.Log("Couldn't instantiate");
+
+
+            newgo.GetComponent<Projectile>().SetTarget(target);
+        };
+
+
         BaseState.Attack att = () =>
         {
-            Vector3 pos = gameObject.GetComponent<Transform>().position;
             Object o = Resources.Load("Prefabs/laserprojectile");
             if (o == null) Debug.Log("Load failed");
             GameObject go = o as GameObject;
             if (go == null) Debug.Log("Loaded object isn't GameObject");
-            GameObject newgo = Instantiate(go, pos, Quaternion.identity);
+            GameObject newgo = Instantiate(go, target2, Quaternion.identity);
             if (newgo == null) Debug.Log("Couldn't instantiate");
 
-            target.x = Random.Range(-7, 8);
-
-            GameObject parent = Instantiate(Resources.Load("Prefabs/FakeParent") as GameObject);
-            newgo.transform.parent = parent.transform;
-            newgo.GetComponent<Projectile>().SetTarget(target);
-            newgo.GetComponent<Projectile>().SetDir((target - pos).normalized);
+            newgo.GetComponent<Projectile>().SetTarget(target2);
+            newgo.GetComponent<Projectile>().SetDir(new Vector3(1,0,0));
             newgo.GetComponent<Projectile>().SetSpeed(5);
         };
 
         for (double time = 0; time < _clip.length; time += beattime)
         {
-            result.AddAttack(time, att);
+
+            if (alternate)
+            {
+                result.AddAttack(time, att);
+            }
+            else
+            {
+                result.AddAttack(time, warn);
+            }
+
+            alternate = !alternate;
+            //result.AddAttack(time, att);
             result.m_audioManager = ap;
         }
 

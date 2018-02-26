@@ -8,6 +8,7 @@ public class ShockwaveProjectile : Projectile
     GameObject _shockwave;
 
     private GameObject _screenShake;
+    private GameObject _feedback;
 
     // Number of waves to make
     int _waves = 5;
@@ -32,6 +33,7 @@ public class ShockwaveProjectile : Projectile
     protected void Start ()
     {
         _screenShake = GameObject.FindGameObjectWithTag("ScreenShake");
+        _feedback = GameObject.FindGameObjectWithTag("Feedback");
         timeToSpawn = ((_speed * Time.deltaTime) / _shockwave.transform.localScale.x);
         base.Start();
     }
@@ -65,6 +67,8 @@ public class ShockwaveProjectile : Projectile
         if (hittarget)
         {
             float _multiplier = ((float)_waves * 0.2f);
+
+            _feedback.GetComponent<Feedback>().CreateImage("ParryFail", gameObject.transform.position);
 
             // BWAAAAAAAAAAAAAAAH
             _screenShake.GetComponent<ScreenShake>().ShakeCamera(0.1f * _multiplier, 0.3f * _multiplier, 0.95f);
