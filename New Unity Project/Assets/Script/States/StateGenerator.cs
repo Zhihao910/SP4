@@ -64,7 +64,6 @@ public class StateGenerator : MonoBehaviour
         return _GenerateDictionary[_type](_clipname, _clip, _multiplier);
     }
 
-<<<<<<< HEAD
     public BaseState GenerateState(GenerateType _type, string _clipname, AudioClip _clip)
     {
         if (_type == GenerateType.NUMSTATE)
@@ -76,10 +75,7 @@ public class StateGenerator : MonoBehaviour
         return _GenerateDictionary[_type](_clipname, _clip);
     }
 
-    public BaseState CreateBaseState(string _clipname, AudioClip _clip,float multiplier = 4f)
-=======
     public BaseState CreateBaseState(string _clipname, AudioClip _clip, float multiplier = 1f)
->>>>>>> 873ed5e067cb9d5b0307bce2d54bbce0e2526527
     {
         BaseState result = gameObject.AddComponent<BaseState>();
         result.SetClipName(_clip.name);

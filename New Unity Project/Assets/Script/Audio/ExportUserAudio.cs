@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ExportUserAudio : MonoBehaviour {
-    [UnityEditor.MenuItem("Assets/Build AssetBundle")]
+    //[UnityEditor.MenuItem("Assets/Build AssetBundle")]
     static void ExportResource()
     {
         string filePath = "Assets/StreamingAssets/UserMusic";
