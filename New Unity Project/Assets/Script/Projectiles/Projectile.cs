@@ -81,13 +81,10 @@ public class Projectile : MonoBehaviour
             Debug.Log("Player health -10");
             //Debug.Log("ADD MANA");
 
-            GetComponent<particles>().ApplyParticle(gameObject, "hitParticle", 0.5f, 1, false);
-
-            //other.GetComponent<PlayerController>().mana += 20;
-            //if (other.GetComponent<PlayerController>().mana >= 100)
-            //    other.GetComponent<PlayerController>().mana = 100;
-            if (other.GetComponentInParent<PlayerController>().invincible == false && other.GetComponentInParent<PlayerController>().invincible2==false)
-                other.GetComponentInParent<PlayerController>().health -= 10;
+            //GetComponent<particles>().ApplyParticle(gameObject, "hitParticle", 0.5f, 1, false);
+            
+            if (other.GetComponentInParent<PlayerController>().invincible == false && other.GetComponentInParent<PlayerController>().invincible2 == false)
+                other.GetComponentInParent<PlayerController>().takeDamage(1);
 
             if (null != transform.parent)
                 Destroy((transform.parent).gameObject);

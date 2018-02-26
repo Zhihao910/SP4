@@ -15,8 +15,6 @@ public class PlayerController : MonoBehaviour
     public LayerMask isGround;
     private bool touchedGround;
     private bool doubleJump;
-    float totalHealth = 100;
-    public float health;
     float totalMana = 100;
     public float mana;
     float dashCountdown;
@@ -40,10 +38,20 @@ public class PlayerController : MonoBehaviour
     public bool _crescendo = false;
     // actually it is
 
+
+    private int maxHeartAmount = 5;
+    public int startHeart = 3;
+    public int currHeart;
+    private int maxHeart;
+    private int healthPerHeart = 2;
+
+    public Image[] healthImage;
+    public Sprite[] healthSprite;
+
     Vector3 lastPosition, currentPosition;
 
     [SerializeField]
-    GameObject healthBar, manaBar;
+    GameObject manaBar;
     [SerializeField]
     MainGame mainGame;
 
@@ -58,7 +66,10 @@ public class PlayerController : MonoBehaviour
         jumpHeight = 5;
         dashCountdown = 7.0f;
         mana = 0;
-        health = 100;
+
+        currHeart = startHeart * healthPerHeart;
+        maxHeart = maxHeartAmount * healthPerHeart;
+        checkHealth();
 
         for (int i = 1; i < 5; ++i)
         {
@@ -79,6 +90,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        updateHealth();
         if (touchedGround)
         {
             doubleJump = false;
@@ -95,7 +107,7 @@ public class PlayerController : MonoBehaviour
             invincible2 = false;
             invinciblelifetime = 0;
         }
-        
+
         // For Dictionary
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -146,15 +158,7 @@ public class PlayerController : MonoBehaviour
             animator.SetInteger("States", 3);
         }
 
-        healthBar.transform.localScale = new Vector3(health / totalHealth, 1, 1);
         manaBar.transform.localScale = new Vector3(mana / totalMana, 1, 1);
-
-        //health -= 1;
-        if (health <= 0)
-        {
-            SceneManager.LoadScene("GameOver");
-            health = 0;
-        }
 
         Movement();
         Jump();
@@ -191,12 +195,12 @@ public class PlayerController : MonoBehaviour
             regainDash = 0;
         }
 
-        //Player Fall off screen, Reset back to previous position
+        //Player Fall off screen,takes dmg, Reset back to previous position
         lastPosition = currentPosition;
         if (!touchedGround && transform.position.y <= -5)
         {
             transform.position = lastPosition;
-            health -= 5;
+            currHeart -= 3;
         }
     }
 
@@ -208,7 +212,6 @@ public class PlayerController : MonoBehaviour
             //Left
             GetComponent<Rigidbody2D>().velocity = new Vector2(-movementSpeed * 10, GetComponent<Rigidbody2D>().velocity.y);
             dashCountdown--;
-            //Debug.Log("LeftDash" + movementSpeed);
             leftDash = false;
             invincible = true;
         }
@@ -217,13 +220,11 @@ public class PlayerController : MonoBehaviour
             //Right
             GetComponent<Rigidbody2D>().velocity = new Vector2(movementSpeed * 10, GetComponent<Rigidbody2D>().velocity.y);
             dashCountdown--;
-           // Debug.Log("RightDash" + movementSpeed);
             rightDash = false;
             invincible = true;
         }
         if (leftUpDash)
         {
-            //Debug.Log("dash upright");
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, movementSpeed * 2);
             dashCountdown--;
             invincible = true;
@@ -231,7 +232,6 @@ public class PlayerController : MonoBehaviour
         }
         if (rightUpDash)
         {
-            //Debug.Log("dash upright");
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, movementSpeed * 2);
             dashCountdown--;
             invincible = true;
@@ -239,18 +239,16 @@ public class PlayerController : MonoBehaviour
         }
         if (leftIdleDash)
         {
-            //Debug.Log("dash left idle");
+            GetComponent<Rigidbody2D>().velocity = new Vector2(-movementSpeed * 1.5f, GetComponent<Rigidbody2D>().velocity.y);
             dashCountdown--;
             invincible = true;
-            GetComponent<Rigidbody2D>().velocity = new Vector2(-movementSpeed * 1.5f, GetComponent<Rigidbody2D>().velocity.y);
             leftIdleDash = false;
         }
         if (rightIdleDash)
         {
-            //Debug.Log("dash right idle");
+            GetComponent<Rigidbody2D>().velocity = new Vector2(movementSpeed * 1.5f, GetComponent<Rigidbody2D>().velocity.y);
             dashCountdown--;
             invincible = true;
-            GetComponent<Rigidbody2D>().velocity = new Vector2(movementSpeed * 1.5f, GetComponent<Rigidbody2D>().velocity.y);
             rightIdleDash = false;
         }
     }
@@ -258,16 +256,8 @@ public class PlayerController : MonoBehaviour
     //Movement
     void Movement()
     {
-        //if (mainGame.direction.x > 0)
-        //{
-        //    //go right
-        //}
-        //if (mainGame.direction.x < 0)
-        //{
-        //    //go left
-        //} 
         //dash upleft
-         if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.LeftArrow) && dashCountdown > 0)
+        if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.LeftArrow) && dashCountdown > 0)
         {
             leftUpDash = true;
             Dash();
@@ -414,4 +404,74 @@ public class PlayerController : MonoBehaviour
         dashButton = true;
     }
 #endif
+
+    //Total heart player have
+    void checkHealth()
+    {
+        for (int i = 0; i < maxHeartAmount; ++i)
+        {
+            if (startHeart <= i)
+                healthImage[i].enabled = false;
+            else
+                healthImage[i].enabled = true;
+        }
+        updateHealth();
+    }
+
+    void updateHealth()
+    {
+        bool empty = false;
+        int i = 0;
+        foreach (Image image in healthImage)
+        {
+            if (empty)
+            {
+                image.sprite = healthSprite[0];
+            }
+            else
+            {
+                ++i;
+                if (currHeart >= i * healthPerHeart)
+                    image.sprite = healthSprite[healthSprite.Length - 1];
+                else
+                {
+                    int currHeartHealth = healthPerHeart - (healthPerHeart * i - currHeart);
+                    int healthPerImage = healthPerHeart / (healthSprite.Length - 1);
+                    int imageIndex = currHeartHealth / healthPerImage;
+                    image.sprite = healthSprite[imageIndex];
+                    empty = true;
+                }
+            }
+        }
+    }
+
+    //Player gets damage
+    public void takeDamage(int amount)
+    {
+        currHeart -= amount;
+        currHeart = Mathf.Clamp(currHeart, 0, startHeart * healthPerHeart);
+        //No more heart, Gameover
+        if (currHeart <= 0)
+            SceneManager.LoadScene("GameOver");
+        updateHealth();
+    }
+
+    //Player regen health
+    public void regenHealth(int amount)
+    {
+        currHeart += amount;
+        currHeart = Mathf.Clamp(currHeart, 0, startHeart * healthPerHeart);
+        updateHealth();
+    }
+
+    //Increase heart for player
+    public void addHealth(int amount)
+    {
+        startHeart += amount;
+        startHeart = Mathf.Clamp(startHeart, 0, maxHeartAmount);
+
+        maxHeart = maxHeartAmount * healthPerHeart;
+
+        checkHealth();
+    }
 }
