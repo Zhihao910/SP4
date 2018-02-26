@@ -670,7 +670,70 @@ public class StateGenerator : MonoBehaviour
 
         return result;
     }
+    public BaseState CreateBlindAttack(string _clipname, AudioClip _clip, float multiplier = 1f)
+    {
+        BaseState result = gameObject.AddComponent<BaseState>();
+        result.SetClipName(_clip.name);
+        //Run adding attacks here
 
+        double beattime = ba.GetBeatTime() * multiplier;
+
+        Vector3 pos = new Vector3(transform.position.x, 0, transform.position.z);
+        Vector3 pos2 = new Vector3(transform.position.x, 0, transform.position.z);
+
+        bool alternate = false;
+
+        // uhh how do i slow down spawning omegalul
+        pos.z = -2;
+        pos.y = 10;
+        pos2.x = Random.Range(-1, 5f);
+        BaseState.Attack blinding = () =>
+        {
+            Object o = Resources.Load("Prefabs/Black");
+            if (o == null) Debug.Log("Load failed");
+            GameObject go = o as GameObject;
+            if (go == null) Debug.Log("Loaded object isn't GameObject");
+            GameObject newgo = Instantiate(go, pos, Quaternion.identity);
+            if (newgo == null) Debug.Log("Couldn't instantiate");
+        };
+
+
+        BaseState.Attack att = () =>
+        {
+            Object o = Resources.Load("Prefabs/Projectile2");
+            if (o == null) Debug.Log("Load failed");
+            GameObject go = o as GameObject;
+            if (go == null) Debug.Log("Loaded object isn't GameObject");
+            GameObject newgo = Instantiate(go, pos2, Quaternion.identity);
+            if (newgo == null) Debug.Log("Couldn't instantiate");
+
+            newgo.GetComponent<Projectile>().SetDir(new Vector3(0, -1, 0));
+            newgo.GetComponent<Projectile>().SetSpeed(5);
+
+        };
+
+        for (double time = 0; time < _clip.length; time += beattime)
+        {
+
+            if (alternate)
+            {
+                result.AddAttack(time, att);
+            }
+            else
+            {
+                result.AddAttack(time, blinding);
+            }
+
+            alternate = !alternate;
+            //result.AddAttack(time, att);
+            result.m_audioManager = ap;
+        }
+
+        m_StateMap[_clipname] = result;
+        result.Sort();
+
+        return result;
+    }
     public BaseState GetState(string _clipname)
     {
         return m_StateMap[_clipname];
