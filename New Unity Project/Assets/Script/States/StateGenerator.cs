@@ -643,9 +643,9 @@ public class StateGenerator : MonoBehaviour
             GameObject newgo = Instantiate(go, target2, Quaternion.identity);
             if (newgo == null) Debug.Log("Couldn't instantiate");
 
-            newgo.GetComponent<Projectile>().SetTarget(target2);
-            newgo.GetComponent<Projectile>().SetDir(new Vector3(1,0,0));
+            newgo.GetComponent<Projectile>().SetDir(new Vector3(1, 0, 0));
             newgo.GetComponent<Projectile>().SetSpeed(5);
+            Debug.Log(target2);
         };
 
         for (double time = 0; time < _clip.length; time += beattime)
