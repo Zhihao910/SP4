@@ -599,9 +599,6 @@ public class StateGenerator : MonoBehaviour
             if (go == null) Debug.Log("Loaded object isn't GameObject");
             GameObject newgo = Instantiate(go, target, Quaternion.identity);
             if (newgo == null) Debug.Log("Couldn't instantiate");
-
-
-            newgo.GetComponent<Projectile>().SetTarget(target);
         };
 
 
