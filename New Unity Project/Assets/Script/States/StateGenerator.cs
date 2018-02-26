@@ -16,7 +16,7 @@ public class StateGenerator : MonoBehaviour
         PARRYSTATE,
         QUICKTIMEEVENTSTATE,
         SHOCKWAVESTATE,
-        MULTISTATE,
+        //MULTISTATE,
         LAZERSTATE,
         NUMSTATE,//Default
     };
