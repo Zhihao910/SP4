@@ -16,7 +16,7 @@ public class StateGenerator : MonoBehaviour
         PARRYSTATE,
         QUICKTIMEEVENTSTATE,
         SHOCKWAVESTATE,
-        //MULTISTATE,
+        MULTISTATE,
         LAZERSTATE,
         NUMSTATE,//Default
     };
@@ -44,7 +44,7 @@ public class StateGenerator : MonoBehaviour
         _GenerateDictionary.Add(GenerateType.PARRYSTATE, CreateParryState);
         _GenerateDictionary.Add(GenerateType.QUICKTIMEEVENTSTATE, CreateQuickTimeEvent);
         _GenerateDictionary.Add(GenerateType.SHOCKWAVESTATE, CreateShockwaveProjectile);
-        //_GenerateDictionary.Add(GenerateType.MULTISTATE, MultiHighState);
+        _GenerateDictionary.Add(GenerateType.MULTISTATE, MultiHighState);
         _GenerateDictionary.Add(GenerateType.LAZERSTATE, CreateLaserAttack);
 
     }
@@ -771,14 +771,111 @@ public class StateGenerator : MonoBehaviour
 
             alternate = !alternate;
             //result.AddAttack(time, att);
-            result.m_audioManager = ap;
         }
+
+        result.m_audioManager = ap;
 
         m_StateMap[_clipname] = result;
         result.Sort();
 
         return result;
     }
+
+    public BaseState1 MultiHighState(string _clipname, AudioClip _clip, float multiplier = 1f)
+    {
+        BaseState1 result = gameObject.AddComponent<BaseState1>();
+        result.SetClipName(_clip.name);
+        //Run adding attacks here
+        BaseState.Attack att = () =>
+        {
+
+            Vector3 pos = gameObject.GetComponent<Transform>().position;
+            Vector3 target = new Vector3(-1, -1, 0);
+            Object o = Resources.Load("Prefabs/Projectile1");
+            if (o == null) Debug.Log("Load failed");
+            GameObject go = o as GameObject;
+            if (go == null) Debug.Log("Loaded object isn't GameObject");
+            GameObject newgo = Instantiate(go, pos, Quaternion.identity);
+            if (newgo == null) Debug.Log("Couldn't instantiate");
+
+            newgo.GetComponent<Projectile>().SetDir(target);
+            newgo.GetComponent<Projectile>().SetSpeed(10 / multiplier);
+
+
+            for (int i = 0; i < 4; ++i)
+            {
+                GameObject newergo = Instantiate(newgo, pos, Quaternion.identity);
+                target.x += 0.5f;
+
+                newergo.GetComponent<Projectile>().SetDir(target);
+                newergo.GetComponent<Projectile>().SetSpeed(10 / multiplier);
+            }
+        };
+
+        BaseState.Attack att2 = () =>
+        {
+            Vector3 pos = gameObject.GetComponent<Transform>().position;
+            Vector3 target = new Vector3(-0.75f, -1, 0);
+            Object o = Resources.Load("Prefabs/Projectile1");
+            if (o == null) Debug.Log("Load failed");
+            GameObject go = o as GameObject;
+            if (go == null) Debug.Log("Loaded object isn't GameObject");
+            GameObject newgo = Instantiate(go, pos, Quaternion.identity);
+            if (newgo == null) Debug.Log("Couldn't instantiate");
+
+            newgo.GetComponent<Projectile>().SetDir(target);
+            newgo.GetComponent<Projectile>().SetSpeed(10 / multiplier);
+
+            for (int i = 0; i < 3; ++i)
+            {
+                GameObject newergo = Instantiate(newgo, pos, Quaternion.identity);
+                target.x += 0.5f;
+
+                newergo.GetComponent<Projectile>().SetDir(target);
+                newergo.GetComponent<Projectile>().SetSpeed(10 / multiplier);
+            }
+        };
+
+        Vector3 target1 = new Vector3(transform.position.x, -4, transform.position.z);
+
+        // uhh how do i slow down spawning omegalul
+
+        BaseState.Attack att3 = () =>
+        {
+            Vector3 pos = gameObject.GetComponent<Transform>().position;
+            pos.y = 9;
+            pos.x = Random.Range(-7, 8);
+            target1.x = pos.x;
+
+            Object o = Resources.Load("Prefabs/ProjectileShockwave");
+            if (o == null) Debug.Log("Load failed");
+            GameObject go = o as GameObject;
+            if (go == null) Debug.Log("Loaded object isn't GameObject");
+            GameObject newgo = Instantiate(go, pos, Quaternion.identity);
+            if (newgo == null) Debug.Log("Couldn't instantiate"); ;
+
+            GameObject parent = Instantiate(Resources.Load("Prefabs/FakeParent") as GameObject);
+            newgo.transform.parent = parent.transform;
+            newgo.GetComponent<Projectile>().SetTarget(target1);
+            newgo.GetComponent<Projectile>().SetDir((target1 - pos).normalized);
+            newgo.GetComponent<ShockwaveProjectile>().SetWaves(20);
+            newgo.GetComponent<Projectile>().SetSpeed(10);
+            newgo.GetComponent<Projectile>().transform.localScale *= 2;
+        };
+
+        result.AddAttack(BaseState1.Type.BASS_TYPE, att);
+        result.AddAttack(BaseState1.Type.KICK_TYPE, att2);
+        result.AddAttack(BaseState1.Type.GENERAL_TYPE, att3);
+
+        result.m_audioManager = ap;
+
+        double beattime = ba.GetBeatTime() * multiplier;
+        result.m_audioManager = ap;
+
+        m_StateMap[_clipname] = result;
+        return result;
+    }
+
     public BaseState GetState(string _clipname)
     {
         return m_StateMap[_clipname];
