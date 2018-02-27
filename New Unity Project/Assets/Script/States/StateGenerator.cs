@@ -30,6 +30,9 @@ public class StateGenerator : MonoBehaviour
     [SerializeField]
     PlayerController pc;
 
+    [SerializeField]
+    Score playerScore;
+
     delegate BaseState GenerateFunc(string _clipname, AudioClip _clip, float _multiplier = 1f);
     Dictionary<GenerateType, GenerateFunc> _GenerateDictionary = new Dictionary<GenerateType, GenerateFunc>();
 
@@ -479,6 +482,9 @@ public class StateGenerator : MonoBehaviour
                 //_outcomeKeys.Add(true);
                 ++totalDmg;
                 ++_counter;
+
+                // Add base 100 score
+                playerScore.AddScore(100.0f);
             }
             else
             {
@@ -502,7 +508,6 @@ public class StateGenerator : MonoBehaviour
 
                     pc.screenShake.ShakeCamera();
                     //_outcomeKeys.Add(false);
-                    ++totalDmg;
                     ++_counter;
                 } // Out of time
                 else if (_QTETime > beattime)
@@ -521,7 +526,6 @@ public class StateGenerator : MonoBehaviour
 
                     pc.screenShake.ShakeCamera();
                     //_outcomeKeys.Add(false);
-                    ++totalDmg;
                     ++_counter;
                 }
             }
@@ -534,6 +538,8 @@ public class StateGenerator : MonoBehaviour
                 Destroy(_buttonList[0]);
                 _buttonList.Remove(_buttonList[0]);
             }
+
+            // Minus boss HP by totalDmg (or something)
         };
 
         for (double time = 0; time < (beattime * 8); time += (double)warnTime)
