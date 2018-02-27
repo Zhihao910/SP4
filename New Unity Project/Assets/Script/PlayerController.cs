@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour
     public float movementSpeed;
     public float jumpHeight;
 
+    [SerializeField]
+    BossHealth bosshealth;
+
     public Transform checkGround;
     public float groundCheckRadius;
     public LayerMask isGround;
@@ -33,7 +36,6 @@ public class PlayerController : MonoBehaviour
     float parryCooldown = 0.3f;
     public Collider2D attackTrigger;
     public Renderer attackVisual;
-
     // THIS ISN'T EVEN MY FINAL FORM
     public static bool _crescendo = false;
     // actually it is
@@ -65,6 +67,8 @@ public class PlayerController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        //bosshealth = GetComponent<BossHealth>();
+        bosshealth.health = 100.0f;
         animator = this.GetComponent<Animator>();
         movementSpeed = 5;
         jumpHeight = 5;
@@ -163,14 +167,18 @@ public class PlayerController : MonoBehaviour
         }
 
         manaBar.transform.localScale = new Vector3(mana / totalMana, 1, 1);
-
         Movement();
         Jump();
         ParryAttack();
         UpdateKeys();
 
         // MANA DRAIN
-        mana -= 0.01f;
+        if (!_crescendo)
+        {
+            mana -= 0.02f;
+        }
+        else
+            mana -= 0.5f;
         // cause like... its actually a sound/music bar thing
         // and uhh.. sound energy is lost to surrounding, amirite?
         // I'm not a scientist. This is a game.
@@ -181,10 +189,10 @@ public class PlayerController : MonoBehaviour
             _crescendo = false;
         }
 
-        if (mana >= 100)
+        if (mana >= 100 && !_crescendo)
         {
-            //mana = totalMana;
-            mana = 0;
+            mana = totalMana;
+            //mana = 0;
             _crescendo = true;
             
             // Add base 5000 score
@@ -467,8 +475,10 @@ public class PlayerController : MonoBehaviour
 
         //No more heart, Gameover
         if (currHeart <= 0)
+        {
+            PlayerPrefs.SetFloat("bosshealth", bosshealth.health);
             SceneManager.LoadScene("GameOver");
-
+        }
         updateHealth();
     }
 

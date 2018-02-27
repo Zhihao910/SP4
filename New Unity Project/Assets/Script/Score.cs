@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Score : MonoBehaviour
 {
-    // 10 highest scores
+    // LOCAL HIGHSCORE
     private int[] _highscore = new int[10];
 
     // Current Score
@@ -12,7 +13,10 @@ public class Score : MonoBehaviour
     // Multiplier
     private float _multiplier = 1.0f;
 
+    // To make noise whenever damage is done
     private GameObject _feedback;
+
+    public Text _text;
 
 	// Use this for initialization
 	void Start ()
@@ -22,7 +26,6 @@ public class Score : MonoBehaviour
         {
             for (int _num = 0; _num < _highscore.Length; ++_num)
             {
-                print(_num);
                 _highscore[_num] = PlayerPrefs.GetInt("highscore" + _num.ToString());
             }
         }
@@ -33,23 +36,36 @@ public class Score : MonoBehaviour
             ClearAllScores();
         }
 
+        // locate feedback gameobject
         _feedback = GameObject.FindGameObjectWithTag("Feedback");
+
+        // Initialise score text
+        DisplayScore();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        // uh
+        // maybe i dont need this
     }
 
     // Make everything zero.
     // Also creates if it doesnt exist in the first place.
     private void ClearAllScores()
     {
+        print("CLEARING ALL SCORES");
+
         for (int _num = 0; _num < _highscore.Length; ++_num)
         {
-            PlayerPrefs.SetFloat("highscore" + _num.ToString(), 0);
+            PlayerPrefs.SetInt("highscore" + _num.ToString(), 0);
             _highscore[_num] = 0;
         }
     }
 
     public int GetCurrScore()
     {
-        return _currScore;
+        return PlayerPrefs.GetInt("currentscore");
     }
 
     // Just pass in a negative if reducing
@@ -58,26 +74,98 @@ public class Score : MonoBehaviour
         // Does it round up or down?
         // hope its consistent.
         _currScore += (int)(score * _multiplier);
+        DisplayScore();
     }
 
-    public float GetMultiplier()
-    {
-        return _multiplier;
-    }
+    //public float GetMultiplier()
+    //{
+    //    return _multiplier;
+    //}
 
     public void SetMultiplier(float multiplier)
     {
         _multiplier = multiplier;
+        DisplayScore();
     }
 
     public void ResetMultiplier()
     {
         _multiplier = 1.0f;
         _feedback.GetComponent<Feedback>().CreateAudio("Damage");
+        DisplayScore();
     }
 
     public void AddMultiplier(float increase)
     {
         _multiplier += increase;
+        DisplayScore();
+    }
+
+    void DisplayScore()
+    {
+        _multiplier = Mathf.Round(_multiplier * 10.0f) / 10.0f;
+
+        _text.text = "Score:" + _currScore.ToString() + "\n"
+    + "Multiplier:" + _multiplier.ToString();
+    }
+
+    // Call this when saving score after boss/death
+    public void SaveScore()
+    {
+        for (int _num = (_highscore.Length - 1); _num > 0; --_num)
+        {
+            if (_currScore > _highscore[_num])
+            {
+                if (_num == 1)
+                {
+                    // Shifting highscore buffer
+                    int[] tempScoreN = new int[_highscore.Length];
+
+                    for (int i = 0; i < (_highscore.Length - 1); ++i)
+                    {
+                        tempScoreN[i + 1] = _highscore[i];
+                    }
+
+                    tempScoreN[0] = _currScore;
+
+                    for (int i = 0; i < _highscore.Length; ++i)
+                    {
+                        _highscore[i] = tempScoreN[i];
+                    }
+
+                    break;
+                }
+
+                continue;
+            }
+
+            // Shifting highscore buffer
+            int[] tempScore = new int[_highscore.Length];
+
+            for (int i = 0; i < (_highscore.Length - 1); ++i)
+            {
+                tempScore[i] = _highscore[i + 1];
+            }
+
+            for (int i = (_num + 2); i < _highscore.Length; ++i)
+            {
+                _highscore[i] = tempScore[i];
+            }
+
+            _highscore[_num + 1] = _currScore;
+
+            break;
+        }
+
+        for (int _num = 0; _num < _highscore.Length; ++_num)
+        {
+            //print(_highscore[_num]);
+            PlayerPrefs.SetInt("highscore" + _num.ToString(), _highscore[_num]);
+        }
+
+        PlayerPrefs.SetInt("currentscore", _currScore);
+
+        _currScore = 0;
+        _multiplier = 1.0f;
     }
 }

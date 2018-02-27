@@ -35,6 +35,9 @@ public class AudioPeerManager : MonoBehaviour
     private List<float> kickList = new List<float>();
     private List<float> highList = new List<float>();
 
+    [SerializeField]
+    Score playerScore;
+
     void Awake()
     {
         if (_sample == null)
@@ -196,6 +199,7 @@ public class AudioPeerManager : MonoBehaviour
         }
         else if(m_playqueue.Count <= 0)
         {
+            playerScore.SaveScore();
             SceneManager.LoadScene("GameOver");
         }
 	}

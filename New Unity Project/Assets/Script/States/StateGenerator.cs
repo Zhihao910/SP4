@@ -33,6 +33,9 @@ public class StateGenerator : MonoBehaviour
     [SerializeField]
     Score playerScore;
 
+    [SerializeField]
+    BossHealth _bossHP;
+
     delegate BaseState GenerateFunc(string _clipname, AudioClip _clip, float _multiplier = 1f);
     Dictionary<GenerateType, GenerateFunc> _GenerateDictionary = new Dictionary<GenerateType, GenerateFunc>();
 
@@ -370,6 +373,17 @@ public class StateGenerator : MonoBehaviour
             }
         };
 
+#if UNITY_STANDALONE || UNITY_WEBPLAYER
+#elif UNITY_ANDROID
+        Touch mytouch = Input.GetTouch(0);
+        Vector3 tempPosition = new Vector3(mytouch.position.x - startPosition.x, mytouch.position.y - startPosition.y, 1);
+        float radius = 50;
+        Vector2 clampPos = Vector2.ClampMagnitude(new Vector2(tempPosition.x, tempPosition.y), radius);
+
+        Vector3 newPosition = new Vector3(clampPos.x, clampPos.y, 1);
+#endif
+
+
         BaseState.Attack att = () =>
         {
             if (_counter >= numberofKeys)
@@ -539,7 +553,10 @@ public class StateGenerator : MonoBehaviour
                 _buttonList.Remove(_buttonList[0]);
             }
 
+            // Add base 250 per successful parry
+            playerScore.AddScore(250.0f * totalDmg);
             // Minus boss HP by totalDmg (or something)
+            _bossHP.health -= totalDmg;
         };
 
         for (double time = 0; time < (beattime * 8); time += (double)warnTime)
