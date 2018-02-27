@@ -344,8 +344,6 @@ public class PlayerController : MonoBehaviour
         //Jump
         if ((Input.GetKeyDown(KeyCode.Space) || jumpButton) && touchedGround && !downbtn)
         {
-            print(playerScore.GetCurrScore());
-            print(playerScore.GetMultiplier());
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
             jumpButton = false;
             animator.SetInteger("States", 4);
