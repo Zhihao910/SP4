@@ -74,7 +74,7 @@ public class Projectile : MonoBehaviour
 
     IEnumerator OnTriggerEnter2D(Collider2D other)
     {
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(0.05f);
 
         if (other.CompareTag("Player"))
         {
