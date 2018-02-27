@@ -57,6 +57,10 @@ public class PlayerController : MonoBehaviour
     public ScreenShake screenShake;
     public Dictionary<int, double> _keys = new Dictionary<int, double>();
 
+    //I mean i could just add a tag for score but uhh idk
+    [SerializeField]
+    Score playerScore;
+
     // Use this for initialization
     void Start()
     {
@@ -165,7 +169,7 @@ public class PlayerController : MonoBehaviour
         UpdateKeys();
 
         // MANA DRAIN
-        mana -= 0.05f;
+        mana -= 0.01f;
         // cause like... its actually a sound/music bar thing
         // and uhh.. sound energy is lost to surrounding, amirite?
         // I'm not a scientist. This is a game.
@@ -181,6 +185,14 @@ public class PlayerController : MonoBehaviour
             //mana = totalMana;
             mana = 0;
             _crescendo = true;
+            
+            // Add base 5000 score
+            playerScore.AddScore(5000.0f);
+            // Increase multiplier by 0.5f
+            playerScore.AddMultiplier(0.5f);
+
+            // True, trigger drop state, trigger QTE
+            // Clear all projectiles on screen
         }
 
         if (dashCountdown == 0)
@@ -199,7 +211,7 @@ public class PlayerController : MonoBehaviour
         if (!touchedGround && transform.position.y <= -5)
         {
             transform.position = lastPosition;
-            currHeart -= 3;
+            takeDamage(3);
         }
     }
 
@@ -333,7 +345,8 @@ public class PlayerController : MonoBehaviour
         //Jump
         if ((Input.GetKeyDown(KeyCode.Space) || jumpButton) && touchedGround && !downbtn)
         {
-
+            print(playerScore.GetCurrScore());
+            print(playerScore.GetMultiplier());
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
             jumpButton = false;
             animator.SetInteger("States", 4);
@@ -451,6 +464,10 @@ public class PlayerController : MonoBehaviour
     {
         currHeart -= amount;
         currHeart = Mathf.Clamp(currHeart, 0, startHeart * healthPerHeart);
+
+        // If hit, reset multiplier
+        playerScore.ResetMultiplier();
+
         //No more heart, Gameover
         if (currHeart <= 0)
         {
