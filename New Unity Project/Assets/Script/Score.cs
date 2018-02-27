@@ -43,6 +43,12 @@ public class Score : MonoBehaviour
 
         // Initialise score text
         DisplayScore();
+
+        if (SceneManager.GetActiveScene().name == "HighscoreScene")
+        {
+            print("THIS IS HIGHSCORE SCENE");
+            DisplayHighScore();
+        }
     }
 
     // Update is called once per frame
@@ -114,8 +120,7 @@ public class Score : MonoBehaviour
     {
         for (int _num = 0; _num < _highscore.Length; ++_num)
         {
-            //PlayerPrefs.GetInt("highscore" + _num.ToString()).ToString();
-            _text.text = PlayerPrefs.GetInt("highscore" + _num.ToString()).ToString();
+            _text.text = "List of highscores " + "\n" + PlayerPrefs.GetInt("highscore" + _num.ToString()).ToString();
         }
     }
 

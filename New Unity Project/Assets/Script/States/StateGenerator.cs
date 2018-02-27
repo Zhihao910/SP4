@@ -373,15 +373,15 @@ public class StateGenerator : MonoBehaviour
             }
         };
 
-#if UNITY_STANDALONE || UNITY_WEBPLAYER
-#elif UNITY_ANDROID
-        Touch mytouch = Input.GetTouch(0);
-        Vector3 tempPosition = new Vector3(mytouch.position.x - startPosition.x, mytouch.position.y - startPosition.y, 1);
-        float radius = 50;
-        Vector2 clampPos = Vector2.ClampMagnitude(new Vector2(tempPosition.x, tempPosition.y), radius);
+//#if UNITY_STANDALONE || UNITY_WEBPLAYER
+//#elif UNITY_ANDROID
+//        Touch mytouch = Input.GetTouch(0);
+//        Vector3 tempPosition = new Vector3(mytouch.position.x - startPosition.x, mytouch.position.y - startPosition.y, 1);
+//        float radius = 50;
+//        Vector2 clampPos = Vector2.ClampMagnitude(new Vector2(tempPosition.x, tempPosition.y), radius);
 
-        Vector3 newPosition = new Vector3(clampPos.x, clampPos.y, 1);
-#endif
+//        Vector3 newPosition = new Vector3(clampPos.x, clampPos.y, 1);
+//#endif
 
 
         BaseState.Attack att = () =>
