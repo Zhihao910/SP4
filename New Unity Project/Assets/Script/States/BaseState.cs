@@ -28,7 +28,6 @@ public class BaseState : MonoBehaviour {
 	protected void FixedUpdate () {
         if (m_Run && m_Queue.Count > 0)
         {
-            print("LMAO");
             if (m_Queue.Peek().Key <= m_audioManager.TimeNow())
             {
                 KeyValuePair<double, Attack> value = m_Queue.Dequeue();
