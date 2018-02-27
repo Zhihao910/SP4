@@ -20,7 +20,7 @@ public class StateGenerator : MonoBehaviour
         LAZERSTATE,
         NUMSTATE,//Default
     };
-
+    float timerdestroy;
     [SerializeField]
     AudioPeerManager ap;
 
@@ -61,7 +61,6 @@ public class StateGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
     }
 
     public BaseState GenerateState(GenerateType _type, string _clipname, AudioClip _clip, float _multiplier)
@@ -636,18 +635,15 @@ public class StateGenerator : MonoBehaviour
         BaseState result = gameObject.AddComponent<BaseState>();
         result.SetClipName(_clip.name);
         //Run adding attacks here
-
         double beattime = ba.GetBeatTime() * multiplier;
-
         Vector3 target = new Vector3(-8.5f, transform.position.y, transform.position.z);
         Vector3 target2 = new Vector3(-12f, transform.position.y, transform.position.z);
-
+        float lifetime = 8;
         bool alternate = false;
-
         // uhh how do i slow down spawning omegalul
-
         target.y = Random.Range(-4, 2f);
         target2.y = target.y;
+
         BaseState.Attack warn = () =>
         {
             Object o = Resources.Load("Prefabs/Indicator");
@@ -656,6 +652,8 @@ public class StateGenerator : MonoBehaviour
             if (go == null) Debug.Log("Loaded object isn't GameObject");
             GameObject newgo = Instantiate(go, target, Quaternion.identity);
             if (newgo == null) Debug.Log("Couldn't instantiate");
+            Debug.Log(alternate);
+            Destroy(newgo,lifetime);
         };
 
 
@@ -671,10 +669,8 @@ public class StateGenerator : MonoBehaviour
             newgo.GetComponent<Projectile>().SetDir(new Vector3(1, 0, 0));
             newgo.GetComponent<Projectile>().SetSpeed(15);
         };
-
         for (double time = 0; time < _clip.length; time += beattime)
         {
-
             if (alternate)
             {
                 result.AddAttack(time, att);
@@ -688,7 +684,6 @@ public class StateGenerator : MonoBehaviour
             //result.AddAttack(time, att);
             result.m_audioManager = ap;
         }
-
         m_StateMap[_clipname] = result;
         result.Sort();
 
@@ -715,10 +710,10 @@ public class StateGenerator : MonoBehaviour
         // uhh how do i slow down spawning omegalul
         float randomspeed;
         randomspeed = Random.Range(5, 10);
-        target2.x = Random.Range(-8,8);
-        target3.x = Random.Range(-8,8);
-        target4.x = Random.Range(-8,8);
-        target5.x = Random.Range(-8,8);
+        target2.x = Random.Range(-8, 8);
+        target3.x = Random.Range(-8, 8);
+        target4.x = Random.Range(-8, 8);
+        target5.x = Random.Range(-8, 8);
         BaseState.Attack warn = () =>
         {
             Object o = Resources.Load("Prefabs/Black");
