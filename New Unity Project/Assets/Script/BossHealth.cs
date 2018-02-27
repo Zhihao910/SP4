@@ -13,6 +13,10 @@ public class BossHealth : MonoBehaviour
 
     [SerializeField]
     GameObject Healthbar;
+
+    [SerializeField]
+    Score playerScore;
+
     void Start()
     {
 
@@ -22,8 +26,12 @@ public class BossHealth : MonoBehaviour
     void Update()
     {
         //scaling of the healthbar
-        Healthbar.transform.localScale = new Vector3(PlayerPrefs.GetFloat("bosshealth") / totalhealth, 1, 1);
+        Healthbar.transform.localScale = new Vector3(health / totalhealth, 1, 1);
+
         if (health <= 0)
+        {
+            playerScore.SaveScore();
             Destroy(gameObject);
+        }
     }
 }

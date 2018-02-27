@@ -63,10 +63,10 @@ public class Score : MonoBehaviour
         }
     }
 
-    //public int GetCurrScore()
-    //{
-    //    return _currScore;
-    //}
+    public int GetCurrScore()
+    {
+        return PlayerPrefs.GetInt("currentscore");
+    }
 
     // Just pass in a negative if reducing
     public void AddScore(float score)
@@ -103,6 +103,8 @@ public class Score : MonoBehaviour
 
     void DisplayScore()
     {
+        _multiplier = Mathf.Round(_multiplier * 10.0f) / 10.0f;
+
         _text.text = "Score:" + _currScore.ToString() + "\n"
     + "Multiplier:" + _multiplier.ToString();
     }
@@ -160,6 +162,8 @@ public class Score : MonoBehaviour
             //print(_highscore[_num]);
             PlayerPrefs.SetInt("highscore" + _num.ToString(), _highscore[_num]);
         }
+
+        PlayerPrefs.SetInt("currentscore", _currScore);
 
         _currScore = 0;
         _multiplier = 1.0f;

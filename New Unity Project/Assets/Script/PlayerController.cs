@@ -9,7 +9,10 @@ public class PlayerController : MonoBehaviour
 
     public float movementSpeed;
     public float jumpHeight;
+
+    [SerializeField]
     BossHealth bosshealth;
+
     public Transform checkGround;
     public float groundCheckRadius;
     public LayerMask isGround;
@@ -64,7 +67,8 @@ public class PlayerController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        bosshealth = GetComponent<BossHealth>();
+        //bosshealth = GetComponent<BossHealth>();
+        bosshealth.health = 100.0f;
         animator = this.GetComponent<Animator>();
         movementSpeed = 5;
         jumpHeight = 5;
@@ -169,7 +173,12 @@ public class PlayerController : MonoBehaviour
         UpdateKeys();
 
         // MANA DRAIN
-        mana -= 0.01f;
+        if (!_crescendo)
+        {
+            mana -= 0.02f;
+        }
+        else
+            mana -= 0.5f;
         // cause like... its actually a sound/music bar thing
         // and uhh.. sound energy is lost to surrounding, amirite?
         // I'm not a scientist. This is a game.
@@ -180,10 +189,10 @@ public class PlayerController : MonoBehaviour
             _crescendo = false;
         }
 
-        if (mana >= 100)
+        if (mana >= 100 && !_crescendo)
         {
-            //mana = totalMana;
-            mana = 0;
+            mana = totalMana;
+            //mana = 0;
             _crescendo = true;
             
             // Add base 5000 score
@@ -320,8 +329,6 @@ public class PlayerController : MonoBehaviour
         //Move Left
         else if ((mainGame.direction.x < 0 || Input.GetKey(KeyCode.LeftArrow)) && !downbtn)
         {
-            bosshealth.health -= 1;
-            Debug.Log(bosshealth.health);
             GetComponent<Rigidbody2D>().velocity = new Vector2(-movementSpeed, GetComponent<Rigidbody2D>().velocity.y);
             //Debug.Log("Left" + movementSpeed);
             animator.SetInteger("States", 1);
