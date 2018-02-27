@@ -73,7 +73,7 @@ public class Score : MonoBehaviour
     public void ResetMultiplier()
     {
         _multiplier = 1.0f;
-        _feedback.GetComponent<Feedback>().CreateAudio("Fail");
+        _feedback.GetComponent<Feedback>().CreateAudio("Damage");
     }
 
     public void AddMultiplier(float increase)

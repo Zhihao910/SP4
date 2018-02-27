@@ -11,6 +11,8 @@ public class Feedback : MonoBehaviour
     AudioClip _pass;
     [SerializeField]
     AudioClip _fail;
+    [SerializeField]
+    AudioClip _damage;
 
     // Use this for initialization
     void Start ()
@@ -63,13 +65,20 @@ public class Feedback : MonoBehaviour
         {
             case "Pass":
                 _audioSource.clip = _pass;
-                _audioSource.Play();
                 break;
             case "Fail":
                 _audioSource.clip = _fail;
-                _audioSource.Play();
                 break;
+            case "Damage":
+                _audioSource.clip = _damage;
+                break;
+
+            default:
+                print("Audioclip not found!");
+                return false;
         }
+
+        _audioSource.Play();
 
         return true;
     }
