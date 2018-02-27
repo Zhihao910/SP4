@@ -19,7 +19,7 @@ public class LoadingScreen : MonoBehaviour
     {
         currentAmount = 0;
         speed = 20;
-        //Screen.orientation = ScreenOrientation.Landscape;
+        Screen.orientation = ScreenOrientation.Landscape;
     }
 
     // Update is called once per frame
@@ -35,7 +35,7 @@ public class LoadingScreen : MonoBehaviour
 #if UNITY_EDITOR || UNITY_WINDOWS
             textLoading.GetComponent<Text>().text = "Press Space to continue..";
 #elif UNITY_ANDROID
-                                    textLoading.GetComponent<Text>().text = "Press to continue..";
+            textLoading.GetComponent<Text>().text = "Press to continue..";
 #endif
             loaded = true;
         }

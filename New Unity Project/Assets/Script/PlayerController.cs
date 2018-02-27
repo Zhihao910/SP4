@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        //bosshealth = GetComponent<BossHealth>();
+        bosshealth = GetComponent<BossHealth>();
         bosshealth.health = 100.0f;
         animator = this.GetComponent<Animator>();
         movementSpeed = 5;

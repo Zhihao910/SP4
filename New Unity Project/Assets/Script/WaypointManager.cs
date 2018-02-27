@@ -63,7 +63,7 @@ public class WaypointManager : MonoBehaviour
         else if (other.CompareTag("Waypoint3"))
         {
             print("TouchedWaypoint3");
-            SceneManager.LoadScene("GameOver");
+            SceneManager.LoadScene("HighscoreScene");
         }
     }
 }
