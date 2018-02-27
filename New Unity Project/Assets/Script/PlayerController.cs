@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         //bosshealth = GetComponent<BossHealth>();
-        bosshealth.health = 100.0f;
+        //bosshealth.health = 100.0f;
         animator = this.GetComponent<Animator>();
         movementSpeed = 5;
         jumpHeight = 5;
@@ -476,7 +476,7 @@ public class PlayerController : MonoBehaviour
         //No more heart, Gameover
         if (currHeart <= 0)
         {
-            PlayerPrefs.SetFloat("bosshealth", bosshealth.health);
+            //PlayerPrefs.SetFloat("bosshealth", bosshealth.health);
             SceneManager.LoadScene("GameOver");
         }
         updateHealth();

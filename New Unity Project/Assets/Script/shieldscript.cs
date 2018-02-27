@@ -8,7 +8,7 @@ public class shieldscript : MonoBehaviour
     float movement;
     float change;
     float change2;
-
+    private GameObject _feedback;
     // Use this for initialization
     void Start()
     {
@@ -16,6 +16,7 @@ public class shieldscript : MonoBehaviour
         movement = 0.2f;
         change = 0;
         change = 0;
+        _feedback = GameObject.FindGameObjectWithTag("Feedback");
     }
 
     // Update is called once per frame
@@ -51,6 +52,7 @@ public class shieldscript : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            _feedback.GetComponent<Feedback>().CreateImage("shieldimage", other.gameObject);
             other.GetComponent<PlayerController>().invincible2 = true;
             Destroy(this.gameObject);
         }
