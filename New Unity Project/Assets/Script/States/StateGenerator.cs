@@ -16,7 +16,7 @@ public class StateGenerator : MonoBehaviour
         PARRYSTATE,
         QUICKTIMEEVENTSTATE,
         SHOCKWAVESTATE,
-        MULTISTATE,
+        //MULTISTATE,
         LAZERSTATE,
         NUMSTATE,//Default
     };
@@ -29,6 +29,9 @@ public class StateGenerator : MonoBehaviour
 
     [SerializeField]
     PlayerController pc;
+
+    [SerializeField]
+    Score playerScore;
 
     delegate BaseState GenerateFunc(string _clipname, AudioClip _clip, float _multiplier = 1f);
     Dictionary<GenerateType, GenerateFunc> _GenerateDictionary = new Dictionary<GenerateType, GenerateFunc>();
@@ -479,6 +482,9 @@ public class StateGenerator : MonoBehaviour
                 //_outcomeKeys.Add(true);
                 ++totalDmg;
                 ++_counter;
+
+                // Add base 100 score
+                playerScore.AddScore(100.0f);
             }
             else
             {
@@ -502,7 +508,6 @@ public class StateGenerator : MonoBehaviour
 
                     pc.screenShake.ShakeCamera();
                     //_outcomeKeys.Add(false);
-                    ++totalDmg;
                     ++_counter;
                 } // Out of time
                 else if (_QTETime > beattime)
@@ -521,7 +526,6 @@ public class StateGenerator : MonoBehaviour
 
                     pc.screenShake.ShakeCamera();
                     //_outcomeKeys.Add(false);
-                    ++totalDmg;
                     ++_counter;
                 }
             }
@@ -534,6 +538,8 @@ public class StateGenerator : MonoBehaviour
                 Destroy(_buttonList[0]);
                 _buttonList.Remove(_buttonList[0]);
             }
+
+            // Minus boss HP by totalDmg (or something)
         };
 
         for (double time = 0; time < (beattime * 8); time += (double)warnTime)
@@ -617,13 +623,13 @@ public class StateGenerator : MonoBehaviour
         double beattime = ba.GetBeatTime() * multiplier;
 
         Vector3 target = new Vector3(-8.5f, transform.position.y, transform.position.z);
-        Vector3 target2=new Vector3(-12f, transform.position.y, transform.position.z);
+        Vector3 target2 = new Vector3(-12f, transform.position.y, transform.position.z);
 
         bool alternate = false;
 
         // uhh how do i slow down spawning omegalul
 
-        target.y = Random.Range(-1, -5f);
+        target.y = Random.Range(-4, 2f);
         target2.y = target.y;
         BaseState.Attack warn = () =>
         {
@@ -646,8 +652,7 @@ public class StateGenerator : MonoBehaviour
             if (newgo == null) Debug.Log("Couldn't instantiate");
 
             newgo.GetComponent<Projectile>().SetDir(new Vector3(1, 0, 0));
-            newgo.GetComponent<Projectile>().SetSpeed(5);
-            Debug.Log(target2);
+            newgo.GetComponent<Projectile>().SetSpeed(15);
         };
 
         for (double time = 0; time < _clip.length; time += beattime)
@@ -672,7 +677,108 @@ public class StateGenerator : MonoBehaviour
 
         return result;
     }
+    public BaseState CreateBlindAttack(string _clipname, AudioClip _clip, float multiplier = 1f)
+    {
+        BaseState result = gameObject.AddComponent<BaseState>();
+        result.SetClipName(_clip.name);
+        //Run adding attacks here
 
+        double beattime = ba.GetBeatTime() * multiplier;
+        //for blackness
+        Vector3 target = new Vector3(transform.position.x, 10, transform.position.z);
+        //for the projectile
+        Vector3 target2 = new Vector3(transform.position.x, 10, transform.position.z);
+        Vector3 target3 = new Vector3(transform.position.x, 10, transform.position.z);
+        Vector3 target4 = new Vector3(transform.position.x, 10, transform.position.z);
+        Vector3 target5 = new Vector3(transform.position.x, 10, transform.position.z);
+        target.x = 0;
+        target.z = -5;
+        bool alternate = false;
+
+        // uhh how do i slow down spawning omegalul
+        float randomspeed;
+        randomspeed = Random.Range(5, 10);
+        target2.x = Random.Range(-8,8);
+        target3.x = Random.Range(-8,8);
+        target4.x = Random.Range(-8,8);
+        target5.x = Random.Range(-8,8);
+        BaseState.Attack warn = () =>
+        {
+            Object o = Resources.Load("Prefabs/Black");
+            if (o == null) Debug.Log("Load failed");
+            GameObject go = o as GameObject;
+            if (go == null) Debug.Log("Loaded object isn't GameObject");
+            GameObject newgo = Instantiate(go, target, Quaternion.identity);
+            if (newgo == null) Debug.Log("Couldn't instantiate");
+        };
+
+
+        BaseState.Attack att = () =>
+        {
+            Object o = Resources.Load("Prefabs/Projectile4");
+            if (o == null) Debug.Log("Load failed");
+            GameObject go = o as GameObject;
+            if (go == null) Debug.Log("Loaded object isn't GameObject");
+            GameObject newgo = Instantiate(go, target2, Quaternion.identity);
+            if (newgo == null) Debug.Log("Couldn't instantiate");
+
+            newgo.GetComponent<Projectile>().SetDir(new Vector3(0, -1, 0));
+            newgo.GetComponent<Projectile>().SetSpeed(randomspeed);
+
+            Object o1 = Resources.Load("Prefabs/Projectile4");
+            if (o1 == null) Debug.Log("Load failed");
+            GameObject go1 = o1 as GameObject;
+            if (go1 == null) Debug.Log("Loaded object isn't GameObject");
+            GameObject newgo1 = Instantiate(go, target3, Quaternion.identity);
+            if (newgo1 == null) Debug.Log("Couldn't instantiate");
+
+            newgo1.GetComponent<Projectile>().SetDir(new Vector3(0, -1, 0));
+            newgo1.GetComponent<Projectile>().SetSpeed(randomspeed);
+
+            Object o2 = Resources.Load("Prefabs/Projectile4");
+            if (o2 == null) Debug.Log("Load failed");
+            GameObject go2 = o2 as GameObject;
+            if (go2 == null) Debug.Log("Loaded object isn't GameObject");
+            GameObject newgo2 = Instantiate(go, target4, Quaternion.identity);
+            if (newgo2 == null) Debug.Log("Couldn't instantiate");
+
+            newgo2.GetComponent<Projectile>().SetDir(new Vector3(0, -1, 0));
+            newgo2.GetComponent<Projectile>().SetSpeed(randomspeed);
+
+            Object o3 = Resources.Load("Prefabs/Projectile4");
+            if (o3 == null) Debug.Log("Load failed");
+            GameObject go3 = o3 as GameObject;
+            if (go3 == null) Debug.Log("Loaded object isn't GameObject");
+            GameObject newgo3 = Instantiate(go, target5, Quaternion.identity);
+            if (newgo3 == null) Debug.Log("Couldn't instantiate");
+
+            newgo3.GetComponent<Projectile>().SetDir(new Vector3(0, -1, 0));
+            newgo3.GetComponent<Projectile>().SetSpeed(randomspeed);
+
+        };
+
+        for (double time = 0; time < _clip.length; time += beattime)
+        {
+
+            if (alternate)
+            {
+                result.AddAttack(time, att);
+            }
+            else
+            {
+                result.AddAttack(time, warn);
+            }
+
+            alternate = !alternate;
+            //result.AddAttack(time, att);
+            result.m_audioManager = ap;
+        }
+
+        m_StateMap[_clipname] = result;
+        result.Sort();
+
+        return result;
+    }
     public BaseState GetState(string _clipname)
     {
         return m_StateMap[_clipname];

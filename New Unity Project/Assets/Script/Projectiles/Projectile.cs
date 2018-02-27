@@ -72,21 +72,20 @@ public class Projectile : MonoBehaviour
         }
     }
 
-
-    void OnTriggerEnter2D(Collider2D other)
+    IEnumerator OnTriggerEnter2D(Collider2D other)
     {
+        yield return new WaitForEndOfFrame();
+
         if (other.CompareTag("Player"))
         {
             Debug.Log("Player health -10");
             //Debug.Log("ADD MANA");
 
-            GetComponent<particles>().ApplyParticle(gameObject, "hitParticle", 0.5f, 1, false);
+            //GetComponent<particles>().ApplyParticle(gameObject, "hitParticle", 0.5f, 1, false);
+            
+            if (other.GetComponentInParent<PlayerController>().invincible == false && other.GetComponentInParent<PlayerController>().invincible2 == false)
+                other.GetComponentInParent<PlayerController>().takeDamage(1);
 
-            //other.GetComponent<PlayerController>().mana += 20;
-            //if (other.GetComponent<PlayerController>().mana >= 100)
-            //    other.GetComponent<PlayerController>().mana = 100;
-            if (other.GetComponent<PlayerController>().invincible == false && other.GetComponent<PlayerController>().invincible2==false)
-                other.GetComponent<PlayerController>().health -= 10;
             if (null != transform.parent)
                 Destroy((transform.parent).gameObject);
             else

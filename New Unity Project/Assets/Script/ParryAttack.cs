@@ -6,6 +6,9 @@ public class ParryAttack : MonoBehaviour
 {
     private GameObject _feedback;
 
+    [SerializeField]
+    Score playerScore;
+
     // Use this for initialization
     void Start()
     {
@@ -21,16 +24,26 @@ public class ParryAttack : MonoBehaviour
     {
         if (other.CompareTag("parableProjectile"))
         {
+            print("Parried!");
             _feedback.GetComponent<Feedback>().CreateImage("ParryPass", other.gameObject.transform.position);
             _feedback.GetComponent<Feedback>().CreateAudio("Pass");
 
             //this.GetComponent<PlayerController>().mana += 10;
             gameObject.GetComponentInParent<PlayerController>().mana += 10;
+            
+            // Add base 300 score
+            playerScore.AddScore(300.0f);
 
+            // Per successful hit, increase multiplier
+            // Like uhh, combo.. bonus?
+            playerScore.AddMultiplier(0.1f);
 
             //other.gameObject.SetActive(false);
+            if (other.transform.parent)
+            {
+                Destroy(other.gameObject.transform.parent.gameObject);
+            }
             Destroy(other.gameObject);
-            //Destroy(other);
         }
     }
 }

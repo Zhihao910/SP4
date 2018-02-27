@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class AudioPeerManager : MonoBehaviour {
-
-    [SerializeField]
-    AudioWrapper frontpeer;
+public class AudioPeerManager : MonoBehaviour
+{
+    public AudioWrapper frontpeer;
     [SerializeField]
     AudioWrapper backpeer;
 
@@ -35,8 +34,11 @@ public class AudioPeerManager : MonoBehaviour {
 
     void Awake()
     {
-        song = PlayerPrefs.GetString("Song");
-        _sample = Resources.Load("Audio/" + song) as AudioClip;
+        if (_sample == null)
+        {
+            song = PlayerPrefs.GetString("Song");
+            _sample = Resources.Load("Audio/" + song) as AudioClip;
+        }
         
     }
 
@@ -115,7 +117,7 @@ public class AudioPeerManager : MonoBehaviour {
                 //m_playqueue.Enqueue(_stateGenerator.GenerateState(StateGenerator.GenerateType.NUMSTATE, ac.name, ac)); _audioclipmap.Add(ac.name, ac);
                 // TODO look at laser attack
                 //m_playqueue.Enqueue(_stateGenerator.CreateLaserAttack(ac.name, ac, 8));
-                m_playqueue.Enqueue(_stateGenerator.GenerateState(StateGenerator.GenerateType.MULTISTATE, ac.name, ac));
+                m_playqueue.Enqueue(_stateGenerator.GenerateState(StateGenerator.GenerateType.SHOCKWAVESTATE, ac.name, ac, 4.0f));
                 //m_playqueue.Enqueue(_stateGenerator.CreateBlindAttack(ac.name, ac, 8));
                 //m_playqueue.Enqueue(_stateGenerator.GenerateState(StateGenerator.GenerateType.NUMSTATE, ac.name, ac));
                 //m_playqueue.Enqueue(_stateGenerator.CreateParryState(ac.name, ac, 8));
