@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
 
     public float movementSpeed;
     public float jumpHeight;
-
+    BossHealth bosshealth;
     public Transform checkGround;
     public float groundCheckRadius;
     public LayerMask isGround;
@@ -33,7 +33,6 @@ public class PlayerController : MonoBehaviour
     float parryCooldown = 0.3f;
     public Collider2D attackTrigger;
     public Renderer attackVisual;
-
     // THIS ISN'T EVEN MY FINAL FORM
     public bool _crescendo = false;
     // actually it is
@@ -61,6 +60,7 @@ public class PlayerController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        bosshealth = GetComponent<BossHealth>();
         animator = this.GetComponent<Animator>();
         movementSpeed = 5;
         jumpHeight = 5;
@@ -159,7 +159,6 @@ public class PlayerController : MonoBehaviour
         }
 
         manaBar.transform.localScale = new Vector3(mana / totalMana, 1, 1);
-
         Movement();
         Jump();
         ParryAttack();
@@ -309,6 +308,8 @@ public class PlayerController : MonoBehaviour
         //Move Left
         else if ((mainGame.direction.x < 0 || Input.GetKey(KeyCode.LeftArrow)) && !downbtn)
         {
+            bosshealth.health -= 1;
+            Debug.Log(bosshealth.health);
             GetComponent<Rigidbody2D>().velocity = new Vector2(-movementSpeed, GetComponent<Rigidbody2D>().velocity.y);
             //Debug.Log("Left" + movementSpeed);
             animator.SetInteger("States", 1);
@@ -452,7 +453,10 @@ public class PlayerController : MonoBehaviour
         currHeart = Mathf.Clamp(currHeart, 0, startHeart * healthPerHeart);
         //No more heart, Gameover
         if (currHeart <= 0)
+        {
+            PlayerPrefs.SetFloat("bosshealth", bosshealth.health);
             SceneManager.LoadScene("GameOver");
+        }
         updateHealth();
     }
 
