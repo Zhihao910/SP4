@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class FreqBeat : MonoBehaviour
 {
-    [SerializeField]
     public AudioSource _source;
 
     // if there is a beat, _beated = true;
@@ -268,31 +267,31 @@ public class FreqBeat : MonoBehaviour
                 {
                     if (i > 18)
                     {
-                        if (_highList[_highSection][i] > 0.4f)
-                            _highList[_highSection][i] *= 0.75f; // 0.75
-                        else
-                            _highList[_highSection][i] *= 0.9f;
+                        //if (_highList[_highSection][i] > 0.4f)
+                        //    _highList[_highSection][i] *= 0.75f; // 0.75
+                        //else
+                            _highList[_highSection][i] *= 0.97f;
                     }
                     else if (i > 6)
                     {
-                        if (_highList[_highSection][i] > 0.4f)
-                            _highList[_highSection][i] *= 0.7f; // 0.7
-                        else
-                            _highList[_highSection][i] *= 0.85f;
+                        //if (_highList[_highSection][i] > 0.4f)
+                        //    _highList[_highSection][i] *= 0.7f; // 0.7
+                        //else
+                            _highList[_highSection][i] *= 0.97f;
                     }
                     else if (i > 3)
                     {
-                        if (_highList[_highSection][i] > 0.4f)
-                            _highList[_highSection][i] *= 0.55f; // 0.55
-                        else
-                            _highList[_highSection][i] *= 0.8f;
+                        //if (_highList[_highSection][i] > 0.4f)
+                        //    _highList[_highSection][i] *= 0.55f; // 0.55
+                        //else
+                            _highList[_highSection][i] *= 0.65f;
                     }
                     else
                     {
-                        if (_highList[_highSection][i] > 0.4f)
-                            _highList[_highSection][i] *= 0.65f; // 0.65
-                        else
-                            _highList[_highSection][i] *= 0.8f;
+                        //if (_highList[_highSection][i] > 0.4f)
+                        //    _highList[_highSection][i] *= 0.65f; // 0.65
+                        //else
+                            _highList[_highSection][i] *= 0.45f;
                     }
 
                     //print(AudioPeer._audioBandBuffer64[i]);

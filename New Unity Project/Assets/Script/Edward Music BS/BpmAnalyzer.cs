@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,6 +22,7 @@ public class BpmAnalyzer : MonoBehaviour
     {
         if (_audioSource.clip == null)
         {
+            print("AudioSource is NULL");
             _bpm = UniBpmAnalyzer.AnalyzeBpm(_apm._sample2);
 
             if (_bpm < 0)
@@ -69,5 +71,48 @@ public class BpmAnalyzer : MonoBehaviour
         }
 
         return _bpmTime;
+    }
+
+    public void ReadBpm(string _name)
+    {
+        if (Saving.LoadingFromFile("MusicData.txt", (List<string> _data) =>
+        {
+            // See if song exists
+            if (_data.Contains("<name>" + _name))
+            {
+                print("Song Data found, reading now...");
+            }
+            else
+            {
+                print("could not find song:" + _name);
+                return false;
+            }
+
+            List<string> songData = new List<string>();
+            songData = _data.GetRange(_data.IndexOf("<name>" + _name), (_data.IndexOf(_name + "end") - _data.IndexOf("<name>" + _name)));
+
+            // FIND BPM
+            List<string> bpmData = new List<string>();
+            bpmData = songData.GetRange(songData.IndexOf("<bpm>"), (songData.IndexOf("</bpm>") - songData.IndexOf("<bpm>")));
+            bpmData.Remove("<bpm>");
+            string bpmString = "";
+            foreach (string num in bpmData)
+                bpmString += num;
+
+            this.SetBpm(Convert.ToInt32(bpmString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
+
+            return true;
+        }
+            ))
+        {
+            print("Successfully loaded from file.");
+
+            return;
+        }
+        else
+        {
+            print("Song does not exist or error in reading file. Will detect.");
+            return;
+        }
     }
 }

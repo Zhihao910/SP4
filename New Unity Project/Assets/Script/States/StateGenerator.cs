@@ -341,7 +341,7 @@ public class StateGenerator : MonoBehaviour
         double _QTETime = 0.0;
         int totalDmg = 0;
         double fifthTime = (beattime * 0.19);
-        float warnTime = (float)(beattime * 1.6);
+        float warnTime = (float)(beattime * (0.4 * multiplier));
         int _countdown = 0;
 
         GameObject _buttonQTE;

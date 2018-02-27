@@ -8,7 +8,6 @@ sealed public class AudioPeer : MonoBehaviour
     public static float[] _samples = new float[512]; // originally 512
 
     private float[] _freqBand = new float[8];
-
     private float[] _freqBand64 = new float[64];
     private float[] _bandBuffer64 = new float[64];
     float[] _bufferDecrease64 = new float[64];
@@ -25,16 +24,12 @@ sealed public class AudioPeer : MonoBehaviour
 
         _audioBand64 = new float[64];
         _audioBandBuffer64 = new float[64];
-
-        //_audioSource = GetComponent<AudioSource>();
-
-        //_audioSource = gameObject.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     private void FixedUpdate ()
     {
-        _audioSource = GetComponent<AudioPeerManager>().frontpeer.GetComponent<AudioSource>();
+        //_audioSource = GetComponent<AudioPeerManager>().frontpeer.GetComponent<AudioSource>();
 
         GetSpectrumAudioSource();
         //MakeFrequencyBands();

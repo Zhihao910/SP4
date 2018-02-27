@@ -41,7 +41,7 @@ public class MusicProjectile : MonoBehaviour
 
     void Awake()
     {
-        _audioSource.clip = Resources.Load("Audio/" + PlayerPrefs.GetString("Song")) as AudioClip;
+        //_audioSource.clip = Resources.Load("Audio/" + PlayerPrefs.GetString("Song")) as AudioClip;
     }
 
     // Use this for initialization
@@ -96,7 +96,7 @@ public class MusicProjectile : MonoBehaviour
         }
 
         // All 3
-        if (SpawnEffect._spawnCenter || SpawnEffect._spawnMelody || SpawnEffect._spawnHigh)
+        if (SpawnEffect._spawnCenter)
         {
             if (!spawnCenter)
             {
@@ -112,6 +112,42 @@ public class MusicProjectile : MonoBehaviour
         else
         {
             spawnCenter = false;
+        }
+
+        if (SpawnEffect._spawnMelody)
+        {
+            if (!spawnMelody)
+            {
+                spawnMelody = true;
+                Instantiate(Projectile, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+                threeList.Add(_audioSource.time);
+            }
+            else if (spawnMelody)
+            {
+                Instantiate(ProjectileDrag, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+            }
+        }
+        else
+        {
+            spawnMelody = false;
+        }
+
+        if (SpawnEffect._spawnHigh)
+        {
+            if (!spawnHigh)
+            {
+                spawnHigh = true;
+                Instantiate(Projectile, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+                threeList.Add(_audioSource.time);
+            }
+            else if (spawnHigh)
+            {
+                Instantiate(ProjectileDrag, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+            }
+        }
+        else
+        {
+            spawnHigh = false;
         }
 
         //// ACTUALLY ALSO PART OF VOCALS AND INSTRUMENTS

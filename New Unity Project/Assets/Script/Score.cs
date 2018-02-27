@@ -10,9 +10,10 @@ public class Score : MonoBehaviour
 
     // Current Score
     private int _currScore = 0;
+    // Default Multiplier
+    private float _defaultMulti = 1.0f;
     // Multiplier
     private float _multiplier = 1.0f;
-
     // To make noise whenever damage is done
     private GameObject _feedback;
 
@@ -90,7 +91,7 @@ public class Score : MonoBehaviour
 
     public void ResetMultiplier()
     {
-        _multiplier = 1.0f;
+        _multiplier = _defaultMulti;
         _feedback.GetComponent<Feedback>().CreateAudio("Damage");
         DisplayScore();
     }
@@ -107,6 +108,12 @@ public class Score : MonoBehaviour
 
         _text.text = "Score:" + _currScore.ToString() + "\n"
     + "Multiplier:" + _multiplier.ToString();
+    }
+
+    public void SetDefaultMultiplier(float _DM)
+    {
+        _defaultMulti = _DM;
+        _multiplier = _defaultMulti;
     }
 
     // Call this when saving score after boss/death
@@ -166,6 +173,6 @@ public class Score : MonoBehaviour
         PlayerPrefs.SetInt("currentscore", _currScore);
 
         _currScore = 0;
-        _multiplier = 1.0f;
+        _multiplier = _defaultMulti;
     }
 }
