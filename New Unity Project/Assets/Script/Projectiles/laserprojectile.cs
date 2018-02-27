@@ -6,6 +6,7 @@ public class laserprojectile : Projectile
 {
     [SerializeField]
     GameObject Laser;
+
     // Use this for initialization
     void Start()
     {
@@ -21,7 +22,6 @@ public class laserprojectile : Projectile
             GameObject go = Instantiate(Laser, transform.position, Quaternion.identity);
             go.GetComponent<Projectile>().SetDir(new Vector3(1, 0, 0));
             Destroy(gameObject);
-
         }
     }
 }

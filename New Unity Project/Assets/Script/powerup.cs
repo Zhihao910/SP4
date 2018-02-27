@@ -49,7 +49,7 @@ public class powerup : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            other.GetComponent<PlayerController>().regenHealth(1);
+            other.GetComponentInParent<PlayerController>().regenHealth(1);
             Destroy(this.gameObject);
         }
     }

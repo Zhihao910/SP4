@@ -50,6 +50,10 @@ public class Feedback : MonoBehaviour
         GameObject _temp = Instantiate(Resources.Load("Prefabs/" + _name) as GameObject);
 
         _temp.transform.parent = _go.transform;
+        _temp.transform.position = _go.transform.position;
+        Vector2 _diff = new Vector2(_temp.GetComponent<SpriteRenderer>().bounds.center.x - _go.GetComponent<SpriteRenderer>().bounds.center.x, _temp.GetComponent<SpriteRenderer>().bounds.center.y - _go.GetComponent<SpriteRenderer>().bounds.center.y);
+        _diff.Scale(new Vector2(0.5f, 0.5f));
+        _temp.transform.position = new Vector3(_go.transform.position.x - _diff.x, _go.transform.position.y - _diff.y, _go.transform.position.z);
 
         Destroy(_temp, _lifetime);
 

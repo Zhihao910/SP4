@@ -86,13 +86,16 @@ public class Projectile : MonoBehaviour
             if (other.GetComponentInParent<PlayerController>().invincible == false && other.GetComponentInParent<PlayerController>().invincible2 == false)
                 other.GetComponentInParent<PlayerController>().takeDamage(1);
 
-            if (null != transform.parent)
-                Destroy((transform.parent).gameObject);
-            else
-                Destroy(gameObject);
+            if (!GetComponent<laserprojectile>())
+            {
+                if (null != transform.parent)
+                    Destroy((transform.parent).gameObject);
+                else
+                    Destroy(gameObject);
 
-            GetComponent<SpriteRenderer>().enabled = false;
-            GetComponent<BoxCollider2D>().enabled = false;
+                GetComponent<SpriteRenderer>().enabled = false;
+                GetComponent<BoxCollider2D>().enabled = false;
+            }
         }
     }
 

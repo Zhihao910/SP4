@@ -83,6 +83,7 @@ public class Playermovement : MonoBehaviour
         healthBar.transform.localScale = new Vector3(health / totalHealth, 1, 1);
         manaBar.transform.localScale = new Vector3(mana / totalMana, 1, 1);
 
+        // What is this?
         health -= 1.0f;
         if (health <= 0.0f)
             health = 0.0f;

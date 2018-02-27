@@ -119,22 +119,22 @@ public class PlayerController : MonoBehaviour
         // For Dictionary
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            _keys[1] = 0.3f;
+            _keys[1] = 0.5f;
         }
 
         if (Input.GetKeyDown(KeyCode.W))
         {
-            _keys[2] = 0.3f;
+            _keys[2] = 0.5f;
         }
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            _keys[3] = 0.3f;
+            _keys[3] = 0.5f;
         }
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            _keys[4] = 0.3f;
+            _keys[4] = 0.5f;
         }
 
         //Crouch animation

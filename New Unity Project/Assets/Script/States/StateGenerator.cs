@@ -310,6 +310,7 @@ public class StateGenerator : MonoBehaviour
         result.SetClipName(_clip.name);
         //Run adding attacks here
 
+        multiplier *= 0.75f;
         double beattime = ba.GetBeatTime() * multiplier;
 
         //Possible Keys
@@ -340,7 +341,7 @@ public class StateGenerator : MonoBehaviour
         double _QTETime = 0.0;
         int totalDmg = 0;
         double fifthTime = (beattime * 0.19);
-        float warnTime = (float)(beattime * (0.4 * multiplier));
+        float warnTime = (float)(beattime * (0.2 * multiplier));
         int _countdown = 0;
 
         GameObject _buttonQTE;
@@ -558,13 +559,13 @@ public class StateGenerator : MonoBehaviour
             _bossHP.health -= totalDmg;
         };
 
-        for (double time = 0; time < (beattime * 8); time += (double)warnTime)
+        for (double time = 0; time < (beattime * 4); time += (double)warnTime)
         {
             result.AddAttack(time, warn);
             result.m_audioManager = ap;
         }
 
-        for (double time = (beattime * 8); time < (_clip.length - 0.2f); time += beattime)
+        for (double time = (beattime * 4); time < (_clip.length - 0.2f); time += beattime)
         {
             result.AddAttack(time, att);
             result.m_audioManager = ap;
@@ -638,14 +639,14 @@ public class StateGenerator : MonoBehaviour
         double beattime = ba.GetBeatTime() * multiplier;
         Vector3 target = new Vector3(-8.5f, transform.position.y, transform.position.z);
         Vector3 target2 = new Vector3(-12f, transform.position.y, transform.position.z);
-        float lifetime = 8;
+        float lifetime = 2.0f;
         bool alternate = false;
-        // uhh how do i slow down spawning omegalul
-        target.y = Random.Range(-4, 2f);
-        target2.y = target.y;
 
         BaseState.Attack warn = () =>
         {
+            target.y = Random.Range(-4, 2f);
+            target2.y = target.y;
+
             Object o = Resources.Load("Prefabs/Indicator");
             if (o == null) Debug.Log("Load failed");
             GameObject go = o as GameObject;

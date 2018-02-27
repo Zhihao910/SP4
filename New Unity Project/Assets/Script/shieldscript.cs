@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class shieldscript : MonoBehaviour
 {
-    float lifetime;
     float movement;
     float change;
     float change2;
@@ -12,7 +11,6 @@ public class shieldscript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        lifetime = 5;
         movement = 0.2f;
         change = 0;
         change = 0;
@@ -22,7 +20,6 @@ public class shieldscript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        lifetime -= Time.deltaTime;
         //code for hovering
         if (change > 0.8f)
         {
@@ -44,17 +41,17 @@ public class shieldscript : MonoBehaviour
         }
 
         transform.Translate(0, movement * Time.deltaTime, 0);
-        if (lifetime < 0)
-            Destroy(gameObject);
 
+        Destroy(gameObject, 5.0f);
     }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            _feedback.GetComponent<Feedback>().CreateImage("shieldimage", other.gameObject);
-            other.GetComponent<PlayerController>().invincible2 = true;
-            Destroy(this.gameObject);
+            _feedback.GetComponent<Feedback>().CreateImage("shieldimage", other.gameObject, 5.0f);
+            other.GetComponentInParent<PlayerController>().invincible2 = true;
+            Destroy(gameObject);
         }
     }
 }
