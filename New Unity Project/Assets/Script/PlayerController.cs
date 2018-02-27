@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
     public Collider2D attackTrigger;
     public Renderer attackVisual;
     // THIS ISN'T EVEN MY FINAL FORM
-    public bool _crescendo = false;
+    public static bool _crescendo = false;
     // actually it is
 
 
