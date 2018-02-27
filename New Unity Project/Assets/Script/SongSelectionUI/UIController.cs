@@ -8,9 +8,15 @@ public class UIController : MonoBehaviour {
     AudioSource _source;
     [SerializeField]
     SongManager _songmanager;
+    UnityEngine.UI.Text SongName;
+    UnityEngine.UI.Text BPM;
+
     int index = 0;
     void Awake()
     {
+        SongName = GameObject.FindGameObjectWithTag("SongName").GetComponent<UnityEngine.UI.Text>();
+        BPM = GameObject.FindGameObjectWithTag("BPM").GetComponent<UnityEngine.UI.Text>();
+
         _source = GetComponent<AudioSource>();
         Saving.LoadingFromFile("Assets/Info/Songs.txt", (List<string> _data) =>
         {
@@ -27,10 +33,13 @@ public class UIController : MonoBehaviour {
     void Start () {
         _songmanager.Swap(songs[index]);
         _songmanager.Play();
+        SongName.text = songs[index];
+        GetComponent<BpmAnalyzer>().ReadBpm(songs[index]);
+        BPM.text = "Speed: " + GetComponent<BpmAnalyzer>()._bpm.ToString();
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
 #if UNITY_STANDALONE || UNITY_WEBPLAYER
         if ((Input.GetKeyDown(KeyCode.LeftArrow)))
         {
@@ -38,17 +47,24 @@ public class UIController : MonoBehaviour {
                 index = songs.Count - 1;
             //send song to gamescene
             _songmanager.Swap(songs[index]);
+            GetComponent<BpmAnalyzer>().ReadBpm(songs[index]);
+            SongName.text = songs[index];
+            BPM.text = "Speed: " + GetComponent<BpmAnalyzer>()._bpm.ToString();
         }
         else if ((Input.GetKeyDown(KeyCode.LeftArrow)))
         {
             if (++index > songs.Count)
                 index = 0;
             _songmanager.Swap(songs[index]);
+            GetComponent<BpmAnalyzer>().ReadBpm(songs[index]);
+            SongName.text = songs[index];
+            BPM.text = "Speed: " + GetComponent<BpmAnalyzer>()._bpm.ToString();
         }
         else if((Input.GetKeyDown(KeyCode.Space)))
         {
             PlayerPrefs.SetString("Song", songs[index]);
             SceneManager.LoadScene("MainGame 1");
+
         }
 #elif UNITY_ANDROID
 

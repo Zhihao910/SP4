@@ -13,17 +13,30 @@ public class BpmAnalyzer : MonoBehaviour
     [SerializeField]
     AudioPeerManager _apm;
 
-    private int _bpm = 0;
+    public int _bpm = 0;
     private float _bpmTime = 0.0f;
 
     // Dont need to call this before calling getbpm/getbeattime
     // I did it anyway
     public void FindBpm()
     {
+        //if (_audioSource.clip == null && _apm == null)
+        //{
+        //    //_audioSource = GetComponent<SongManager>().frontpeer.GetComponent<AudioSource>();
+        //}
+
+        //_audioSource = GetComponent<SongManager>().frontpeer.GetComponent<AudioSource>();
+
         if (_audioSource.clip == null)
         {
-            print("AudioSource is NULL");
-            _bpm = UniBpmAnalyzer.AnalyzeBpm(_apm._sample2);
+            if (_apm == null)
+            {
+                _bpm = UniBpmAnalyzer.AnalyzeBpm(GetComponent<SongManager>().frontpeer.GetComponent<AudioSource>().clip);
+            }
+            else
+            {
+                _bpm = UniBpmAnalyzer.AnalyzeBpm(_apm._sample2);
+            }
 
             if (_bpm < 0)
             {
@@ -103,7 +116,7 @@ public class BpmAnalyzer : MonoBehaviour
 
             return true;
         }
-            ))
+        ))
         {
             print("Successfully loaded from file.");
 

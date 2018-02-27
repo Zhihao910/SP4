@@ -14,6 +14,7 @@ public class BeatingCube : MonoBehaviour
     void Start()
     {
         _originalScale = gameObject.transform.localScale;
+        // change this to read from file
         _ba = GameObject.FindGameObjectWithTag("Boss").GetComponent<BpmAnalyzer>();
     }
 

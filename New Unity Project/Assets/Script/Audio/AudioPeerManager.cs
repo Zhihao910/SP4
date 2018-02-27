@@ -17,6 +17,8 @@ public class AudioPeerManager : MonoBehaviour
     [SerializeField]
     StateGenerator _stateGenerator;
 
+    MusicProjectile musicprojectile;
+
     static bool swap = false;
     Queue<BaseState> m_playqueue = new Queue<BaseState>();
 
@@ -25,6 +27,7 @@ public class AudioPeerManager : MonoBehaviour
     public bool RemixVersion = false;
 
     BaseState curr;
+    BaseState next;
 
     string song;
 
@@ -42,7 +45,10 @@ public class AudioPeerManager : MonoBehaviour
             song = PlayerPrefs.GetString("Song");
             _sample = Resources.Load("Audio/" + song) as AudioClip;
         }
-        
+        musicprojectile = gameObject.AddComponent<MusicProjectile>();
+        musicprojectile.detected = musicprojectile.ChckSongName(_sample.name);
+
+
     }
 
     // Use this for initialization
@@ -113,18 +119,45 @@ public class AudioPeerManager : MonoBehaviour
         }
         else if (!RemixVersion)
         {
+            float offset = 0;
             foreach (AudioClip ac in AudioSplitter.SplitClip(_sample))
             {
                 m_audioclipmap.Add(ac.name, ac);
-                //Playtest one
-                //m_playqueue.Enqueue(_stateGenerator.GenerateState(StateGenerator.GenerateType.NUMSTATE, ac.name, ac)); _audioclipmap.Add(ac.name, ac);
-                // TODO look at laser attack
-                //m_playqueue.Enqueue(_stateGenerator.CreateLaserAttack(ac.name, ac, 8));
-                m_playqueue.Enqueue(_stateGenerator.GenerateState(StateGenerator.GenerateType.SHOCKWAVESTATE, ac.name, ac, 4.0f));
-                //m_playqueue.Enqueue(_stateGenerator.CreateBlindAttack(ac.name, ac, 8));
-                //m_playqueue.Enqueue(_stateGenerator.GenerateState(StateGenerator.GenerateType.NUMSTATE, ac.name, ac));
-                //m_playqueue.Enqueue(_stateGenerator.CreateParryState(ac.name, ac, 8));
-                //m_playqueue.Enqueue(_stateGenerator.CreateQuickTimeEvent(ac.name, ac));
+                //BaseState1 bs = _stateGenerator.MultiHighState(ac.name, ac, 4.0f);
+                //foreach(float f in musicprojectile.bassList)
+                //{
+                //    if (f > offset + ac.length)
+                //        break;
+                //    else if (f < offset)
+                //        continue;
+                //    if (f > offset && f < offset + ac.length)
+                //        bs.AddBeat(BaseState1.Type.BASS_TYPE, f - offset);
+                //}
+
+                //foreach (float f in musicprojectile.kickList)
+                //{
+                //    if (f > offset + ac.length)
+                //        break;
+                //    else if (f < offset)
+                //        continue;
+                //    if (f > offset && f < offset + ac.length)
+                //        bs.AddBeat(BaseState1.Type.KICK_TYPE, f - offset);
+
+                //}
+
+                //foreach (float f in musicprojectile.highList)
+                //{
+                //    if (f > offset + ac.length)
+                //        break;
+                //    else if (f < offset)
+                //        continue;
+                //    if (f > offset && f < offset + ac.length)
+                //        bs.AddBeat(BaseState1.Type.GENERAL_TYPE, f - offset);
+                //}
+                //bs.PushAttacksIntoList();
+                //m_playqueue.Enqueue(bs);
+                //offset += ac.length;
+                m_playqueue.Enqueue(_stateGenerator.GenerateState(StateGenerator.GenerateType.NUMSTATE, ac.name, ac, 4.0f));
             }
         }
         curr = m_playqueue.Dequeue();
@@ -133,13 +166,29 @@ public class AudioPeerManager : MonoBehaviour
         frontpeer.SetAudioClip(m_audioclipmap[curr.GetClipName()]);
         frontpeer.StartPlaying();
     }
-
+    bool QTE = false;
     // Update is called once per frame
     void Update () {
+        if(PlayerController._crescendo)
+        {
+            if (m_playqueue.Count > 0 && !QTE)
+            {
+                print("yrmom");
+                next = _stateGenerator.GenerateState(StateGenerator.GenerateType.QUICKTIMEEVENTSTATE, m_playqueue.Peek().GetClipName(), m_audioclipmap[m_playqueue.Peek().GetClipName()]);
+                QTE = true;
+            }
+        }
         if (swap && m_playqueue.Count > 0)
         {
             curr.StopRun();
             curr = m_playqueue.Dequeue();
+            if (QTE)
+            {
+                print("yrmomgay");
+
+                curr = next;
+                QTE = false;
+            }
             curr.Run();
 
             AudioWrapper ap = frontpeer;

@@ -30,25 +30,18 @@ public class MusicProjectile : MonoBehaviour
     private bool spawnThree;
 
     // List of beats
-    private List<float> bassList = new List<float>();
-    private List<float> kickList = new List<float>();
+    public List<float> bassList = new List<float>();
+    public List<float> kickList = new List<float>();
     private List<float> centerList = new List<float>();
     private List<float> melodyList = new List<float>();
-    private List<float> highList = new List<float>();
+    public List<float> highList = new List<float>();
 
-    bool detected = false;
+    public bool detected = false;
     private List<float> threeList = new List<float>();
-
-    void Awake()
-    {
-        //_audioSource.clip = Resources.Load("Audio/" + PlayerPrefs.GetString("Song")) as AudioClip;
-    }
 
     // Use this for initialization
     void Start()
     {
-        //frontpeer.SetAudioClip(_sample);
-        //frontpeer.StartPlaying();
     }
 
     // Update is called once per frame
@@ -494,6 +487,111 @@ public class MusicProjectile : MonoBehaviour
 
             //    highList.Add(Convert.ToSingle(freqString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
             //}
+
+            return true;
+        }
+            ))
+        {
+            print("Successfully loaded from file.");
+            detected = true;
+            return true;
+        }
+        else
+        {
+            print("Song does not exist or error in reading file. Will detect.");
+            detected = false;
+            return false;
+        }
+    }
+
+    public bool ChckSongName(string _name)
+    {
+        if (Saving.LoadingFromFile("MusicData.txt", (List<string> _data) =>
+        {
+            // See if song exists
+            if (_data.Contains("<FreqName>" + _name))
+                print("Song Data found, reading now...");
+            else
+            {
+                print("couldnt find song name:" + _name);
+
+                return false;
+            }
+
+            List<string> freqData = new List<string>();
+            freqData = _data.GetRange(_data.IndexOf("<FreqName>" + _name), (_data.IndexOf(_name + "FreqEnd") - _data.IndexOf("<FreqName>" + _name)));
+
+            // FIND BASS COUNT
+            List<string> bassSegment = new List<string>();
+            bassSegment = freqData.GetRange(freqData.IndexOf("<basscount>"), (freqData.IndexOf("</basscount>") - freqData.IndexOf("<basscount>")));
+            bassSegment.Remove("<basscount>");
+            string basssegmentString = "";
+            foreach (string num in bassSegment)
+                basssegmentString += num;
+
+            // FIND BASS
+            List<string> freqBass = freqData.GetRange(freqData.IndexOf("<bass>"), (freqData.IndexOf("</bass>") - freqData.IndexOf("<bass>")));
+            freqBass.Remove("<bass>");
+
+            for (int i = 0; i < (Convert.ToInt32(basssegmentString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat) - 1); ++i)
+            {
+                List<string> bassData = freqBass.GetRange(freqBass.IndexOf("<ba" + i.ToString() + ">"), (freqBass.IndexOf("<ba/" + i.ToString() + ">") - freqBass.IndexOf("<ba" + i.ToString() + ">")));
+                bassData.Remove("<ba" + i.ToString() + ">");
+
+                string freqString = "";
+                foreach (string num in bassData)
+                    freqString += num;
+
+                bassList.Add(Convert.ToSingle(freqString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
+            }
+
+            // FIND KICK COUNT
+            List<string> kickSegment = new List<string>();
+            kickSegment = freqData.GetRange(freqData.IndexOf("<kickcount>"), (freqData.IndexOf("</kickcount>") - freqData.IndexOf("<kickcount>")));
+            kickSegment.Remove("<kickcount>");
+            string kicksegmentString = "";
+            foreach (string num in kickSegment)
+                kicksegmentString += num;
+
+            // FIND KICK
+            List<string> freqkick = freqData.GetRange(freqData.IndexOf("<kick>"), (freqData.IndexOf("</kick>") - freqData.IndexOf("<kick>")));
+            freqkick.Remove("<kick>");
+
+            for (int i = 0; i < (Convert.ToInt32(kicksegmentString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat) - 1); ++i)
+            {
+                List<string> kickData = freqkick.GetRange(freqkick.IndexOf("<ki" + i.ToString() + ">"), (freqkick.IndexOf("<ki/" + i.ToString() + ">") - freqkick.IndexOf("<ki" + i.ToString() + ">")));
+                kickData.Remove("<ki" + i.ToString() + ">");
+
+                string freqString = "";
+                foreach (string num in kickData)
+                    freqString += num;
+
+                kickList.Add(Convert.ToSingle(freqString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
+            }
+
+            // FIND THREE COUNT
+            List<string> threeSegment = new List<string>();
+            threeSegment = freqData.GetRange(freqData.IndexOf("<threecount>"), (freqData.IndexOf("</threecount>") - freqData.IndexOf("<threecount>")));
+            threeSegment.Remove("<threecount>");
+            string threesegmentString = "";
+            foreach (string num in threeSegment)
+                threesegmentString += num;
+
+            // FIND THREE
+            List<string> freqthree = freqData.GetRange(freqData.IndexOf("<three>"), (freqData.IndexOf("</three>") - freqData.IndexOf("<three>")));
+            freqthree.Remove("<three>");
+
+            for (int i = 0; i < (Convert.ToInt32(threesegmentString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat) - 1); ++i)
+            {
+                List<string> threeData = freqthree.GetRange(freqthree.IndexOf("<tre" + i.ToString() + ">"), (freqthree.IndexOf("<tre/" + i.ToString() + ">") - freqthree.IndexOf("<tre" + i.ToString() + ">")));
+                threeData.Remove("<tre" + i.ToString() + ">");
+
+                string freqString = "";
+                foreach (string num in threeData)
+                    freqString += num;
+
+                threeList.Add(Convert.ToSingle(freqString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
+            }
 
             return true;
         }

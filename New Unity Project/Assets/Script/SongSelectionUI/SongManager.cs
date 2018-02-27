@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SongManager : MonoBehaviour {
-    [SerializeField]
-    AudioWrapper frontpeer;
+    //[SerializeField]
+    public AudioWrapper frontpeer;
     [SerializeField]
     AudioWrapper backpeer;
+
+    [SerializeField]
+    BpmAnalyzer _ba;
 
     Dictionary<string, AudioClip> m_audioclipmap = new Dictionary<string, AudioClip>();
 
@@ -32,6 +35,10 @@ public class SongManager : MonoBehaviour {
         frontpeer.SetFadeIn();
         frontpeer.StartPlaying();
         backpeer = ap;
+
+        _ba.ReadBpm(frontpeer.GetComponent<AudioSource>().clip.name);
+
+        //UniBpmAnalyzer.AnalyzeBpm(frontpeer.GetComponent<AudioSource>().clip);
     }
 
     public void Play()

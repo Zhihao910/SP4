@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Score : MonoBehaviour
 {
@@ -19,8 +20,8 @@ public class Score : MonoBehaviour
 
     public Text _text;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start()
     {
         // Does it exist? If yes, read and input into _highscore
         if (PlayerPrefs.HasKey("highscore0"))
@@ -106,8 +107,16 @@ public class Score : MonoBehaviour
     {
         _multiplier = Mathf.Round(_multiplier * 10.0f) / 10.0f;
 
-        _text.text = "Score:" + _currScore.ToString() + "\n"
-    + "Multiplier:" + _multiplier.ToString();
+        _text.text = "Score:" + _currScore.ToString() + "\n" + "Multiplier:" + _multiplier.ToString();
+    }
+
+    void DisplayHighScore()
+    {
+        for (int _num = 0; _num < _highscore.Length; ++_num)
+        {
+            //PlayerPrefs.GetInt("highscore" + _num.ToString()).ToString();
+            _text.text = PlayerPrefs.GetInt("highscore" + _num.ToString()).ToString();
+        }
     }
 
     public void SetDefaultMultiplier(float _DM)

@@ -29,7 +29,14 @@ sealed public class AudioPeer : MonoBehaviour
     // Update is called once per frame
     private void FixedUpdate ()
     {
-        //_audioSource = GetComponent<AudioPeerManager>().frontpeer.GetComponent<AudioSource>();
+        if (this.GetComponent<AudioPeerManager>())
+        {
+            _audioSource = GetComponent<AudioPeerManager>().frontpeer.GetComponent<AudioSource>();
+        }
+        else
+        {
+            _audioSource = GetComponent<SongManager>().frontpeer.GetComponent<AudioSource>();
+        }
 
         GetSpectrumAudioSource();
         //MakeFrequencyBands();
