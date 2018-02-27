@@ -53,7 +53,7 @@ public class BaseState : MonoBehaviour {
         m_clipname = _clipname;
     }
 
-    public void Run()
+    public virtual void Run()
     {
         foreach (KeyValuePair<double,Attack> a in m_Attacks)
             m_Queue.Enqueue(a);

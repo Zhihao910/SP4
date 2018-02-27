@@ -25,11 +25,6 @@ public class BaseState1 : BaseState {
     void Start () {
 
 	}
-	
-	// Update is called once per frame
-	void FixedUpdate () {
-        base.FixedUpdate();
-	}
 
     public void AddAttack(Type _go,Attack _function)
     {
@@ -46,5 +41,10 @@ public class BaseState1 : BaseState {
             }
         }
         Sort();
+    }
+
+    public void AddBeat(Type _type,float _other)
+    {
+        beatList[(int)_type].Add(_other);
     }
 }

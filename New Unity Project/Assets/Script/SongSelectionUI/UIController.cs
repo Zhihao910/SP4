@@ -49,6 +49,7 @@ public class UIController : MonoBehaviour {
         {
             PlayerPrefs.SetString("Song", songs[index]);
             SceneManager.LoadScene("MainGame 1");
+
         }
 #elif UNITY_ANDROID
 
