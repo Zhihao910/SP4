@@ -20,6 +20,7 @@ public class StateGenerator : MonoBehaviour
         LAZERSTATE,
         DROPPERSTATE,
         BLINDSTATE,
+        RUNERSTATE,
         NUMSTATE,//Default
     };
     float timerdestroy;
@@ -38,6 +39,8 @@ public class StateGenerator : MonoBehaviour
     [SerializeField]
     BossHealth _bossHP;
 
+    ProjectileSpawner ps;
+
     delegate BaseState GenerateFunc(string _clipname, AudioClip _clip, float _multiplier = 1f);
     Dictionary<GenerateType, GenerateFunc> _GenerateDictionary = new Dictionary<GenerateType, GenerateFunc>();
 
@@ -53,9 +56,10 @@ public class StateGenerator : MonoBehaviour
         _GenerateDictionary.Add(GenerateType.LAZERSTATE, CreateLaserAttack);
         _GenerateDictionary.Add(GenerateType.DROPPERSTATE, CreateDropperState);
         _GenerateDictionary.Add(GenerateType.BLINDSTATE, CreateBlindAttack);
-
-
-
+        _GenerateDictionary.Add(GenerateType.RUNERSTATE, CreateRunerState);
+        //ps = gameObject.AddComponent<ProjectileSpawner>();
+        //ps.isActiveAndEnabled = false;
+        
     }
 
     // Use this for initialization
@@ -99,7 +103,7 @@ public class StateGenerator : MonoBehaviour
 
         // ba.FindBpm();
 
-        double beattime = 0.4918 * multiplier;//0.5357; // 0.588 //0.4918
+        double beattime = ba.GetBeatTime() * multiplier;//0.5357; // 0.588 //ba.GetBeatTime()
 
         BaseState.Attack att = () =>
         {
@@ -171,7 +175,7 @@ public class StateGenerator : MonoBehaviour
         result.SetClipName(_clip.name);
         //Run adding attacks here
 
-        double beattime = 0.4918 * multiplier;//0.5357; // 0.588
+        double beattime = ba.GetBeatTime() * multiplier;//0.5357; // 0.588
 
         Vector3 leftlimit = new Vector3(-0.75f, 1, 0);
         Vector3 rightlimit = new Vector3(0.75f, 1, 0);
@@ -228,7 +232,7 @@ public class StateGenerator : MonoBehaviour
         result.SetClipName(_clip.name);
         //Run adding attacks here
 
-        double beattime = 0.4918 * multiplier;//0.5357; // 0.588 0.4918 
+        double beattime = ba.GetBeatTime() * multiplier;//0.5357; // 0.588 ba.GetBeatTime() 
 
         result.AddAttack(0.1f, gameObject.GetComponent<PlatformGenerator>().ToggleGround);
         result.AddAttack(_clip.length - 0.1f, gameObject.GetComponent<PlatformGenerator>().ToggleGround);
@@ -269,7 +273,7 @@ public class StateGenerator : MonoBehaviour
         result.SetClipName(_clip.name);
         //Run adding attacks here
 
-        double beattime = 0.4918 * multiplier;//0.5357; // 0.588
+        double beattime = ba.GetBeatTime() * multiplier;//0.5357; // 0.588
         Vector3 target = new Vector3(-8, -2, transform.position.z);
         int mult = 1;
         int prevprev = 0;
@@ -960,7 +964,7 @@ public class StateGenerator : MonoBehaviour
         result.SetClipName(_clip.name);
         //Run adding attacks here
 
-        double beattime = 0.4918 * multiplier;//0.5357; // 0.588 0.4918 
+        double beattime = ba.GetBeatTime() * multiplier;//0.5357; // 0.588 ba.GetBeatTime() 
 
         result.AddAttack(0.1f, gameObject.GetComponent<PlatformGenerator>().ToggleGround);
 
@@ -985,6 +989,52 @@ public class StateGenerator : MonoBehaviour
         }
         result.m_audioManager = ap;
         
+        m_StateMap[_clipname] = result;
+        result.Sort();
+
+        return result;
+    }
+
+    public BaseState CreateRunerState(string _clipname, AudioClip _clip, float multiplier = 1f)
+    {
+        BaseState result = gameObject.AddComponent<BaseState>();
+        result.SetClipName(_clip.name);
+        //Run adding attacks here
+
+        double beattime = ba.GetBeatTime() * multiplier;//0.5357; // 0.588 ba.GetBeatTime() 
+
+        result.AddAttack(0.1f, gameObject.GetComponent<PlatformGenerator>().ToggleGround);
+
+        result.AddAttack(_clip.length - 0.1f, gameObject.GetComponent<PlatformGenerator>().ToggleGround);
+
+
+        BaseState.Attack att = () =>
+        {
+            for (int i = -3; i < 1; ++i)
+            {
+                if (Random.Range(0, 2) == 0)
+                    continue;
+                gameObject.GetComponent<PlatformGenerator>().GeneratePlatform(new Vector3(10, i * 2), new Vector3(-10, i * 2), 1, true).GetComponent<Platform>().projectileSpeed = 5;            }
+        };
+
+        BaseState.Attack att2 = () =>
+        {
+            int drop = Random.Range(-4, 5);
+            for (int i = -4; i < 5; ++i)
+            {
+                if (i == drop)
+                    continue;
+                gameObject.GetComponent<PlatformGenerator>().GeneratePlatform(new Vector3(10, i * 2), new Vector3(-10, i * 2), 1, true);
+            }
+        };
+
+
+        for (double time = 0; time < _clip.length; time += beattime)
+        {
+            result.AddAttack(time, att);
+        }
+        result.m_audioManager = ap;
+
         m_StateMap[_clipname] = result;
         result.Sort();
 

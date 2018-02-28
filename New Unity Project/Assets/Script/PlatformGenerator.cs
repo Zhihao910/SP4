@@ -82,7 +82,7 @@ public class PlatformGenerator : MonoBehaviour
         }
     }
 
-    public void GeneratePlatform(Vector3 _Position, Vector3 _Target, int index = 1, bool des = false)
+    public GameObject GeneratePlatform(Vector3 _Position, Vector3 _Target, int index = 1, bool des = false)
     {
         _Target.x -= platform[1].GetComponentInChildren<BoxCollider2D>().size.x;
         _Position.x -= platform[1].GetComponentInChildren<BoxCollider2D>().size.x;
@@ -92,6 +92,7 @@ public class PlatformGenerator : MonoBehaviour
         newplat.GetComponent<Platform>().SetDir((_Target - _Position).normalized);
         newplat.GetComponent<Platform>().despawnonhittarget = des;
         newplat.SetActive(true); //Show the platform
+        return newplat;
     }
 
     public void ToggleGround()

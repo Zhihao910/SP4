@@ -14,7 +14,7 @@ public class Platform : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        projectileSpeed = 1;
+        
     }
 	
 	// Update is called once per frame

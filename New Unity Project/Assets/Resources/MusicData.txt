@@ -23213,7 +23213,7 @@ battleThemeAFreqEnd
 0.5601918
 <v/26>
 <v27>
-0.4918029
+ba.GetBeatTime()029
 <v/27>
 <v28>
 0.6764306
