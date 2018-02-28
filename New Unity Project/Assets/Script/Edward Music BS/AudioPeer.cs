@@ -33,7 +33,7 @@ sealed public class AudioPeer : MonoBehaviour
         {
             _audioSource = GetComponent<AudioPeerManager>().frontpeer.GetComponent<AudioSource>();
         }
-        else
+        else if (this.GetComponent<SongManager>())
         {
             _audioSource = GetComponent<SongManager>().frontpeer.GetComponent<AudioSource>();
         }

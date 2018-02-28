@@ -89,59 +89,78 @@ public class MusicProjectile : MonoBehaviour
         }
 
         // All 3
-        if (SpawnEffect._spawnCenter)
+        if (SpawnEffect._spawnThree)
         {
-            if (!spawnCenter)
+            if (!spawnThree)
             {
-                spawnCenter = true;
+                spawnThree = true;
                 Instantiate(Projectile, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
                 threeList.Add(_audioSource.time);
             }
-            else if (spawnCenter)
+            else if (spawnThree)
             {
                 Instantiate(ProjectileDrag, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
             }
         }
         else
         {
-            spawnCenter = false;
+            spawnThree = false;
         }
 
-        if (SpawnEffect._spawnMelody)
-        {
-            if (!spawnMelody)
-            {
-                spawnMelody = true;
-                Instantiate(Projectile, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
-                threeList.Add(_audioSource.time);
-            }
-            else if (spawnMelody)
-            {
-                Instantiate(ProjectileDrag, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
-            }
-        }
-        else
-        {
-            spawnMelody = false;
-        }
+        // All 3
+        //if (SpawnEffect._spawnCenter)
+        //{
+        //    if (!spawnCenter)
+        //    {
+        //        spawnCenter = true;
+        //        Instantiate(Projectile, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+        //        threeList.Add(_audioSource.time);
+        //    }
+        //    else if (spawnCenter)
+        //    {
+        //        Instantiate(ProjectileDrag, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+        //    }
+        //}
+        //else
+        //{
+        //    spawnCenter = false;
+        //}
 
-        if (SpawnEffect._spawnHigh)
-        {
-            if (!spawnHigh)
-            {
-                spawnHigh = true;
-                Instantiate(Projectile, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
-                threeList.Add(_audioSource.time);
-            }
-            else if (spawnHigh)
-            {
-                Instantiate(ProjectileDrag, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
-            }
-        }
-        else
-        {
-            spawnHigh = false;
-        }
+        //if (SpawnEffect._spawnMelody)
+        //{
+        //    if (!spawnMelody)
+        //    {
+        //        spawnMelody = true;
+        //        Instantiate(Projectile, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+        //        threeList.Add(_audioSource.time);
+        //    }
+        //    else if (spawnMelody)
+        //    {
+        //        Instantiate(ProjectileDrag, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+        //    }
+        //}
+        //else
+        //{
+        //    spawnMelody = false;
+        //}
+
+        //if (SpawnEffect._spawnHigh)
+        //{
+        //    if (!spawnHigh)
+        //    {
+        //        spawnHigh = true;
+        //        Instantiate(Projectile, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+        //        threeList.Add(_audioSource.time);
+        //    }
+        //    else if (spawnHigh)
+        //    {
+        //        Instantiate(ProjectileDrag, new Vector2(15, -1), Quaternion.identity).GetComponent<Projectile>().SetDir(new Vector3(-1, 0, 0));
+        //    }
+        //}
+        //else
+        //{
+        //    spawnHigh = false;
+        //}
 
         //// ACTUALLY ALSO PART OF VOCALS AND INSTRUMENTS
         //if (SpawnEffect._spawnCenter)
