@@ -37,7 +37,7 @@ public class MainGame : MonoBehaviour
 
     public void Dragging()
     {
-#if UNITY_STANDALONE || UNITY_WEBPLAYER
+#if UNITY_STANDALONE || UNITY_WEBPLAYER ||UNITY_EDITOR
         //Vector3 screenPos = UICamera.ScreenToWorldPoint(Input.mousePosition);
         Vector3 tempPosition = new Vector3(Input.mousePosition.x - startPosition.x, Input.mousePosition.y - startPosition.y, 1);
         float radius = 50;
