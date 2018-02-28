@@ -518,7 +518,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Delete))
         {
             gameObjects = GameObject.FindGameObjectsWithTag("Projectile");
-            for(int i=0;i<gameObjects.Length;i++)
+            for (int i = 0; i < gameObjects.Length; i++)
             {
                 Destroy(gameObjects[i]);
             }
