@@ -82,9 +82,15 @@ public class Projectile : MonoBehaviour
             //Debug.Log("ADD MANA");
 
             //GetComponent<particles>().ApplyParticle(gameObject, "hitParticle", 0.5f, 1, false);
-            
+
             if (other.GetComponentInParent<PlayerController>().invincible == false && other.GetComponentInParent<PlayerController>().invincible2 == false)
+            {
+                other.GetComponentInParent<PlayerController>().invincible2 = true;
+                other.GetComponentInParent<PlayerController>().invinciblelifetime = 4.5f;
+
+                
                 other.GetComponentInParent<PlayerController>().takeDamage(1);
+            }
 
             if (!GetComponent<laserprojectile>())
             {
