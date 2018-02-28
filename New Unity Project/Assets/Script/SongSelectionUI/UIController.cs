@@ -48,20 +48,23 @@ public class UIController : MonoBehaviour
         Selection();
     }
 
-#if UNITY_STANDALONE || UNITY_WEBPLAYER || UNITY_ANDROID
+#if UNITY_ANDROID
 
     public void leftSelectionBtn()
     {
         leftBtn = true;
+        print("leftpressed");
     }
     public void rightSelectionBtn()
     {
         rightBtn = true;
+        print("rightpressed");
     }
 
     public void playSelectionBtn()
     {
         playBtn = true;
+        print("play");
     }
 #endif
 
@@ -78,7 +81,7 @@ public class UIController : MonoBehaviour
             BPM.text = "Speed: " + GetComponent<BpmAnalyzer>()._bpm.ToString();
             leftBtn = false;
         }
-        else if (Input.GetKeyDown(KeyCode.RightArrow) || rightBtn)
+        if (Input.GetKeyDown(KeyCode.RightArrow) || rightBtn)
         {
             if (++index >= songs.Count)
                 index = 0;
@@ -88,7 +91,7 @@ public class UIController : MonoBehaviour
             BPM.text = "Speed: " + GetComponent<BpmAnalyzer>()._bpm.ToString();
             rightBtn = false;
         }
-        else if (Input.GetKeyDown(KeyCode.Space) || playBtn)
+        if (Input.GetKeyDown(KeyCode.Space) || playBtn)
         {
             PlayerPrefs.SetString("Song", songs[index]);
             SceneManager.LoadScene("MainGame 1");

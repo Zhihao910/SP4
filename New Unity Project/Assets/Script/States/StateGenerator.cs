@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StateGenerator : MonoBehaviour
 {
@@ -336,26 +337,8 @@ public class StateGenerator : MonoBehaviour
         result.SetClipName(_clip.name);
         //Run adding attacks here
 
-        multiplier *= 0.75f;
+        //multiplier *= 0.75f;
         double beattime = ba.GetBeatTime() * multiplier;
-
-        //Possible Keys
-        List<int> _InputKeys = new List<int>();
-        //List<bool> _outcomeKeys = new List<bool>();
-
-        int numberofKeys = 14;
-
-        for (int i = 0; i < numberofKeys; ++i)
-        {
-            // which fucking idiot
-            // thought it was a smart idea
-            // to have min and max
-            // have the min be "inclusive"
-            // BUT THE MAX IS "EXCLUSIVE"
-            // WHY?
-            // WHY ARE YOU LIKE THIS?
-            _InputKeys.Add(Random.Range(1, 5));
-        }
 
         // 1 - Up
         // 2 - Right
@@ -369,6 +352,24 @@ public class StateGenerator : MonoBehaviour
         double fifthTime = (beattime * 0.19);
         float warnTime = (float)(beattime * (0.2 * multiplier));
         int _countdown = 0;
+
+        //Possible Keys
+        List<int> _InputKeys = new List<int>();
+        //List<bool> _outcomeKeys = new List<bool>();
+
+        int numberofKeys = 30;
+
+        for (int i = 0; i < numberofKeys; ++i)
+        {
+            // which fucking idiot
+            // thought it was a smart idea
+            // to have min and max
+            // have the min be "inclusive"
+            // BUT THE MAX IS "EXCLUSIVE"
+            // WHY?
+            // WHY ARE YOU LIKE THIS?
+            _InputKeys.Add(Random.Range(1, 5));
+        }
 
         GameObject _buttonQTE;
         List<GameObject> _buttonList = new List<GameObject>();
@@ -399,17 +400,7 @@ public class StateGenerator : MonoBehaviour
             }
         };
 
-//#if UNITY_STANDALONE || UNITY_WEBPLAYER
-//#elif UNITY_ANDROID
-//        Touch mytouch = Input.GetTouch(0);
-//        Vector3 tempPosition = new Vector3(mytouch.position.x - startPosition.x, mytouch.position.y - startPosition.y, 1);
-//        float radius = 50;
-//        Vector2 clampPos = Vector2.ClampMagnitude(new Vector2(tempPosition.x, tempPosition.y), radius);
-
-//        Vector3 newPosition = new Vector3(clampPos.x, clampPos.y, 1);
-//#endif
-
-
+#if UNITY_STANDALONE || UNITY_WEBPLAYER
         BaseState.Attack att = () =>
         {
             if (_counter >= numberofKeys)
@@ -570,6 +561,75 @@ public class StateGenerator : MonoBehaviour
                 }
             }
         };
+#elif UNITY_ANDROID
+        BaseState.Attack att = () =>
+        {
+            if (_counter >= numberofKeys)
+            {
+                print("done");
+
+                return;
+            }
+
+            if (_QTETime == 0.0)
+            {
+                _buttonQTE = Instantiate(Resources.Load("Prefabs/QTETappable") as GameObject);
+                _buttonQTE.transform.SetParent(GameObject.FindGameObjectWithTag("MobileCanvas").transform);
+                Vector2 _randPos = Random.insideUnitCircle;
+                _buttonQTE.transform.position = new Vector3(400 + (_randPos.x * 100.0f), 200 + (_randPos.y * 100.0f));
+                _buttonList.Add(_buttonQTE);
+            }
+
+            // ever wondered why you have no time to qte?
+            _QTETime += Time.deltaTime * 8;
+
+            if (QTETappable._tapped)
+            {
+                //succ ess full
+                print("QTE SUCCESS");
+
+                // spawn a tick above player head
+                // con-fookin-gratis
+                // you pressed a button
+                _feedback.GetComponent<Feedback>().CreateImage("ParryPass", pc.transform.position + new Vector3(0, 1));
+                _feedback.GetComponent<Feedback>().CreateAudio("Pass");
+
+                _QTETime = 0.0;
+                Destroy(_buttonList[0]);
+                _buttonList.Remove(_buttonList[0]);
+
+                //_outcomeKeys.Add(true);
+                ++totalDmg;
+                ++_counter;
+
+                // Add base 100 score
+                playerScore.AddScore(100.0f);
+
+                QTETappable._tapped = false;
+            }
+
+            if (_QTETime > beattime)
+            {
+                // boi you fuked up
+                // oof ooch owie
+                print("Too slow!");
+
+                // how are you so bad
+                _feedback.GetComponent<Feedback>().CreateImage("ParryFail", pc.transform.position + new Vector3(0, 1));
+                _feedback.GetComponent<Feedback>().CreateAudio("Fail");
+
+                _QTETime = 0.0;
+                Destroy(_buttonList[0]);
+                _buttonList.Remove(_buttonList[0]);
+
+                pc.screenShake.ShakeCamera();
+                //_outcomeKeys.Add(false);
+                ++_counter;
+
+                QTETappable._tapped = false;
+            }
+        };
+#endif
 
         BaseState.Attack clear = () =>
         {

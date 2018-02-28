@@ -21,7 +21,7 @@ public class BeatingCube : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        _beatTime += (Time.deltaTime * 0.25f);
+        _beatTime += (Time.deltaTime * 0.5f);
         beatCube();
     }
 
