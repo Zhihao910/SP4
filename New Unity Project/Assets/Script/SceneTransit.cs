@@ -27,6 +27,10 @@ public class SceneTransit : MonoBehaviour {
     {
         SceneManager.LoadScene("Help");
     }
+    public void ToSongEnded()
+    {
+        SceneManager.LoadScene("songend");
+    }
     public void ToQuit()
     {
         Application.Quit();

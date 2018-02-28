@@ -910,6 +910,62 @@ public class StateGenerator : MonoBehaviour
         m_StateMap[_clipname] = result;
         return result;
     }
+    public BaseState CreateVerticalLaserAttack(string _clipname, AudioClip _clip, float multiplier = 1f)
+    {
+        BaseState result = gameObject.AddComponent<BaseState>();
+        result.SetClipName(_clip.name);
+        //Run adding attacks here
+        double beattime = ba.GetBeatTime() * multiplier;
+        Vector3 target = new Vector3(transform.position.x, 4.5f, transform.position.z);
+        Vector3 target2 = new Vector3(transform.position.x, 10, transform.position.z);
+        float lifetime = 2.0f;
+        bool alternate = false;
+
+        BaseState.Attack warn = () =>
+        {
+            target.x = Random.Range(-4, 2f);
+            target2.x = target.x;
+
+            Object o = Resources.Load("Prefabs/Indicator");
+            if (o == null) Debug.Log("Load failed");
+            GameObject go = o as GameObject;
+            if (go == null) Debug.Log("Loaded object isn't GameObject");
+            GameObject newgo = Instantiate(go, target, Quaternion.identity);
+            if (newgo == null) Debug.Log("Couldn't instantiate");
+            Debug.Log(alternate);
+            Destroy(newgo, lifetime);
+        };
+
+        BaseState.Attack att = () =>
+        {
+            Object o = Resources.Load("Prefabs/VerticalGreenLaser");
+            if (o == null) Debug.Log("Load failed");
+            GameObject go = o as GameObject;
+            if (go == null) Debug.Log("Loaded object isn't GameObject");
+            GameObject newgo = Instantiate(go, target2, Quaternion.identity);
+            if (newgo == null) Debug.Log("Couldn't instantiate");
+
+            newgo.GetComponent<Projectile>().SetDir(new Vector3(0, -1, 0));
+            newgo.GetComponent<Projectile>().SetSpeed(15);
+        };
+        for (double time = 0; time < _clip.length; time += beattime)
+        {
+            if (alternate)
+            {
+                result.AddAttack(time, att);
+            }
+            else
+            {
+                result.AddAttack(time, warn);
+            }
+
+            alternate = !alternate;
+            //result.AddAttack(time, att);
+            result.m_audioManager = ap;
+        }
+
+        return result;
+    }
 
     public BaseState CreateDropperState(string _clipname, AudioClip _clip, float multiplier = 1f)
     {
@@ -941,7 +997,7 @@ public class StateGenerator : MonoBehaviour
             result.AddAttack(time, att);
         }
         result.m_audioManager = ap;
-
+        
         m_StateMap[_clipname] = result;
         result.Sort();
 
