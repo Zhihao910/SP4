@@ -37,6 +37,8 @@ public class FreqBeat : MonoBehaviour
 
     public static List<float[]> _highList = new List<float []>();
 
+    private List<float[]> _bufferhighList = new List<float[]>();
+
     // HighsSection
     public static int _highSection;
 
@@ -63,6 +65,10 @@ public class FreqBeat : MonoBehaviour
 
     public static Dictionary<string, int> _songInfo = new Dictionary<string, int>();
 
+    private double _eightCount = 0.0;
+
+    private double _eightBPM;
+
     //[SerializeField]
     //AudioPeerManager _apm; // korean apm :worry:
 
@@ -71,6 +77,7 @@ public class FreqBeat : MonoBehaviour
     {
         //_source = gameObject.GetComponent<AudioSource>();
 
+        _bufferhighList.Add(new float[64]);
         _highList.Add(new float[64]);
         _highSection = 0;
         _highBeat = 0.0f;
@@ -104,6 +111,8 @@ public class FreqBeat : MonoBehaviour
         print(_isbeatSaved);
 
         _highBeat = 60.0f / _ba.GetBpm();
+
+        _eightBPM = _ba.GetBeatTime() * 0.125f;
 
         //if (!_detectedFinish)
         //{
@@ -160,6 +169,9 @@ public class FreqBeat : MonoBehaviour
                             saver.Add("<v" + k.ToString() + ">");
                             saver.Add(_highList[i][k].ToString());
                             saver.Add("<v/" + k.ToString() + ">");
+
+                            // Unrelated
+                            _bufferhighList[i][k] = _highList[i][k];
                         }
                         saver.Add("<c/" + i.ToString() + ">");
                     }
@@ -179,6 +191,8 @@ public class FreqBeat : MonoBehaviour
                     Saving.SaveToFile("MusicData.txt", saver);
                 }
 
+                //_bufferhighList = new List<float[]>(_highList);
+
                 Debug.Log("DONE DETECTING FREQ -----------------------------------------------------------");
             }
 
@@ -191,55 +205,55 @@ public class FreqBeat : MonoBehaviour
 
         if (_detectedFinish)
         {
+            _eightCount += Time.deltaTime;
+
             //print(AudioPeer._audioBandBuffer64[3]);
 
             //_source.pitch = 1;
             //Time.timeScale = 1;
 
-            SpawnEffect._spawnBass = false;
-            SpawnEffect._spawnKick = false;
-            SpawnEffect._spawnCenter = false;
-            SpawnEffect._spawnMelody = false;
-            SpawnEffect._spawnHigh = false;
-
-            for (int i = 0; i < 64; ++i)
+            if (_eightCount > _eightBPM)
             {
-                //if (_freqbeat[i])
+                _eightCount = 0.0;
 
-                if (AudioPeer._audioBandBuffer64[i] > _highList[_highSection][i]) //audiobandbuffer64
+                SpawnEffect._spawnBass = false;
+                SpawnEffect._spawnKick = false;
+                SpawnEffect._spawnCenter = false;
+                SpawnEffect._spawnMelody = false;
+                SpawnEffect._spawnHigh = false;
+                SpawnEffect._spawnThree = false;
+
+                for (int i = 0; i < 64; ++i)
                 {
-                    //print("hit");
-                    //print(_highList[_highSection][i]);
+                    if (AudioPeer._audioBandBuffer64[i] < 0.07)
+                        continue;
 
-                    if (!SpawnEffect._spawnHigh && i >= 19)
+                    if (AudioPeer._audioBandBuffer64[i] > _bufferhighList[_highSection][i]) //audiobandbuffer64
                     {
-                        //print("spawn high");
-
-                        SpawnEffect._spawnHigh = true;
-                    }
-                    else if (!SpawnEffect._spawnMelody && i >= 12 && i < 19)
-                    {
-                        //print("spawn melody");
-
-                        SpawnEffect._spawnMelody = true;
-                    }
-                    else if (!SpawnEffect._spawnCenter && i >= 6 && i < 12)
-                    {
-                        //print("spawn center");
-
-                        SpawnEffect._spawnCenter = true;
-                    }
-                    else if (!SpawnEffect._spawnKick && i >= 4 && i < 6)
-                    {
-                        //print("spawn kick");
-
-                        SpawnEffect._spawnKick = true;
-                    }
-                    else if (!SpawnEffect._spawnBass && i < 4) // bass is 0-3 but
-                    {                                                   // it goes in a wave
-                        //print("spawn bass");                          // so like, yeah
-
-                        SpawnEffect._spawnBass = true;
+                        //if (!SpawnEffect._spawnHigh && i >= 19)
+                        //{
+                        //    SpawnEffect._spawnHigh = true;
+                        //}
+                        //else if (!SpawnEffect._spawnMelody && i >= 12 && i < 19)
+                        //{
+                        //    SpawnEffect._spawnMelody = true;
+                        //}
+                        //else if (!SpawnEffect._spawnCenter && i >= 6 && i < 12)
+                        //{
+                        //    SpawnEffect._spawnCenter = true;
+                        //}
+                        if (!SpawnEffect._spawnThree && i >= 6)
+                        {
+                            SpawnEffect._spawnThree = true;
+                        }
+                        else if (!SpawnEffect._spawnKick && i >= 4 && i < 6)
+                        {
+                            SpawnEffect._spawnKick = true;
+                        }
+                        else if (!SpawnEffect._spawnBass && i < 4)
+                        {
+                            SpawnEffect._spawnBass = true;
+                        }
                     }
                 }
             }
@@ -270,28 +284,28 @@ public class FreqBeat : MonoBehaviour
                         //if (_highList[_highSection][i] > 0.4f)
                         //    _highList[_highSection][i] *= 0.75f; // 0.75
                         //else
-                            _highList[_highSection][i] *= 0.97f;
+                            _highList[_highSection][i] *= 0.85f;
                     }
                     else if (i > 6)
                     {
                         //if (_highList[_highSection][i] > 0.4f)
                         //    _highList[_highSection][i] *= 0.7f; // 0.7
                         //else
-                            _highList[_highSection][i] *= 0.97f;
+                            _highList[_highSection][i] *= 0.85f;
                     }
                     else if (i > 3)
                     {
                         //if (_highList[_highSection][i] > 0.4f)
                         //    _highList[_highSection][i] *= 0.55f; // 0.55
                         //else
-                            _highList[_highSection][i] *= 0.65f;
+                            _highList[_highSection][i] *= 0.7f;
                     }
                     else
                     {
                         //if (_highList[_highSection][i] > 0.4f)
                         //    _highList[_highSection][i] *= 0.65f; // 0.65
                         //else
-                            _highList[_highSection][i] *= 0.45f;
+                            _highList[_highSection][i] *= 0.5f;
                     }
 
                     //print(AudioPeer._audioBandBuffer64[i]);
@@ -302,6 +316,7 @@ public class FreqBeat : MonoBehaviour
             }
 
             _highTime = 0.0;
+            _bufferhighList.Add(new float[64]);
             _highList.Add(new float[64]);
             ++_highSection;
         }
@@ -461,7 +476,10 @@ public class FreqBeat : MonoBehaviour
                 highsegmentString += num;
 
             for (int i = 0; i < (Convert.ToInt32(highsegmentString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat) - 1); ++i)
+            {
                 _highList.Add(new float[64]);
+                _bufferhighList.Add(new float[64]);
+            }
             //print(_highList.Count);
 
             // Define out where the highs value will be found
@@ -488,6 +506,7 @@ public class FreqBeat : MonoBehaviour
 
                     // WHY IN FRESH HELL IS EVERYTHING ELSE NICELY LABELLED "ToDouble", "ToInt" BUT FLOAT IS "TO SINGLE" ?? WHY?
                     _highList[i][k] = Convert.ToSingle(highString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
+                    _bufferhighList[i][k] = Convert.ToSingle(highString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
                     //print(_highList[i][k]);
                 }
             }
@@ -507,6 +526,9 @@ public class FreqBeat : MonoBehaviour
 
                 AudioPeer._freqBandHighest64[i] = Convert.ToSingle(freqString, System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
             }
+
+            _eightBPM = _ba.GetBeatTime() * 0.125f;
+            //System.Linq.Enumerable.ToList(_highList);
 
             return true;
         }
