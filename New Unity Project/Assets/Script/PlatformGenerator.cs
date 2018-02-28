@@ -54,6 +54,7 @@ public class PlatformGenerator : MonoBehaviour
                 go.transform.Translate(0, -1 * Time.deltaTime, 0);
                 if (go.transform.position.y < -10f)
                 {
+                    print("KLMAO");
                     go.transform.position = new Vector3(go.transform.position.x, -10f, 0);
                 }
             }
@@ -81,15 +82,15 @@ public class PlatformGenerator : MonoBehaviour
         }
     }
 
-    public void GeneratePlatform(Vector3 _Position, Vector3 _Target)
+    public void GeneratePlatform(Vector3 _Position, Vector3 _Target, int index = 1, bool des = false)
     {
         _Target.x -= platform[1].GetComponentInChildren<BoxCollider2D>().size.x;
         _Position.x -= platform[1].GetComponentInChildren<BoxCollider2D>().size.x;
-        GameObject newplat = Instantiate(platform[1], _Position, Quaternion.identity); //Create platform at different position
+        GameObject newplat = Instantiate(platform[index], _Position, Quaternion.identity); //Create platform at different position
         movingPlatforms.Add(newplat);
         newplat.GetComponent<Platform>().SetTarget(_Target);
         newplat.GetComponent<Platform>().SetDir((_Target - _Position).normalized);
-
+        newplat.GetComponent<Platform>().despawnonhittarget = des;
         newplat.SetActive(true); //Show the platform
     }
 
