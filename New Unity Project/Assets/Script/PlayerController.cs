@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
     float regainDash = 0;
     public bool invincible = false;
     public bool invincible2 = false;
-    float invinciblelifetime = 0;
+    public float invinciblelifetime = 0;
     bool leftDash, rightDash, leftUpDash, rightUpDash, leftIdleDash, rightIdleDash;
     bool downbtn = false;
 

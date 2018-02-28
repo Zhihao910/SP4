@@ -9,16 +9,17 @@ public class StateGenerator : MonoBehaviour
 
     public enum GenerateType
     {
-        INTROSTATE,
         QUICKTIMEEVENTSTATE,
 
         BASESTATE,
+        INTROSTATE,
         DROPSTATE,
         PARRYSTATE,
         SHOCKWAVESTATE,
         MULTISTATE,
         LAZERSTATE,
         DROPPERSTATE,
+        BLINDSTATE,
         NUMSTATE,//Default
     };
     float timerdestroy;
@@ -51,6 +52,8 @@ public class StateGenerator : MonoBehaviour
         _GenerateDictionary.Add(GenerateType.MULTISTATE, MultiHighState);
         _GenerateDictionary.Add(GenerateType.LAZERSTATE, CreateLaserAttack);
         _GenerateDictionary.Add(GenerateType.DROPPERSTATE, CreateDropperState);
+        _GenerateDictionary.Add(GenerateType.BLINDSTATE, CreateBlindAttack);
+
 
 
     }

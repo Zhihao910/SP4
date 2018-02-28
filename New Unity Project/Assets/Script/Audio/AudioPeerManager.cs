@@ -157,7 +157,7 @@ public class AudioPeerManager : MonoBehaviour
                 //bs.PushAttacksIntoList();
                 //m_playqueue.Enqueue(bs);
                 //offset += ac.length;
-                m_playqueue.Enqueue(_stateGenerator.GenerateState(StateGenerator.GenerateType.DROPPERSTATE, ac.name, ac, 4.0f));
+                m_playqueue.Enqueue(_stateGenerator.GenerateState(StateGenerator.GenerateType.NUMSTATE, ac.name, ac, 4.0f));
             }
         }
         curr = m_playqueue.Dequeue();
@@ -173,7 +173,6 @@ public class AudioPeerManager : MonoBehaviour
         {
             if (m_playqueue.Count > 0 && !QTE)
             {
-                print("yrmom");
                 next = _stateGenerator.GenerateState(StateGenerator.GenerateType.QUICKTIMEEVENTSTATE, m_playqueue.Peek().GetClipName(), m_audioclipmap[m_playqueue.Peek().GetClipName()]);
                 QTE = true;
             }
@@ -184,7 +183,6 @@ public class AudioPeerManager : MonoBehaviour
             curr = m_playqueue.Dequeue();
             if (QTE)
             {
-                print("yrmomgay");
 
                 curr = next;
                 QTE = false;
