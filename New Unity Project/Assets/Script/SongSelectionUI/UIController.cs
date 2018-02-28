@@ -21,7 +21,7 @@ public class UIController : MonoBehaviour
         BPM = GameObject.FindGameObjectWithTag("BPM").GetComponent<UnityEngine.UI.Text>();
 
         _source = GetComponent<AudioSource>();
-        Saving.LoadingFromFile("Assets/Info/Songs.txt", (List<string> _data) =>
+        Saving.LoadingFromFile("../Info/Songs.txt", (List<string> _data) =>
         {
             foreach (string s in _data)
             {
