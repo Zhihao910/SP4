@@ -37,7 +37,7 @@ public class WaypointManager : MonoBehaviour
         {
             animator.SetInteger("States", 2);
             gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, target, speed * Time.deltaTime);
-            print(gameObject.transform.position);
+            //print(gameObject.transform.position);
             if (gameObject.transform.position == target)
                 animator.SetInteger("States", 3);
         }

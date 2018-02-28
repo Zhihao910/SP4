@@ -45,8 +45,28 @@ public class UIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Selection();
+    }
+
 #if UNITY_STANDALONE || UNITY_WEBPLAYER || UNITY_ANDROID
 
+    public void leftSelectionBtn()
+    {
+        leftBtn = true;
+    }
+    public void rightSelectionBtn()
+    {
+        rightBtn = true;
+    }
+
+    public void playSelectionBtn()
+    {
+        playBtn = true;
+    }
+#endif
+
+    public void Selection()
+    {
         if (Input.GetKeyDown(KeyCode.LeftArrow) || leftBtn)
         {
             if (--index < 0)
@@ -74,25 +94,5 @@ public class UIController : MonoBehaviour
             SceneManager.LoadScene("MainGame 1");
             playBtn = false;
         }
-
-//#elif UNITY_ANDROID
-
-
-#endif
-
-    }
-
-    public void leftSelectionBtn()
-    {
-        leftBtn = true;
-    }
-    public void rightSelectionBtn()
-    {
-        rightBtn = true;
-    }
-
-    public void playSelectionBtn()
-    {
-        playBtn = true;
     }
 }

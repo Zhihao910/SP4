@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class Score : MonoBehaviour
 {
     // LOCAL HIGHSCORE
-    private int[] _highscore = new int[10];
+    public int[] _highscore = new int[10];
 
     // Current Score
     private int _currScore = 0;
@@ -60,7 +60,7 @@ public class Score : MonoBehaviour
 
     // Make everything zero.
     // Also creates if it doesnt exist in the first place.
-    private void ClearAllScores()
+    public void ClearAllScores()
     {
         print("CLEARING ALL SCORES");
 
@@ -118,9 +118,11 @@ public class Score : MonoBehaviour
 
     void DisplayHighScore()
     {
+        _text.text = "List of currentscore ";
         for (int _num = 0; _num < _highscore.Length; ++_num)
         {
-            _text.text = "List of highscores " + "\n" + PlayerPrefs.GetInt("highscore" + _num.ToString()).ToString();
+            print(GetCurrScore());
+            _text.text += "\n" + PlayerPrefs.GetInt("highscore" + _num.ToString()).ToString();
         }
     }
 
@@ -133,11 +135,11 @@ public class Score : MonoBehaviour
     // Call this when saving score after boss/death
     public void SaveScore()
     {
-        for (int _num = (_highscore.Length - 1); _num > 0; --_num)
+        for (int _num = (_highscore.Length - 1); _num >= 0; --_num)
         {
             if (_currScore > _highscore[_num])
             {
-                if (_num == 1)
+                if (_num == 0)
                 {
                     // Shifting highscore buffer
                     int[] tempScoreN = new int[_highscore.Length];
@@ -156,16 +158,17 @@ public class Score : MonoBehaviour
 
                     break;
                 }
-
                 continue;
             }
+            if (_num + 1 > 9)
+                break;
 
             // Shifting highscore buffer
             int[] tempScore = new int[_highscore.Length];
 
             for (int i = 0; i < (_highscore.Length - 1); ++i)
             {
-                tempScore[i] = _highscore[i + 1];
+                tempScore[i + 1] = _highscore[i];
             }
 
             for (int i = (_num + 2); i < _highscore.Length; ++i)
