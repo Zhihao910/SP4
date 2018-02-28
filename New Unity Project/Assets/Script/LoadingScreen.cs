@@ -32,8 +32,9 @@ public class LoadingScreen : MonoBehaviour
         }
         else
         {
-#if UNITY_EDITOR || UNITY_WINDOWS
-            textLoading.GetComponent<Text>().text = "Press Space to continue..";
+#if UNITY_EDITOR || UNITY_WINDOWS || UNITY_STANDALONE
+            if (currentAmount >= 100)
+                textLoading.GetComponent<Text>().text = "Press Space to continue..";
 #elif UNITY_ANDROID
             textLoading.GetComponent<Text>().text = "Press to continue..";
 #endif

@@ -2,19 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class blankPowerup : MonoBehaviour {
+public class blankPowerup : MonoBehaviour
+{
     float movement;
     float change;
     float change2;
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         movement = 0.2f;
         change = 0;
         change = 0;
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         //code for hovering
         if (change > 0.8f)
         {
@@ -45,10 +48,15 @@ public class blankPowerup : MonoBehaviour {
         GameObject[] gameObjects;
         if (other.CompareTag("Player"))
         {
-            gameObjects = GameObject.FindGameObjectsWithTag("Projectile");
-            for (int i = 0; i < gameObjects.Length; i++)
+            //gameObjects = GameObject.FindGameObjectsWithTag("Projectile");
+            //for (int i = 0; i < gameObjects.Length; i++)
+            //{
+            //    Destroy(gameObjects[i]);
+            //}
+            if (other.GetComponent<PlayerController>().currBlank < other.GetComponent<PlayerController>().maxBlanks)
             {
-                Destroy(gameObjects[i]);
+                other.GetComponentInParent<PlayerController>().currBlank++;
+                other.GetComponentInParent<PlayerController>().gotBlanks = true;
             }
             Destroy(this.gameObject);
         }

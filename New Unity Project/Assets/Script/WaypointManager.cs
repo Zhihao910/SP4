@@ -48,7 +48,7 @@ public class WaypointManager : MonoBehaviour
         if (other.CompareTag("Waypoint"))
         {
             print("TouchedWaypoint");
-            SceneManager.LoadScene("MainMenu");
+            SceneManager.LoadScene("OptionScene");
         }
         else if (other.CompareTag("Waypoint1"))
         {

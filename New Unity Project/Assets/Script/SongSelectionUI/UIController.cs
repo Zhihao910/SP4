@@ -48,7 +48,7 @@ public class UIController : MonoBehaviour
         Selection();
     }
 
-#if UNITY_ANDROID
+#if UNITY_ANDROID || UNITY_STANDALONE
 
     public void leftSelectionBtn()
     {
@@ -66,7 +66,6 @@ public class UIController : MonoBehaviour
         playBtn = true;
         print("play");
     }
-#endif
 
     public void Selection()
     {
@@ -98,4 +97,5 @@ public class UIController : MonoBehaviour
             playBtn = false;
         }
     }
+#endif
 }

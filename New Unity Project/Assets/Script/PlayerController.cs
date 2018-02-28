@@ -50,6 +50,11 @@ public class PlayerController : MonoBehaviour
     public Image[] healthImage;
     public Sprite[] healthSprite;
 
+    public int maxBlanks = 3;
+    public int currBlank = 0;
+    public bool gotBlanks = false;
+    public Text blankText;
+
     Vector3 lastPosition, currentPosition;
 
     [SerializeField]
@@ -222,12 +227,16 @@ public class PlayerController : MonoBehaviour
             transform.position = lastPosition;
             takeDamage(3);
         }
+
         removeAllProjectile();
+        //blankText.text = " : " + currBlank + " / " + maxBlanks;
+
         //ForHighScoreTesting
         //if (Input.GetKey(KeyCode.PageDown))
         //    takeDamage(50);
         //if (Input.GetKey(KeyCode.End))
         //    playerScore.ClearAllScores();
+
     }
 
     //Dash movement
@@ -377,7 +386,7 @@ public class PlayerController : MonoBehaviour
     {
         if ((Input.GetKeyDown(KeyCode.D) || parryButton) && !parryAttack)
         {
-            playerScore.AddScore(100);
+            //playerScore.AddScore(100);
             parryAttack = true;
             parryButton = false;
             attackTrigger.enabled = true;
@@ -511,17 +520,27 @@ public class PlayerController : MonoBehaviour
         checkHealth();
     }
 
+
     //ForBlankPowerupTesting
     public void removeAllProjectile()
     {
         GameObject[] gameObjects;
-        if (Input.GetKeyDown(KeyCode.Delete))
+        if (Input.GetKeyDown(KeyCode.Delete) && gotBlanks)
         {
+            currBlank--;
+            if (currBlank <= 0)
+                gotBlanks = false;
             gameObjects = GameObject.FindGameObjectsWithTag("Projectile");
             for (int i = 0; i < gameObjects.Length; i++)
             {
                 Destroy(gameObjects[i]);
             }
         }
+
+        blankText.text = " : " + currBlank + " / " + maxBlanks;
+        if (currBlank >= maxBlanks)
+            blankText.text = " : " + currBlank + " / " + maxBlanks + " (Maxed) ";
+        else if (currBlank <= 0)
+            blankText.text = " : " + currBlank + " / " + maxBlanks + " (Empty) ";
     }
 }
