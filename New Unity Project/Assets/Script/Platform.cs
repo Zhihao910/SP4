@@ -9,6 +9,7 @@ public class Platform : MonoBehaviour {
     Vector3 target = new Vector3(999, 999, 999);
     Vector3 pos;
     public bool despawn;
+    public bool despawnonhittarget = false;
     protected bool hittarget = false;
 
     // Use this for initialization
@@ -26,7 +27,12 @@ public class Platform : MonoBehaviour {
             if (null != target)
             {
                 if ((target - transform.position).magnitude < 0.01f)
+                {
                     hittarget = true;
+                    if (despawnonhittarget)
+                        despawn = true;
+                }
+
             }
         }
     }

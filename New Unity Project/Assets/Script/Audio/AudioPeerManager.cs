@@ -174,7 +174,6 @@ public class AudioPeerManager : MonoBehaviour
         {
             if (m_playqueue.Count > 0 && !QTE)
             {
-                print("yrmom");
                 next = _stateGenerator.GenerateState(StateGenerator.GenerateType.QUICKTIMEEVENTSTATE, m_playqueue.Peek().GetClipName(), m_audioclipmap[m_playqueue.Peek().GetClipName()]);
                 QTE = true;
             }
@@ -185,7 +184,6 @@ public class AudioPeerManager : MonoBehaviour
             curr = m_playqueue.Dequeue();
             if (QTE)
             {
-                print("yrmomgay");
 
                 curr = next;
                 QTE = false;
