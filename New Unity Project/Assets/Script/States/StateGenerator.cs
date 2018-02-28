@@ -720,7 +720,7 @@ public class StateGenerator : MonoBehaviour
 
         double beattime = ba.GetBeatTime() * multiplier;
         //for blackness
-        Vector3 target = new Vector3(transform.position.x, 10, transform.position.z);
+        Vector3 target = new Vector3(transform.position.x, 1.3f, transform.position.z);
         //for the projectile
         Vector3 target2 = new Vector3(transform.position.x, 10, transform.position.z);
         Vector3 target3 = new Vector3(transform.position.x, 10, transform.position.z);
@@ -737,19 +737,17 @@ public class StateGenerator : MonoBehaviour
         target3.x = Random.Range(-8, 8);
         target4.x = Random.Range(-8, 8);
         target5.x = Random.Range(-8, 8);
-        BaseState.Attack warn = () =>
-        {
-            Object o = Resources.Load("Prefabs/Black");
-            if (o == null) Debug.Log("Load failed");
-            GameObject go = o as GameObject;
-            if (go == null) Debug.Log("Loaded object isn't GameObject");
-            GameObject newgo = Instantiate(go, target, Quaternion.identity);
-            if (newgo == null) Debug.Log("Couldn't instantiate");
-        };
-
-
         BaseState.Attack att = () =>
         {
+
+            Object o4 = Resources.Load("Prefabs/Black");
+            if (o4 == null) Debug.Log("Load failed");
+            GameObject go4 = o4 as GameObject;
+            if (go4 == null) Debug.Log("Loaded object isn't GameObject");
+            GameObject newgo4 = Instantiate(go4, target, Quaternion.identity);
+            if (newgo4 == null) Debug.Log("Couldn't instantiate");
+
+
             Object o = Resources.Load("Prefabs/Projectile4");
             if (o == null) Debug.Log("Load failed");
             GameObject go = o as GameObject;
@@ -794,18 +792,7 @@ public class StateGenerator : MonoBehaviour
 
         for (double time = 0; time < _clip.length; time += beattime)
         {
-
-            if (alternate)
-            {
                 result.AddAttack(time, att);
-            }
-            else
-            {
-                result.AddAttack(time, warn);
-            }
-
-            alternate = !alternate;
-            //result.AddAttack(time, att);
         }
 
         result.m_audioManager = ap;
