@@ -5,16 +5,16 @@ using UnityEngine;
 public class Saving : MonoBehaviour {
     public static bool SaveToFile(string _filename, List<string> _data)
     {
-        if(!System.IO.File.Exists(_filename))
+        if(!System.IO.File.Exists("Assets/Resources/" + _filename))
         {
             print("Making File");
-            System.IO.File.Create(_filename);
+            System.IO.File.Create("Assets/Resources/" + _filename);
         }
 
         foreach (string s in _data)
         {
-            System.IO.File.AppendAllText(_filename, s);
-            System.IO.File.AppendAllText(_filename, "\n");
+            System.IO.File.AppendAllText("Assets/Resources/" + _filename, s);
+            System.IO.File.AppendAllText("Assets/Resources/" + _filename, "\n");
         }
         return true;
     }
@@ -23,7 +23,7 @@ public class Saving : MonoBehaviour {
 
     public static bool LoadingFromFile(string _filename, ParserFunction _func)
     {
-        if (!System.IO.File.Exists(_filename))
+        if (!System.IO.File.Exists("Assets/Resources/" + _filename))
         {
             print("File doesnt exist!");
             return false;
@@ -31,7 +31,7 @@ public class Saving : MonoBehaviour {
 
         List<string> ret = new List<string>();
 
-        string[] data = System.IO.File.ReadAllLines(_filename);
+        string[] data = System.IO.File.ReadAllLines("Assets/Resources/" + _filename);
 
         foreach (string s in data)
         {

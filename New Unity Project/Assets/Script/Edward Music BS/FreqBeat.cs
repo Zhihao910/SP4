@@ -284,14 +284,14 @@ public class FreqBeat : MonoBehaviour
                         //if (_highList[_highSection][i] > 0.4f)
                         //    _highList[_highSection][i] *= 0.75f; // 0.75
                         //else
-                            _highList[_highSection][i] *= 0.8f;
+                            _highList[_highSection][i] *= 0.85f;
                     }
                     else if (i > 6)
                     {
                         //if (_highList[_highSection][i] > 0.4f)
                         //    _highList[_highSection][i] *= 0.7f; // 0.7
                         //else
-                            _highList[_highSection][i] *= 0.8f;
+                            _highList[_highSection][i] *= 0.85f;
                     }
                     else if (i > 3)
                     {
