@@ -746,7 +746,7 @@ public class StateGenerator : MonoBehaviour
             if (go4 == null) Debug.Log("Loaded object isn't GameObject");
             GameObject newgo4 = Instantiate(go4, target, Quaternion.identity);
             if (newgo4 == null) Debug.Log("Couldn't instantiate");
-
+            Destroy(newgo4, 1);
 
             Object o = Resources.Load("Prefabs/Projectile4");
             if (o == null) Debug.Log("Load failed");
