@@ -194,7 +194,7 @@ public class PlayerController : MonoBehaviour
             mana = totalMana;
             //mana = 0;
             _crescendo = true;
-            
+
             // Add base 5000 score
             playerScore.AddScore(5000.0f);
             // Increase multiplier by 0.5f
@@ -222,6 +222,12 @@ public class PlayerController : MonoBehaviour
             transform.position = lastPosition;
             takeDamage(3);
         }
+        removeAllProjectile();
+        //ForHighScoreTesting
+        //if (Input.GetKey(KeyCode.PageDown))
+        //    takeDamage(50);
+        //if (Input.GetKey(KeyCode.End))
+        //    playerScore.ClearAllScores();
     }
 
     //Dash movement
@@ -271,6 +277,7 @@ public class PlayerController : MonoBehaviour
             invincible = true;
             rightIdleDash = false;
         }
+
     }
 
     //Movement
@@ -370,6 +377,7 @@ public class PlayerController : MonoBehaviour
     {
         if ((Input.GetKeyDown(KeyCode.D) || parryButton) && !parryAttack)
         {
+            playerScore.AddScore(100);
             parryAttack = true;
             parryButton = false;
             attackTrigger.enabled = true;
@@ -477,6 +485,8 @@ public class PlayerController : MonoBehaviour
         if (currHeart <= 0)
         {
             //PlayerPrefs.SetFloat("bosshealth", bosshealth.health);
+            playerScore.SaveScore();
+            print(playerScore.GetCurrScore());
             SceneManager.LoadScene("GameOver");
         }
         updateHealth();
@@ -499,5 +509,19 @@ public class PlayerController : MonoBehaviour
         maxHeart = maxHeartAmount * healthPerHeart;
 
         checkHealth();
+    }
+
+    //ForBlankPowerupTesting
+    public void removeAllProjectile()
+    {
+        GameObject[] gameObjects;
+        if (Input.GetKeyDown(KeyCode.Delete))
+        {
+            gameObjects = GameObject.FindGameObjectsWithTag("Projectile");
+            for(int i=0;i<gameObjects.Length;i++)
+            {
+                Destroy(gameObjects[i]);
+            }
+        }
     }
 }

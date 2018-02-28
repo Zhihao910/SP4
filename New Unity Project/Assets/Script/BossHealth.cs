@@ -30,7 +30,7 @@ public class BossHealth : MonoBehaviour
 
         if (health <= 0)
         {
-            playerScore.SaveScore();
+            //playerScore.SaveScore();
             Destroy(gameObject);
         }
     }
