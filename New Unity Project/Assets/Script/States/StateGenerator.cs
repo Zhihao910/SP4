@@ -58,8 +58,7 @@ public class StateGenerator : MonoBehaviour
         _GenerateDictionary.Add(GenerateType.DROPPERSTATE, CreateDropperState);
         _GenerateDictionary.Add(GenerateType.BLINDSTATE, CreateBlindAttack);
         _GenerateDictionary.Add(GenerateType.RUNERSTATE, CreateRunerState);
-        //ps = gameObject.AddComponent<ProjectileSpawner>();
-        //ps.isActiveAndEnabled = false;
+        ps = gameObject.AddComponent<ProjectileSpawner>();
 
     }
 
@@ -234,10 +233,12 @@ public class StateGenerator : MonoBehaviour
         //Run adding attacks here
 
         double beattime = ba.GetBeatTime() * multiplier;//0.5357; // 0.588 ba.GetBeatTime() 
+        result.AddAttack(0f, ps.ActivateSpawn);
 
         result.AddAttack(0.1f, gameObject.GetComponent<PlatformGenerator>().ToggleGround);
         result.AddAttack(_clip.length - 0.1f, gameObject.GetComponent<PlatformGenerator>().ToggleGround);
 
+        result.AddAttack(_clip.length - 0.15f, ps.ActivateSpawn);
 
         BaseState.Attack att = () =>
         {
@@ -1026,6 +1027,8 @@ public class StateGenerator : MonoBehaviour
 
         double beattime = ba.GetBeatTime() * multiplier;//0.5357; // 0.588 ba.GetBeatTime() 
 
+        result.AddAttack(0f, ps.ActivateSpawn);
+
         result.AddAttack(0.1f, gameObject.GetComponent<PlatformGenerator>().ToggleGround);
 
         result.AddAttack(_clip.length - 0.1f, gameObject.GetComponent<PlatformGenerator>().ToggleGround);
@@ -1064,6 +1067,9 @@ public class StateGenerator : MonoBehaviour
         double beattime = ba.GetBeatTime() * multiplier;//0.5357; // 0.588 ba.GetBeatTime() 
 
         result.AddAttack(0.1f, gameObject.GetComponent<PlatformGenerator>().ToggleGround);
+        result.AddAttack(0f, ps.ActivateSpawn);
+        result.AddAttack(_clip.length - 0.15f, ps.ActivateSpawn);
+
 
         result.AddAttack(_clip.length - 0.1f, gameObject.GetComponent<PlatformGenerator>().ToggleGround);
 
