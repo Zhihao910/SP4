@@ -576,7 +576,7 @@ public class StateGenerator : MonoBehaviour
                 _buttonQTE = Instantiate(Resources.Load("Prefabs/QTETappable") as GameObject);
                 _buttonQTE.transform.SetParent(GameObject.FindGameObjectWithTag("MobileCanvas").transform);
                 Vector2 _randPos = Random.insideUnitCircle;
-                _buttonQTE.transform.position = new Vector3(400 + (_randPos.x * 100.0f), 200 + (_randPos.y * 100.0f));
+                _buttonQTE.transform.position = new Vector3(400 + (_randPos.x * 70.0f), 200 + (_randPos.y * 35.0f));
                 _buttonList.Add(_buttonQTE);
             }
 
