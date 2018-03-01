@@ -14,7 +14,10 @@ public class AudioWrapper : MonoBehaviour {
     // Use this for initialization
     void Start () {
         _audioSource = GetComponent<AudioSource>();
-        startVolume = _audioSource.volume;
+        startVolume = PlayerPrefs.GetFloat("Volume");
+        _audioSource.volume = startVolume;
+        print("HILO");
+        print(startVolume);
     }
 	
 	// Update is called once per frame
