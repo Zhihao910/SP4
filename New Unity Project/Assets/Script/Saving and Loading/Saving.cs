@@ -7,9 +7,9 @@ public class Saving : MonoBehaviour {
 
     public static bool SaveToFile(string _filename, List<string> _data)
     {
-        string ret2 = "Assets/Resources/" + "/" + _filename;
+        string ret2 = "Assets/Resources/" + _filename;
 
-        if (!System.IO.File.Exists("Assets/Resources/" + "/" + _filename))
+        if (!System.IO.File.Exists("Assets/Resources/" + _filename))
         {
 
             print("Making File");
@@ -31,9 +31,9 @@ public class Saving : MonoBehaviour {
         string ret2 = "";
 
 #if UNITY_STANDALONE
-        ret2 = "Assets/Resources/"+ "/" + _filename;
-
-        if (!System.IO.File.Exists("Assets/Resources/" + _filename))
+        ret2 = Application.dataPath+ "/" + _filename;
+        print(ret2);
+        if (!System.IO.File.Exists(ret2))
         {
             print("File doesnt exist!");
             return false;
