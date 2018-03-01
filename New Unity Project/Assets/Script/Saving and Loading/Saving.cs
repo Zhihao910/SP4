@@ -31,7 +31,7 @@ public class Saving : MonoBehaviour {
         string ret2 = "";
 
 #if UNITY_STANDALONE
-        ret2 = Application.dataPath+ "/" + _filename;
+        ret2 = Application.dataPath+ "/Resources/" + _filename;
         print(ret2);
         if (!System.IO.File.Exists(ret2))
         {
