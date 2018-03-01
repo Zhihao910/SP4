@@ -31,6 +31,7 @@ public class BossHealth : MonoBehaviour
         if (health <= 0)
         {
             //playerScore.SaveScore();
+            health = 0;
             Destroy(gameObject);
             SceneManager.LoadScene("GameOver");
         }
