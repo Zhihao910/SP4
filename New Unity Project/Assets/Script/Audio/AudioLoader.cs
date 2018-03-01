@@ -9,7 +9,6 @@ public class AudioLoader : MonoBehaviour
     private static string Directory = "";
     private List<string> Songs = new List<string>();
     Dictionary<string, AudioClip> LoadedSongs = new Dictionary<string, AudioClip>();
-
     void Awake()
     {
 #if UNITY_ANDROID
@@ -63,6 +62,16 @@ public class AudioLoader : MonoBehaviour
         GetComponent<AudioSource>().clip = songloader.GetAudioClip(true, false);
     }
 
+    public AudioClip LoadSong(string _name)
+    {
+        songloader = new WWW("file:///"+Application.streamingAssetsPath + "/UserMusic/" + _name);
+        while (songloader.progress != 1)
+        {
+        }
+        AudioClip ac = songloader.GetAudioClip(true, false);
+        ac.name = _name;
 
+        return ac;
+    }
 
 }
