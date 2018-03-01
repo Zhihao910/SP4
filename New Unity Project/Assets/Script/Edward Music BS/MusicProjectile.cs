@@ -340,13 +340,14 @@ public class MusicProjectile : MonoBehaviour
             saver.Add(_audioSource.clip.name.ToString() + "FreqEnd\n");
 
             Saving.SaveToFile("MusicData.txt", saver);
-#elif UNITY_ANDROID
-#endif
+
         }
         else
         {
             print("Failed to save!");
         }
+#elif UNITY_ANDROID
+#endif
     }
 
     public bool checkSong()

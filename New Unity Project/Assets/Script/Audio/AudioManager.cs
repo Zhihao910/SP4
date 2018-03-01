@@ -20,6 +20,8 @@ public class AudioManager : MonoBehaviour {
             instance = this;
             DontDestroyOnLoad(audio);
         }
+
+        PlayerPrefs.SetString("Song", "Yuna - Lullabies (Adventure Club Remix)");
     }
 
     // Use this for initialization

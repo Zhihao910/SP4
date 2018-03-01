@@ -27,7 +27,7 @@ public class BossHealth : MonoBehaviour
     {
         //scaling of the healthbar
         Healthbar.transform.localScale = new Vector3(PlayerPrefs.GetFloat("something") / totalhealth, 1, 1);
-        Debug.Log(PlayerPrefs.GetFloat("something"));
+        //Debug.Log(PlayerPrefs.GetFloat("something"));
         if (health <= 0)
         {
             //playerScore.SaveScore();
