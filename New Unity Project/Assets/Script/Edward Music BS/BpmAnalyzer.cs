@@ -88,7 +88,7 @@ public class BpmAnalyzer : MonoBehaviour
 
     public void ReadBpm(string _name)
     {
-        if (Saving.LoadingFromFile("MusicData.txt", (List<string> _data) =>
+        if (Saving.LoadingFromFile("Resources/MusicData.txt", (List<string> _data) =>
         {
             // See if song exists
             if (_data.Contains("<name>" + _name))

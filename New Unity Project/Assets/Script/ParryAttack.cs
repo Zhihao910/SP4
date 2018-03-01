@@ -34,7 +34,7 @@ public class ParryAttack : MonoBehaviour
             _feedback.GetComponent<Feedback>().CreateAudio("Pass");
 
             //this.GetComponent<PlayerController>().mana += 10;
-            gameObject.GetComponentInParent<PlayerController>().mana += 10;
+            gameObject.GetComponentInParent<PlayerController>().mana += 5;
             Debug.Log("Y IS THE HEALTH 85 IN THERE"+_bh.health);
             //_bh.health -= 3;
 
