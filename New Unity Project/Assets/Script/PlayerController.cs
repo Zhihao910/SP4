@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
     bool downbtn = false;
 
     bool parryAttack = false;
-    bool parryButton, jumpButton, dashButton = false;
+    bool parryButton, jumpButton, dashButton, skillButton = false;
     float parryTimer = 0;
     bool facingleft = false;
     bool facingright = true;
@@ -439,6 +439,11 @@ public class PlayerController : MonoBehaviour
     {
         dashButton = true;
     }
+
+    public void SkillButton()
+    {
+        skillButton = true;
+    }
 #endif
 
     //Total heart player have
@@ -525,7 +530,7 @@ public class PlayerController : MonoBehaviour
     public void removeAllProjectile()
     {
         GameObject[] gameObjects;
-        if (Input.GetKeyDown(KeyCode.Delete) && gotBlanks)
+        if ((Input.GetKeyDown(KeyCode.S) || skillButton) && gotBlanks)
         {
             currBlank--;
             if (currBlank <= 0)
@@ -535,6 +540,7 @@ public class PlayerController : MonoBehaviour
             {
                 Destroy(gameObjects[i]);
             }
+            skillButton = false;
         }
 
         blankText.text = " : " + currBlank + " / " + maxBlanks;
