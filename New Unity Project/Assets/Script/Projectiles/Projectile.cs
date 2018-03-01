@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    float lifeTime = 5;
-    float projectileSpeed = 5;
-    Vector3 dir;
-    Vector3 target = new Vector3(999, 999, 999);
+    protected float lifeTime = 5;
+    protected float projectileSpeed = 5;
+    protected Vector3 dir = new Vector3(-1, 0, 0);
+    protected Vector3 target = new Vector3(999, 999, 999);
     protected bool hittarget = false;
     GameObject Indicator;
     //int _waveHeight = 0;
@@ -32,29 +32,6 @@ public class Projectile : MonoBehaviour
         {
             lifeTime -= Time.deltaTime;
             transform.Translate(dir.x * projectileSpeed * Time.deltaTime, dir.y * projectileSpeed * Time.deltaTime, 0);
-
-            //if (_waveHeight != 0)
-            //{
-            //    transform.localScale += new Vector3(0, _waveHeight, 0);
-            //}
-
-            //if (_waveHeight == 0)
-            //{
-            //    transform.Translate(dir.x * projectileSpeed * Time.deltaTime, dir.y * projectileSpeed * Time.deltaTime, 0);
-            //}
-            //else
-            //{
-            //    //_sinAngle += (0.025f * _waveHeight);
-            //    //transform.Translate(dir.x * projectileSpeed * Time.deltaTime, Mathf.Sin(_sinAngle) / 90, 0);
-            //    transform.Translate(dir.x * projectileSpeed * Time.deltaTime, dir.y * projectileSpeed * Time.deltaTime, 0);
-
-            //    if (_sinAngle < 1.5)
-            //    {
-            //        print("spawn");
-            //        transform.localScale += new Vector3(0,20,0);
-            //        _sinAngle += 1.0f;
-            //    }
-            //}
 
             if (lifeTime <= 0)
             {

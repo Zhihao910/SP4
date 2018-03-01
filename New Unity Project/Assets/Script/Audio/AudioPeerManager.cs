@@ -47,8 +47,7 @@ public class AudioPeerManager : MonoBehaviour
         }
         musicprojectile = gameObject.AddComponent<MusicProjectile>();
         musicprojectile.detected = musicprojectile.ChckSongName(_sample.name);
-
-
+        playerScore.SetWinValue(Mathf.RoundToInt(_sample.length) * 300);
     }
 
     // Use this for initialization
@@ -157,7 +156,7 @@ public class AudioPeerManager : MonoBehaviour
                 //bs.PushAttacksIntoList();
                 //m_playqueue.Enqueue(bs);
                 //offset += ac.length;
-                m_playqueue.Enqueue(_stateGenerator.GenerateState(StateGenerator.GenerateType.NUMSTATE, ac.name, ac, 4.0f));
+                m_playqueue.Enqueue(_stateGenerator.GenerateState(StateGenerator.GenerateType.RUNERSTATE, ac.name, ac, 4.0f));
                 //m_playqueue.Enqueue(_stateGenerator.CreateVerticalLaserAttack(ac.name,ac,4.0f));
             }
         }

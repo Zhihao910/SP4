@@ -13,6 +13,8 @@ public class Feedback : MonoBehaviour
     AudioClip _fail;
     [SerializeField]
     AudioClip _damage;
+    [SerializeField]
+    AudioClip _greeting;
 
     // Use this for initialization
     void Start ()
@@ -75,6 +77,9 @@ public class Feedback : MonoBehaviour
                 break;
             case "Damage":
                 _audioSource.clip = _damage;
+                break;
+            case "Greeting":
+                _audioSource.clip = _greeting;
                 break;
 
             default:
