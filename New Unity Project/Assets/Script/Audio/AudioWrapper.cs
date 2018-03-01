@@ -75,7 +75,7 @@ public class AudioWrapper : MonoBehaviour {
 
         if (_audioSource.volume > 0)
         {
-            _audioSource.volume -= startVolume * Time.deltaTime / 0.1f;
+            _audioSource.volume -= (1 * Time.deltaTime) / 0.1f;
 
             return;
         }
@@ -95,7 +95,7 @@ public class AudioWrapper : MonoBehaviour {
 
         if (_audioSource.volume < startVolume)
         {
-            _audioSource.volume += startVolume * Time.deltaTime / 0.1f;
+            _audioSource.volume += (1 * Time.deltaTime) / 0.1f;
             return;
         }
         _fadein = false;

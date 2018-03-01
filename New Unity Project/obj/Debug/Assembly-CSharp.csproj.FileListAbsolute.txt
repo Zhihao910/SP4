@@ -1,5 +1,3 @@
-C:\Users\163061T\Desktop\SP4\New Unity Project\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
-C:\Users\163061T\Desktop\SP4\New Unity Project\obj\Debug\Assembly-CSharp.pdb
 C:\Users\163061T\Desktop\SP4\New Unity Project\Temp\bin\Debug\Assembly-CSharp.dll
 C:\Users\163061T\Desktop\SP4\New Unity Project\Temp\bin\Debug\Assembly-CSharp.pdb
 C:\Users\163061T\Desktop\SP4\New Unity Project\Temp\bin\Debug\nunit.framework.dll
@@ -28,4 +26,6 @@ C:\Users\163061T\Desktop\SP4\New Unity Project\Temp\bin\Debug\nunit.framework.xm
 C:\Users\163061T\Desktop\SP4\New Unity Project\Temp\bin\Debug\UnityEngine.Analytics.xml
 C:\Users\163061T\Desktop\SP4\New Unity Project\Temp\bin\Debug\UnityEngine.HoloLens.xml
 C:\Users\163061T\Desktop\SP4\New Unity Project\Temp\bin\Debug\UnityEngine.VR.xml
+C:\Users\163061T\Desktop\SP4\New Unity Project\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 C:\Users\163061T\Desktop\SP4\New Unity Project\obj\Debug\Assembly-CSharp.dll
+C:\Users\163061T\Desktop\SP4\New Unity Project\obj\Debug\Assembly-CSharp.pdb

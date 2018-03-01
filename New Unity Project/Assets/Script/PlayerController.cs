@@ -180,19 +180,23 @@ public class PlayerController : MonoBehaviour
         // MANA DRAIN
         if (!_crescendo)
         {
-            mana -= 0.01f;
+            if (mana > 0)
+                mana -= 0.01f;
         }
         else
-            mana -= 5.0f;
+        {
+            if (mana > 0)
+                mana -= 5.0f;
+            else
+            {
+                mana = -50.0f;
+                _crescendo = false;
+            }
+        }
+        
         // cause like... its actually a sound/music bar thing
         // and uhh.. sound energy is lost to surrounding, amirite?
         // I'm not a scientist. This is a game.
-
-        if (mana <= 0)
-        {
-            mana = 0;
-            _crescendo = false;
-        }
 
         if (mana >= 100 && !_crescendo)
         {

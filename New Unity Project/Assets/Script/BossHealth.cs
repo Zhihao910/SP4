@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class BossHealth : MonoBehaviour
 {
 
@@ -26,12 +26,14 @@ public class BossHealth : MonoBehaviour
     void Update()
     {
         //scaling of the healthbar
-        Healthbar.transform.localScale = new Vector3(PlayerPrefs.GetFloat("bosshealth") / totalhealth, 1, 1);
-
+        Healthbar.transform.localScale = new Vector3(PlayerPrefs.GetFloat("something") / totalhealth, 1, 1);
+        //Debug.Log(PlayerPrefs.GetFloat("something"));
         if (health <= 0)
         {
             //playerScore.SaveScore();
+            health = 0;
             Destroy(gameObject);
+            SceneManager.LoadScene("GameOver");
         }
     }
 }

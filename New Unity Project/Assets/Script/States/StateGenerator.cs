@@ -22,6 +22,7 @@ public class StateGenerator : MonoBehaviour
         DROPPERSTATE,
         BLINDSTATE,
         RUNERSTATE,
+        BOMBSTATE,
         NUMSTATE,//Default
     };
     float timerdestroy;
@@ -58,6 +59,7 @@ public class StateGenerator : MonoBehaviour
         _GenerateDictionary.Add(GenerateType.DROPPERSTATE, CreateDropperState);
         _GenerateDictionary.Add(GenerateType.BLINDSTATE, CreateBlindAttack);
         _GenerateDictionary.Add(GenerateType.RUNERSTATE, CreateRunerState);
+        _GenerateDictionary.Add(GenerateType.BOMBSTATE, CreateDropBomb);
         ps = gameObject.AddComponent<ProjectileSpawner>();
 
     }
@@ -562,7 +564,7 @@ public class StateGenerator : MonoBehaviour
                 }
             }
         };
-#elif UNITY_ANDROID
+#elif UNITY_ANDROID || UNITY_EDITOR
         BaseState.Attack att = () =>
         {
             if (_counter >= numberofKeys)
@@ -1101,6 +1103,60 @@ public class StateGenerator : MonoBehaviour
             result.AddAttack(time, att);
         }
         result.m_audioManager = ap;
+
+        m_StateMap[_clipname] = result;
+        result.Sort();
+
+        return result;
+    }
+
+    public BaseState CreateDropBomb(string _clipname, AudioClip _clip, float multiplier = 1f)
+    {
+        BaseState result = gameObject.AddComponent<BaseState>();
+        result.SetClipName(_clip.name);
+        //Run adding attacks here
+
+        double beattime = ba.GetBeatTime() * multiplier;//0.5357; // 0.588
+        Vector3 target = new Vector3(transform.position.x, -3, transform.position.z);
+        int mult = 1;
+        int prevprev = 0;
+
+        BaseState.Attack att = () =>
+        {
+            Vector3 pos = gameObject.GetComponent<Transform>().position;
+            pos.y = 9;
+            pos.x = Random.Range(-7, 7);
+            target.x = pos.x;
+            target.y = Random.Range(0, -3);
+
+            if (prevprev != 0 && Mathf.Abs(target.x) == 8)
+                mult = -mult;
+            Object o = Resources.Load("Prefabs/Projectile4");
+            if (o == null) Debug.Log("Load failed");
+            GameObject go = o as GameObject;
+            if (go == null) Debug.Log("Loaded object isn't GameObject");
+            GameObject newgo = Instantiate(go, pos, Quaternion.identity);
+            if (newgo == null) Debug.Log("Couldn't instantiate");
+
+            GameObject parent = Instantiate(Resources.Load("Prefabs/FakeParent") as GameObject);
+            newgo.transform.parent = parent.transform;
+            newgo.GetComponent<Projectile>().SetTarget(target);
+            newgo.GetComponent<Projectile>().SetDir((target - pos).normalized);
+            newgo.GetComponent<ExplodingProjectile>().SetSplitCount(4);
+            newgo.GetComponent<Projectile>().SetSpeed(3);
+            prevprev = (int)(target.x);
+            target.x += (4 * mult);
+
+        };
+
+        for (double time = 0; time < _clip.length; time += beattime)
+        {
+            result.AddAttack(time, att);
+            result.m_audioManager = ap;
+        }
+
+        result.AddAttack(_clip.length - 0.5f, GetComponent<PlatformGenerator>().DespawnAll);
+
 
         m_StateMap[_clipname] = result;
         result.Sort();
