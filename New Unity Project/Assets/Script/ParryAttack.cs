@@ -34,11 +34,11 @@ public class ParryAttack : MonoBehaviour
 
             //this.GetComponent<PlayerController>().mana += 10;
             gameObject.GetComponentInParent<PlayerController>().mana += 10;
-
+            Debug.Log("Y IS THE HEALTH 85 IN THERE"+_bh.health);
             _bh.health -= 3;
 
             print(_bh.health);
-
+            PlayerPrefs.SetFloat("something", _bh.health);
             // Add base 300 score
             playerScore.AddScore(300.0f);
 
