@@ -52,8 +52,7 @@ public class UIController : MonoBehaviour
         _songmanager.Swap(songs[index]);
         _songmanager.Play();
         SongName.text = songs[index];
-        GetComponent<BpmAnalyzer>().ReadBpm(songs[index]);
-        BPM.text = "Speed: " + GetComponent<BpmAnalyzer>()._bpm.ToString();
+        BPM.text = "Time: " + _songmanager.GetTime(songs[index]);
     }
 
     // Update is called once per frame
@@ -91,9 +90,9 @@ public class UIController : MonoBehaviour
                     index = songs.Count - 1;
                 //send song to gamescene
                 _songmanager.Swap(songs[index]);
-                GetComponent<BpmAnalyzer>().ReadBpm(songs[index]);
                 SongName.text = songs[index];
-                BPM.text = "Speed: " + GetComponent<BpmAnalyzer>()._bpm.ToString();
+                BPM.text = "Time: " + _songmanager.GetTime(songs[index]);
+
                 leftBtn = false;
             }
             else
@@ -102,9 +101,9 @@ public class UIController : MonoBehaviour
                     index = usersongs.Count - 1;
                 //send song to gamescene
                 _songmanager.Swap(usersongs[index]);
-                GetComponent<BpmAnalyzer>().ReadBpm(songs[index]);
                 SongName.text = usersongs[index];
-                BPM.text = "Speed: " + GetComponent<BpmAnalyzer>()._bpm.ToString();
+                BPM.text = "Time: " + _songmanager.GetTime(usersongs[index]);
+
                 leftBtn = false;
             }
         }
@@ -115,9 +114,9 @@ public class UIController : MonoBehaviour
                 if (++index >= songs.Count)
                     index = 0;
                 _songmanager.Swap(songs[index]);
-                GetComponent<BpmAnalyzer>().ReadBpm(songs[index]);
                 SongName.text = songs[index];
-                BPM.text = "Speed: " + GetComponent<BpmAnalyzer>()._bpm.ToString();
+                BPM.text = "Time: " + _songmanager.GetTime(songs[index]);
+
                 rightBtn = false;
             }
             else
@@ -126,9 +125,9 @@ public class UIController : MonoBehaviour
                     index = 0;
                 //send song to gamescene
                 _songmanager.Swap(usersongs[index]);
-                GetComponent<BpmAnalyzer>().ReadBpm(songs[index]);
                 SongName.text = usersongs[index];
-                BPM.text = "Speed: " + GetComponent<BpmAnalyzer>()._bpm.ToString();
+                BPM.text = "Time: " + _songmanager.GetTime(usersongs[index]);
+
                 leftBtn = false;
             }
         }
@@ -145,18 +144,18 @@ public class UIController : MonoBehaviour
             {
                 //send song to gamescene
                 _songmanager.Swap(songs[index]);
-                GetComponent<BpmAnalyzer>().ReadBpm(songs[index]);
                 SongName.text = songs[index];
-                BPM.text = "Speed: " + GetComponent<BpmAnalyzer>()._bpm.ToString();
+                BPM.text = "Time: " + _songmanager.GetTime(usersongs[index]);
+
                 leftBtn = false;
             }
             else
             {
                 //send song to gamescene
                 _songmanager.Swap(usersongs[index]);
-                GetComponent<BpmAnalyzer>().ReadBpm(songs[index]);
                 SongName.text = usersongs[index];
-                BPM.text = "Speed: " + GetComponent<BpmAnalyzer>()._bpm.ToString();
+                BPM.text = "Time: " + _songmanager.GetTime(usersongs[index]);
+
                 leftBtn = false;
             }
         }

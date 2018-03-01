@@ -28,20 +28,22 @@ public class SongManager : MonoBehaviour {
 
     public void Swap(string _name)
     {
-        if (!m_audioclipmap.ContainsKey(_name))
+        if (m_audioclipmap.ContainsKey(_name))
         {
-            m_audioclipmap.Add(_name, GetComponent<AudioLoader>().LoadSong(_name));
+            AudioWrapper ap = frontpeer;
+            frontpeer.SetFadeOut();
+            frontpeer = backpeer;
+            frontpeer.SetAudioClip(m_audioclipmap[_name]);
+            frontpeer.SetFadeIn();
+            frontpeer.StartPlaying();
+            backpeer = ap;
+
+            _ba.ReadBpm(frontpeer.GetComponent<AudioSource>().clip.name);
         }
-
-        AudioWrapper ap = frontpeer;
-        frontpeer.SetFadeOut();
-        frontpeer = backpeer;
-        frontpeer.SetAudioClip(m_audioclipmap[_name]);
-        frontpeer.SetFadeIn();
-        frontpeer.StartPlaying();
-        backpeer = ap;
-
-        _ba.ReadBpm(frontpeer.GetComponent<AudioSource>().clip.name);
+        else
+        {
+            m_audioclipmap.Add(_name,GetComponent<AudioLoader>().LoadSong(_name));
+        }
 
         //UniBpmAnalyzer.AnalyzeBpm(frontpeer.GetComponent<AudioSource>().clip);
     }
@@ -49,5 +51,10 @@ public class SongManager : MonoBehaviour {
     public void Play()
     {
         frontpeer.StartPlaying();
+    }
+
+    public float GetTime(string _name)
+    {
+        return m_audioclipmap[_name].length;
     }
 }
