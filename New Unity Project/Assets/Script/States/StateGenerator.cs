@@ -562,7 +562,7 @@ public class StateGenerator : MonoBehaviour
                 }
             }
         };
-#elif UNITY_ANDROID
+#elif UNITY_ANDROID || UNITY_EDITOR
         BaseState.Attack att = () =>
         {
             if (_counter >= numberofKeys)

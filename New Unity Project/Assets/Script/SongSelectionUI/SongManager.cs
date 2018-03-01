@@ -36,7 +36,7 @@ public class SongManager : MonoBehaviour {
         frontpeer.StartPlaying();
         backpeer = ap;
 
-        _ba.ReadBpm(frontpeer.GetComponent<AudioSource>().clip.name);
+        //_ba.ReadBpm(frontpeer.GetComponent<AudioSource>().clip.name);
 
         //UniBpmAnalyzer.AnalyzeBpm(frontpeer.GetComponent<AudioSource>().clip);
     }
