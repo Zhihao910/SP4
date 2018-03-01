@@ -5,25 +5,18 @@ using UnityEngine.UI;
 
 public class Options : MonoBehaviour
 {
-    public AudioSource audio;
     public Slider audioSlider;
 
     // Use this for initialization
     void Start()
     {
-        audioSlider.value = PlayerPrefs.GetFloat("Volume");
+        audioSlider.value = AudioManager.instance.Volume;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(audio.volume = audioSlider.value);
-        SaveVolume();
+        AudioManager.instance.UpdateVolume( audioSlider.value);
     }
-
-    public void SaveVolume()
-    {
-        PlayerPrefs.SetFloat("Volume", audio.volume);
-    }
-
+    
 }

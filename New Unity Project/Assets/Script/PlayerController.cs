@@ -232,8 +232,8 @@ public class PlayerController : MonoBehaviour
         //blankText.text = " : " + currBlank + " / " + maxBlanks;
 
         //ForHighScoreTesting
-        //if (Input.GetKey(KeyCode.PageDown))
-        //    takeDamage(50);
+        if (Input.GetKey(KeyCode.PageDown))
+            takeDamage(50);
         //if (Input.GetKey(KeyCode.End))
         //    playerScore.ClearAllScores();
 
