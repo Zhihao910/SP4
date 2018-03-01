@@ -124,22 +124,22 @@ public class PlayerController : MonoBehaviour
         // For Dictionary
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            _keys[1] = 0.5f;
+            _keys[1] = 1.0f;
         }
 
         if (Input.GetKeyDown(KeyCode.W))
         {
-            _keys[2] = 0.5f;
+            _keys[2] = 1.0f;
         }
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            _keys[3] = 0.5f;
+            _keys[3] = 1.0f;
         }
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            _keys[4] = 0.5f;
+            _keys[4] = 1.0f;
         }
 
         //Crouch animation
@@ -180,10 +180,10 @@ public class PlayerController : MonoBehaviour
         // MANA DRAIN
         if (!_crescendo)
         {
-            mana -= 0.02f;
+            mana -= 0.01f;
         }
         else
-            mana -= 0.5f;
+            mana -= 5.0f;
         // cause like... its actually a sound/music bar thing
         // and uhh.. sound energy is lost to surrounding, amirite?
         // I'm not a scientist. This is a game.

@@ -54,7 +54,7 @@ public class MainGame : MonoBehaviour
 
         Vector3 newPosition = new Vector3(clampPos.x, clampPos.y, 1);
 
-#endif   
+#endif
         Stick.rectTransform.localPosition = newPosition;
         direction = Stick.rectTransform.localPosition;
     }
