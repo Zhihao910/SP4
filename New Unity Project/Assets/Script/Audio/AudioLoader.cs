@@ -18,7 +18,7 @@ public class AudioLoader : MonoBehaviour
         Directory = "file:///" + Application.streamingAssetsPath + Path.AltDirectorySeparatorChar + "UserMusic" + Path.AltDirectorySeparatorChar ;
 #endif
         
-        LoadSongs();
+        LoadSong();
     }
     // Use this for initialization
     void Start()
@@ -51,6 +51,16 @@ public class AudioLoader : MonoBehaviour
             LoadedSongs[s].name = s;
         }
 #endif
+    }
+
+    public void LoadSong()
+    {
+        print(PlayerPrefs.GetString("Song"));
+        songloader = new WWW("file:///" + PlayerPrefs.GetString("Song"));
+        while (songloader.progress != 1)
+        {
+        }
+        GetComponent<AudioSource>().clip = songloader.GetAudioClip(true, false);
     }
 
 
