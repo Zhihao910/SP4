@@ -140,6 +140,8 @@ public class FreqBeat : MonoBehaviour
             {
                 _detectedFinish = true;
 
+#if UNITY_STANDALONE || UNITY_WEBPLAYER || UNITY_EDITOR
+
                 if (Saving.LoadingFromFile("MusicData.txt", (List<string> _data) =>
                 {
                     return !_data.Contains(_source.clip.name.ToString());
@@ -194,6 +196,8 @@ public class FreqBeat : MonoBehaviour
                 //_bufferhighList = new List<float[]>(_highList);
 
                 Debug.Log("DONE DETECTING FREQ -----------------------------------------------------------");
+#elif UNITY_ANDROID
+#endif
             }
 
             _source.Play();

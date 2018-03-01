@@ -242,6 +242,7 @@ public class MusicProjectile : MonoBehaviour
 
     public void saveSong()
     {
+#if UNITY_STANDALONE || UNITY_WEBPLAYER || UNITY_EDITOR
         if (Saving.LoadingFromFile("MusicData.txt", (List<string> _data) =>
         {
             return !_data.Contains("<FreqName>" + _audioSource.clip.name.ToString());
@@ -339,6 +340,8 @@ public class MusicProjectile : MonoBehaviour
             saver.Add(_audioSource.clip.name.ToString() + "FreqEnd\n");
 
             Saving.SaveToFile("MusicData.txt", saver);
+#elif UNITY_ANDROID
+#endif
         }
         else
         {

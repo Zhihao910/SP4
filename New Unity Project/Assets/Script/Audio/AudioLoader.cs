@@ -13,7 +13,7 @@ public class AudioLoader : MonoBehaviour
     void Awake()
     {
 #if UNITY_ANDROID
-        Directory = Application.dataPath + "!assets/";
+        Directory = "jar:file:///" + Application.dataPath + "/!assets/";
 #else
         Directory = "file:///" + Application.streamingAssetsPath + Path.AltDirectorySeparatorChar + "UserMusic" + Path.AltDirectorySeparatorChar ;
 #endif
