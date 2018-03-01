@@ -31,6 +31,10 @@ public class SceneTransit : MonoBehaviour {
     {
         SceneManager.LoadScene("songend");
     }
+    public void ToInstruction()
+    {
+        SceneManager.LoadScene("instruction");
+    }
     public void ToQuit()
     {
         Application.Quit();
