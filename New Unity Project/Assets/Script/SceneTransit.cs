@@ -39,4 +39,9 @@ public class SceneTransit : MonoBehaviour {
     {
         Application.Quit();
     }
+
+    public void ToOverWorld()
+    {
+        SceneManager.LoadScene("Overworld");
+    }
 }
