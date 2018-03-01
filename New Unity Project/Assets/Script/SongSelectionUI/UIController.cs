@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 public class UIController : MonoBehaviour
 {
     public List<string> songs = new List<string>();
+    public List<string> usersongs = new List<string>();
+
     AudioSource _source;
     [SerializeField]
     SongManager _songmanager;
@@ -13,6 +15,8 @@ public class UIController : MonoBehaviour
     UnityEngine.UI.Text BPM;
 
     int index = 0;
+    int index2 = 0;
+    bool user = false;
     bool leftBtn, rightBtn, playBtn = false;
 
     void Awake()
@@ -21,7 +25,7 @@ public class UIController : MonoBehaviour
         BPM = GameObject.FindGameObjectWithTag("BPM").GetComponent<UnityEngine.UI.Text>();
 
         _source = GetComponent<AudioSource>();
-        Saving.LoadingFromFile("StreamingAssets/Songs.txt", (List<string> _data) =>
+        Saving.TEMPLoadingFromFile("Songs.txt", (List<string> _data) =>
         {
             foreach (string s in _data)
             {
@@ -30,6 +34,15 @@ public class UIController : MonoBehaviour
             }
             return true;
         });
+
+        foreach (string s in System.IO.Directory.GetFiles(System.IO.Path.Combine(Application.streamingAssetsPath, "UserMusic/")))
+        {
+            if (s.Contains(".meta"))
+                continue;
+            string lmoa = s.Replace(System.IO.Path.Combine(Application.streamingAssetsPath, "UserMusic/"), "");
+            usersongs.Add(lmoa);
+        }
+
         _songmanager.Init();
     }
 
@@ -72,30 +85,80 @@ public class UIController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.LeftArrow) || leftBtn)
         {
-            if (--index < 0)
-                index = songs.Count - 1;
-            //send song to gamescene
-            _songmanager.Swap(songs[index]);
-            GetComponent<BpmAnalyzer>().ReadBpm(songs[index]);
-            SongName.text = songs[index];
-            BPM.text = "Speed: " + GetComponent<BpmAnalyzer>()._bpm.ToString();
-            leftBtn = false;
+            if (!user)
+            {
+                if (--index < 0)
+                    index = songs.Count - 1;
+                //send song to gamescene
+                _songmanager.Swap(songs[index]);
+                GetComponent<BpmAnalyzer>().ReadBpm(songs[index]);
+                SongName.text = songs[index];
+                BPM.text = "Speed: " + GetComponent<BpmAnalyzer>()._bpm.ToString();
+                leftBtn = false;
+            }
+            else
+            {
+                if (--index2 < 0)
+                    index = usersongs.Count - 1;
+                //send song to gamescene
+                _songmanager.Swap(usersongs[index]);
+                GetComponent<BpmAnalyzer>().ReadBpm(songs[index]);
+                SongName.text = usersongs[index];
+                BPM.text = "Speed: " + GetComponent<BpmAnalyzer>()._bpm.ToString();
+                leftBtn = false;
+            }
         }
-        if (Input.GetKeyDown(KeyCode.RightArrow) || rightBtn)
+        else if (Input.GetKeyDown(KeyCode.RightArrow) || rightBtn)
         {
-            if (++index >= songs.Count)
-                index = 0;
-            _songmanager.Swap(songs[index]);
-            GetComponent<BpmAnalyzer>().ReadBpm(songs[index]);
-            SongName.text = songs[index];
-            BPM.text = "Speed: " + GetComponent<BpmAnalyzer>()._bpm.ToString();
-            rightBtn = false;
+            if (!user)
+            {
+                if (++index >= songs.Count)
+                    index = 0;
+                _songmanager.Swap(songs[index]);
+                GetComponent<BpmAnalyzer>().ReadBpm(songs[index]);
+                SongName.text = songs[index];
+                BPM.text = "Speed: " + GetComponent<BpmAnalyzer>()._bpm.ToString();
+                rightBtn = false;
+            }
+            else
+            {
+                if (++index2 >= usersongs.Count)
+                    index = 0;
+                //send song to gamescene
+                _songmanager.Swap(usersongs[index]);
+                GetComponent<BpmAnalyzer>().ReadBpm(songs[index]);
+                SongName.text = usersongs[index];
+                BPM.text = "Speed: " + GetComponent<BpmAnalyzer>()._bpm.ToString();
+                leftBtn = false;
+            }
         }
-        if (Input.GetKeyDown(KeyCode.Space) || playBtn)
+        else if (Input.GetKeyDown(KeyCode.Space) || playBtn)
         {
             PlayerPrefs.SetString("Song", songs[index]);
             SceneManager.LoadScene("MainGame 1");
             playBtn = false;
+        }
+        else if(Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            user = !user;
+            if (!user)
+            {
+                //send song to gamescene
+                _songmanager.Swap(songs[index]);
+                GetComponent<BpmAnalyzer>().ReadBpm(songs[index]);
+                SongName.text = songs[index];
+                BPM.text = "Speed: " + GetComponent<BpmAnalyzer>()._bpm.ToString();
+                leftBtn = false;
+            }
+            else
+            {
+                //send song to gamescene
+                _songmanager.Swap(usersongs[index]);
+                GetComponent<BpmAnalyzer>().ReadBpm(songs[index]);
+                SongName.text = usersongs[index];
+                BPM.text = "Speed: " + GetComponent<BpmAnalyzer>()._bpm.ToString();
+                leftBtn = false;
+            }
         }
     }
 #endif

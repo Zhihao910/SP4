@@ -73,5 +73,52 @@ public class Saving : MonoBehaviour {
         return false;
     }
 
+    public static bool TEMPLoadingFromFile(string _filename, ParserFunction _func)
+    {
+        string ret2 = "";
+
+#if UNITY_STANDALONE
+        ret2 = Application.streamingAssetsPath + "/" + _filename;
+        print(ret2);
+        if (!System.IO.File.Exists(ret2))
+        {
+            print("File doesnt exist!");
+            return false;
+        }
+        List<string> ret = new List<string>();
+
+        string[] data = System.IO.File.ReadAllLines(ret2);
+
+        foreach (string s in data)
+        {
+            ret.Add(s);
+        }
+        if (_func(ret))
+            return true;
+#elif UNITY_ANDROID
+
+        string filePath = System.IO.Path.Combine(Application.streamingAssetsPath, "Songs.txt");
+        UnityWebRequest www = UnityWebRequest.Get(filePath);
+        www.Send();
+
+        while (!www.isDone)
+        {
+            print("LOLOLOLOL");
+        }
+        string datameme = www.downloadHandler.text;
+        string[] strings = datameme.Split('\n');
+        print(datameme);
+        List<string> listofstring = new List<string>();
+        foreach (string s in strings) { print(s); listofstring.Add(s); }
+        _func(listofstring); 
+        // result = www.downloadHandler.text;
+
+
+#endif
+
+
+        return false;
+    }
+
 
 }
