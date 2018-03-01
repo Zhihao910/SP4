@@ -104,14 +104,14 @@ public class AudioPeerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if(PlayerController._crescendo)
-        //{
-        //    if (m_playqueue.Count > 0 && !QTE)
-        //    {
-        //        //next = _stateGenerator.GenerateState(StateGenerator.GenerateType.QUICKTIMEEVENTSTATE, m_playqueue.Peek().GetClipName(), m_audioclipmap[m_playqueue.Peek().GetClipName()]);
-        //        QTE = true;
-        //    }
-        //}
+        if (PlayerController._crescendo)
+        {
+            if (m_playqueue.Count > 0 && !QTE)
+            {
+                next = _stateGenerator.GenerateState(StateGenerator.GenerateType.QUICKTIMEEVENTSTATE, m_playqueue.Peek().GetClipName(), m_audioclipmap[m_playqueue.Peek().GetClipName()]);
+                QTE = true;
+            }
+        }
         if (swap && m_playqueue.Count > 0)
         {
             curr.StopRun();

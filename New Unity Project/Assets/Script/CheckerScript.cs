@@ -35,7 +35,7 @@ public class CheckerScript : MonoBehaviour {
     public void Transit()
     {
         PlayerPrefs.SetString("Song", dict[dropdown.options[dropdown.value].text]);
-        SceneManager.LoadScene("SongDetection");
+        SceneManager.LoadScene("MusicDetection");
 
     }
 
