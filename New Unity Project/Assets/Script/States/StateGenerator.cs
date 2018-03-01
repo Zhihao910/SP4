@@ -23,6 +23,7 @@ public class StateGenerator : MonoBehaviour
         BLINDSTATE,
         RUNERSTATE,
         BOMBSTATE,
+        RAINSTATE,
         NUMSTATE,//Default
     };
     float timerdestroy;
@@ -58,8 +59,9 @@ public class StateGenerator : MonoBehaviour
         _GenerateDictionary.Add(GenerateType.LAZERSTATE, CreateLaserAttack);
         _GenerateDictionary.Add(GenerateType.DROPPERSTATE, CreateDropperState);
         _GenerateDictionary.Add(GenerateType.BLINDSTATE, CreateBlindAttack);
-        _GenerateDictionary.Add(GenerateType.RUNERSTATE, CreateRunerState);
+        _GenerateDictionary.Add(GenerateType.RUNERSTATE, CreateRunerState); // Runner not runer REE
         _GenerateDictionary.Add(GenerateType.BOMBSTATE, CreateDropBomb);
+        _GenerateDictionary.Add(GenerateType.RAINSTATE, CreateRain);
         ps = gameObject.AddComponent<ProjectileSpawner>();
 
     }
@@ -1173,7 +1175,35 @@ public class StateGenerator : MonoBehaviour
 
         double beattime = ba.GetBeatTime() * multiplier;
 
-        Vector3 target = new Vector3(transform.position.x, -4, transform.position.z);
+        Vector3 target = new Vector3(transform.position.x, -8, transform.position.z);
+
+        BaseState.Attack torrent = () =>
+        {
+            Vector3 pos = gameObject.GetComponent<Transform>().position;
+            pos.y = 9;
+            pos.x = Random.Range(0, 16);
+            target.x = pos.x;
+            // rain left?
+            target.x -= 8;
+
+            Object o;
+            o = Resources.Load("Prefabs/Projectile1");
+
+            if (o == null) Debug.Log("Load failed");
+            GameObject go = o as GameObject;
+            if (go == null) Debug.Log("Loaded object isn't GameObject");
+            GameObject newgo = Instantiate(go, pos, Quaternion.identity);
+            if (newgo == null) Debug.Log("Couldn't instantiate");
+
+            GameObject parent = Instantiate(Resources.Load("Prefabs/FakeParent") as GameObject);
+            newgo.transform.parent = parent.transform;
+            newgo.GetComponent<Projectile>().SetTarget(target);
+            newgo.GetComponent<Projectile>().SetDir((target - pos).normalized);
+            newgo.GetComponent<Projectile>().SetSpeed(7);
+
+            // uhh, they dont destroy themselves, so i added this
+            Destroy(parent, 3);
+        };
 
         BaseState.Attack att = () =>
         {
@@ -1182,7 +1212,7 @@ public class StateGenerator : MonoBehaviour
             pos.x = Random.Range(-7, 8);
             target.x = pos.x;
             // rain left?
-            target.x -= 2;
+            target.x -= 8;
 
             Object o;
             o = Resources.Load("Prefabs/Projectile2");
@@ -1193,10 +1223,21 @@ public class StateGenerator : MonoBehaviour
             GameObject newgo = Instantiate(go, pos, Quaternion.identity);
             if (newgo == null) Debug.Log("Couldn't instantiate");
 
+            GameObject parent = Instantiate(Resources.Load("Prefabs/FakeParent") as GameObject);
+            newgo.transform.parent = parent.transform;
             newgo.GetComponent<Projectile>().SetTarget(target);
             newgo.GetComponent<Projectile>().SetDir((target - pos).normalized);
-            newgo.GetComponent<Projectile>().SetSpeed(10);
+            newgo.GetComponent<Projectile>().SetSpeed(7);
+
+            // uhh, they dont destroy themselves, so i added this
+            Destroy(parent, 3);
         };
+
+        for (double time = 0; time < _clip.length; time += (beattime * 0.05f))
+        {
+            result.AddAttack(time, torrent);
+            result.m_audioManager = ap;
+        }
 
         for (double time = 0; time < _clip.length; time += beattime)
         {
