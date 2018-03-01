@@ -230,18 +230,19 @@ public class FreqBeat : MonoBehaviour
 
                     if (AudioPeer._audioBandBuffer64[i] > _bufferhighList[_highSection][i]) //audiobandbuffer64
                     {
-                        //if (!SpawnEffect._spawnHigh && i >= 19)
-                        //{
-                        //    SpawnEffect._spawnHigh = true;
-                        //}
-                        //else if (!SpawnEffect._spawnMelody && i >= 12 && i < 19)
-                        //{
-                        //    SpawnEffect._spawnMelody = true;
-                        //}
-                        //else if (!SpawnEffect._spawnCenter && i >= 6 && i < 12)
-                        //{
-                        //    SpawnEffect._spawnCenter = true;
-                        //}
+                        if (!SpawnEffect._spawnHigh && i >= 19)
+                        {
+                            SpawnEffect._spawnHigh = true;
+                        }
+                        else if (!SpawnEffect._spawnMelody && i >= 12 && i < 19)
+                        {
+                            SpawnEffect._spawnMelody = true;
+                        }
+                        else if (!SpawnEffect._spawnCenter && i >= 6 && i < 12)
+                        {
+                            SpawnEffect._spawnCenter = true;
+                        }
+
                         if (!SpawnEffect._spawnThree && i >= 6)
                         {
                             SpawnEffect._spawnThree = true;
