@@ -38,7 +38,7 @@ public class powerupspawner : MonoBehaviour
             Instantiate(powerup1, randomPosition, Quaternion.identity);
             spawntime2 = 0;
         }
-        if (spawntime3 >= 2)
+        if (spawntime3 >= 20)
         {
             Instantiate(blankPowerup, new Vector3(Random.Range(-7, 7), Random.RandomRange(0, -4), 0), Quaternion.identity);
             spawntime3 = 0;

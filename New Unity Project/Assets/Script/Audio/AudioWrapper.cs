@@ -14,7 +14,7 @@ public class AudioWrapper : MonoBehaviour {
     // Use this for initialization
     void Start () {
         _audioSource = GetComponent<AudioSource>();
-        startVolume = PlayerPrefs.GetFloat("Volume");
+        startVolume = AudioManager.instance.Volume;
         _audioSource.volume = startVolume;
         print("HILO");
         print(startVolume);

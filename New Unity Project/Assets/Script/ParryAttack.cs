@@ -16,6 +16,7 @@ public class ParryAttack : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        _bh = GetComponent<BossHealth>();
         _feedback = GameObject.FindGameObjectWithTag("Feedback");
     }
 
@@ -39,6 +40,11 @@ public class ParryAttack : MonoBehaviour
 
             print(_bh.health);
             PlayerPrefs.SetFloat("something", _bh.health);
+
+            //_bh.health -= 3;
+
+            //print(_bh.health);
+
             // Add base 300 score
             playerScore.AddScore(300.0f);
 
