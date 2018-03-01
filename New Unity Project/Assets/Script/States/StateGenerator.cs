@@ -338,7 +338,7 @@ public class StateGenerator : MonoBehaviour
         result.SetClipName(_clip.name);
         //Run adding attacks here
 
-        //multiplier *= 0.75f;
+        multiplier *= 2.5f;
         double beattime = ba.GetBeatTime() * multiplier;
 
         // 1 - Up
@@ -813,7 +813,7 @@ public class StateGenerator : MonoBehaviour
             if (newgo4 == null) Debug.Log("Couldn't instantiate");
             Destroy(newgo4, 1);
 
-            Object o = Resources.Load("Prefabs/Projectile4");
+            Object o = Resources.Load("Prefabs/Projectile2");
             if (o == null) Debug.Log("Load failed");
             GameObject go = o as GameObject;
             if (go == null) Debug.Log("Loaded object isn't GameObject");
@@ -823,7 +823,7 @@ public class StateGenerator : MonoBehaviour
             newgo.GetComponent<Projectile>().SetDir(new Vector3(0, -1, 0));
             newgo.GetComponent<Projectile>().SetSpeed(randomspeed);
 
-            Object o1 = Resources.Load("Prefabs/Projectile4");
+            Object o1 = Resources.Load("Prefabs/Projectile2");
             if (o1 == null) Debug.Log("Load failed");
             GameObject go1 = o1 as GameObject;
             if (go1 == null) Debug.Log("Loaded object isn't GameObject");
@@ -833,7 +833,7 @@ public class StateGenerator : MonoBehaviour
             newgo1.GetComponent<Projectile>().SetDir(new Vector3(0, -1, 0));
             newgo1.GetComponent<Projectile>().SetSpeed(randomspeed);
 
-            Object o2 = Resources.Load("Prefabs/Projectile4");
+            Object o2 = Resources.Load("Prefabs/Projectile2");
             if (o2 == null) Debug.Log("Load failed");
             GameObject go2 = o2 as GameObject;
             if (go2 == null) Debug.Log("Loaded object isn't GameObject");
@@ -843,7 +843,7 @@ public class StateGenerator : MonoBehaviour
             newgo2.GetComponent<Projectile>().SetDir(new Vector3(0, -1, 0));
             newgo2.GetComponent<Projectile>().SetSpeed(randomspeed);
 
-            Object o3 = Resources.Load("Prefabs/Projectile4");
+            Object o3 = Resources.Load("Prefabs/Projectile2");
             if (o3 == null) Debug.Log("Load failed");
             GameObject go3 = o3 as GameObject;
             if (go3 == null) Debug.Log("Loaded object isn't GameObject");

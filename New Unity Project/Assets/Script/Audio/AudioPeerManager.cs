@@ -47,8 +47,7 @@ public class AudioPeerManager : MonoBehaviour
         }
         musicprojectile = gameObject.AddComponent<MusicProjectile>();
         musicprojectile.detected = musicprojectile.ChckSongName(_sample.name);
-
-
+        playerScore.SetWinValue(Mathf.RoundToInt(_sample.length) * 300);
     }
 
     // Use this for initialization

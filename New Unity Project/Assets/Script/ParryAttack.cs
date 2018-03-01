@@ -9,6 +9,10 @@ public class ParryAttack : MonoBehaviour
     [SerializeField]
     Score playerScore;
 
+
+    [SerializeField]
+    BossHealth _bh;
+
     // Use this for initialization
     void Start()
     {
@@ -30,7 +34,11 @@ public class ParryAttack : MonoBehaviour
 
             //this.GetComponent<PlayerController>().mana += 10;
             gameObject.GetComponentInParent<PlayerController>().mana += 10;
-            
+
+            _bh.health -= 3;
+
+            print(_bh.health);
+
             // Add base 300 score
             playerScore.AddScore(300.0f);
 

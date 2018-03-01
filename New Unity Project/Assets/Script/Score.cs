@@ -17,6 +17,8 @@ public class Score : MonoBehaviour
     private float _multiplier = 1.0f;
     // To make noise whenever damage is done
     private GameObject _feedback;
+    // Score needed to "win"
+    private int _winValue;
 
     public Text _text;
 
@@ -113,7 +115,9 @@ public class Score : MonoBehaviour
     {
         _multiplier = Mathf.Round(_multiplier * 10.0f) / 10.0f;
 
-        _text.text = "Score:" + _currScore.ToString() + "\n" + "Multiplier:" + _multiplier.ToString();
+        _text.text = "Score:" + _currScore.ToString() + "\n"
+            + "Multiplier:" + _multiplier.ToString() + "\n"
+            + "Need:" + _winValue.ToString();
     }
 
     void DisplayHighScore()
@@ -191,5 +195,16 @@ public class Score : MonoBehaviour
 
         _currScore = 0;
         _multiplier = _defaultMulti;
+    }
+
+    public void SetWinValue(int _val)
+    {
+        _winValue = _val;
+        print("Win Value is: " + _winValue);
+    }
+
+    public bool PlayerWon()
+    {
+        return (_currScore > _winValue);
     }
 }
