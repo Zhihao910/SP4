@@ -137,7 +137,7 @@ public class AudioPeerManager : MonoBehaviour
         else if (m_playqueue.Count <= 0)
         {
             playerScore.SaveScore();
-            SceneManager.LoadScene("GameOver");
+            SceneManager.LoadScene("SongEndScene");
         }
     }
 
