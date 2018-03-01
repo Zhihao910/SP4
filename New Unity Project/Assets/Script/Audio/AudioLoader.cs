@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class AudioLoader : MonoBehaviour
 {
+    [SerializeField]
+    bool LoadOnStart = true;
     WWW songloader;
     private static string Directory = "";
     private List<string> Songs = new List<string>();
@@ -16,13 +18,14 @@ public class AudioLoader : MonoBehaviour
 #else
         Directory = "file:///" + Application.streamingAssetsPath + Path.AltDirectorySeparatorChar + "UserMusic" + Path.AltDirectorySeparatorChar ;
 #endif
-        
-        LoadSong();
+        if(LoadOnStart)
+            LoadSong();
     }
     // Use this for initialization
     void Start()
     {
-        GetComponent<AudioSource>().Play();
+        if (GetComponent<AudioSource>() != null)
+            GetComponent<AudioSource>().Play();
     }
 
     // Update is called once per frame
