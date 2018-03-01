@@ -1164,6 +1164,52 @@ public class StateGenerator : MonoBehaviour
         return result;
     }
 
+    public BaseState CreateRain(string _clipname, AudioClip _clip, float multiplier = 8.0f)
+    {
+        multiplier = 8.0f;
+        BaseState result = gameObject.AddComponent<BaseState>();
+        result.SetClipName(_clip.name);
+        //Run adding attacks here
+
+        double beattime = ba.GetBeatTime() * multiplier;
+
+        Vector3 target = new Vector3(transform.position.x, -4, transform.position.z);
+
+        BaseState.Attack att = () =>
+        {
+            Vector3 pos = gameObject.GetComponent<Transform>().position;
+            pos.y = 9;
+            pos.x = Random.Range(-7, 8);
+            target.x = pos.x;
+            // rain left?
+            target.x -= 2;
+
+            Object o;
+            o = Resources.Load("Prefabs/Projectile2");
+
+            if (o == null) Debug.Log("Load failed");
+            GameObject go = o as GameObject;
+            if (go == null) Debug.Log("Loaded object isn't GameObject");
+            GameObject newgo = Instantiate(go, pos, Quaternion.identity);
+            if (newgo == null) Debug.Log("Couldn't instantiate");
+
+            newgo.GetComponent<Projectile>().SetTarget(target);
+            newgo.GetComponent<Projectile>().SetDir((target - pos).normalized);
+            newgo.GetComponent<Projectile>().SetSpeed(10);
+        };
+
+        for (double time = 0; time < _clip.length; time += beattime)
+        {
+            result.AddAttack(time, att);
+            result.m_audioManager = ap;
+        }
+
+        m_StateMap[_clipname] = result;
+        result.Sort();
+
+        return result;
+    }
+
     public BaseState GetState(string _clipname)
     {
         return m_StateMap[_clipname];
