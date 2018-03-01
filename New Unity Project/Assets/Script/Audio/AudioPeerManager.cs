@@ -123,7 +123,7 @@ public class AudioPeerManager : MonoBehaviour
             {
                 m_audioclipmap.Add(ac.name, ac);
                 //BaseState1 bs = _stateGenerator.MultiHighState(ac.name, ac, 4.0f);
-                //foreach(float f in musicprojectile.bassList)
+                //foreach (float f in musicprojectile.bassList)
                 //{
                 //    if (f > offset + ac.length)
                 //        break;
@@ -156,7 +156,7 @@ public class AudioPeerManager : MonoBehaviour
                 //bs.PushAttacksIntoList();
                 //m_playqueue.Enqueue(bs);
                 //offset += ac.length;
-                m_playqueue.Enqueue(_stateGenerator.GenerateState(StateGenerator.GenerateType.RUNERSTATE, ac.name, ac, 4.0f));
+                m_playqueue.Enqueue(_stateGenerator.GenerateState(StateGenerator.GenerateType.NUMSTATE, ac.name, ac, 4.0f));
                 //m_playqueue.Enqueue(_stateGenerator.CreateVerticalLaserAttack(ac.name,ac,4.0f));
             }
         }
@@ -169,14 +169,14 @@ public class AudioPeerManager : MonoBehaviour
     bool QTE = false;
     // Update is called once per frame
     void Update () {
-        if(PlayerController._crescendo)
-        {
-            if (m_playqueue.Count > 0 && !QTE)
-            {
-                next = _stateGenerator.GenerateState(StateGenerator.GenerateType.QUICKTIMEEVENTSTATE, m_playqueue.Peek().GetClipName(), m_audioclipmap[m_playqueue.Peek().GetClipName()]);
-                QTE = true;
-            }
-        }
+        //if(PlayerController._crescendo)
+        //{
+        //    if (m_playqueue.Count > 0 && !QTE)
+        //    {
+        //        //next = _stateGenerator.GenerateState(StateGenerator.GenerateType.QUICKTIMEEVENTSTATE, m_playqueue.Peek().GetClipName(), m_audioclipmap[m_playqueue.Peek().GetClipName()]);
+        //        QTE = true;
+        //    }
+        //}
         if (swap && m_playqueue.Count > 0)
         {
             curr.StopRun();

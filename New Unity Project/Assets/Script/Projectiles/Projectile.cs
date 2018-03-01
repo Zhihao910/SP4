@@ -9,6 +9,7 @@ public class Projectile : MonoBehaviour
     protected Vector3 dir = new Vector3(-1, 0, 0);
     protected Vector3 target = new Vector3(999, 999, 999);
     protected bool hittarget = false;
+    protected float projectTimer = 3;
     GameObject Indicator;
     //int _waveHeight = 0;
     //float _sinAngle = 1.0f;
@@ -46,6 +47,9 @@ public class Projectile : MonoBehaviour
                 if ((target - transform.position).magnitude < 0.1f)
                     hittarget = true;
             }
+
+            projectTimer -= Time.deltaTime;
+            
         }
     }
 
