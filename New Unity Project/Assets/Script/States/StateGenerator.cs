@@ -60,7 +60,7 @@ public class StateGenerator : MonoBehaviour
         _GenerateDictionary.Add(GenerateType.RUNERSTATE, CreateRunerState);
         //ps = gameObject.AddComponent<ProjectileSpawner>();
         //ps.isActiveAndEnabled = false;
-        
+
     }
 
     // Use this for initialization
@@ -251,7 +251,7 @@ public class StateGenerator : MonoBehaviour
         {
             for (int i = -2; i < 3; ++i)
             {
-                gameObject.GetComponent<PlatformGenerator>().GeneratePlatform(new Vector3((i * 4) - 2, -10), new Vector3((i * 4) - 2, 15), 0,true);
+                gameObject.GetComponent<PlatformGenerator>().GeneratePlatform(new Vector3((i * 4) - 2, -10), new Vector3((i * 4) - 2, 15), 0, true);
             }
         };
 
@@ -740,7 +740,7 @@ public class StateGenerator : MonoBehaviour
             GameObject newgo = Instantiate(go, target, Quaternion.identity);
             if (newgo == null) Debug.Log("Couldn't instantiate");
             Debug.Log(alternate);
-            Destroy(newgo,lifetime);
+            Destroy(newgo, lifetime);
         };
 
 
@@ -792,17 +792,17 @@ public class StateGenerator : MonoBehaviour
         Vector3 target5 = new Vector3(transform.position.x, 10, transform.position.z);
         target.x = 0;
         target.z = -5;
-        bool alternate = false;
 
         // uhh how do i slow down spawning omegalul
+
         float randomspeed;
-        randomspeed = Random.Range(5, 10);
-        target2.x = Random.Range(-8, 8);
-        target3.x = Random.Range(-8, 8);
-        target4.x = Random.Range(-8, 8);
-        target5.x = Random.Range(-8, 8);
         BaseState.Attack att = () =>
         {
+            randomspeed = Random.Range(5, 10);
+            target2.x = Random.Range(-8, 8);
+            target3.x = Random.Range(-8, 8);
+            target4.x = Random.Range(-8, 8);
+            target5.x = Random.Range(-8, 8);
 
             Object o4 = Resources.Load("Prefabs/Black");
             if (o4 == null) Debug.Log("Load failed");
@@ -856,7 +856,7 @@ public class StateGenerator : MonoBehaviour
 
         for (double time = 0; time < _clip.length; time += beattime)
         {
-                result.AddAttack(time, att);
+            result.AddAttack(time, att);
         }
 
         result.m_audioManager = ap;
@@ -1034,7 +1034,7 @@ public class StateGenerator : MonoBehaviour
         BaseState.Attack att = () =>
         {
             int drop = Random.Range(-4, 5);
-            for (int i = -4; i <5; ++i)
+            for (int i = -4; i < 5; ++i)
             {
                 if (i == drop)
                     continue;
@@ -1048,7 +1048,7 @@ public class StateGenerator : MonoBehaviour
             result.AddAttack(time, att);
         }
         result.m_audioManager = ap;
-        
+
         m_StateMap[_clipname] = result;
         result.Sort();
 
@@ -1074,7 +1074,8 @@ public class StateGenerator : MonoBehaviour
             {
                 if (Random.Range(0, 2) == 0)
                     continue;
-                gameObject.GetComponent<PlatformGenerator>().GeneratePlatform(new Vector3(10, i * 2), new Vector3(-10, i * 2), 1, true).GetComponent<Platform>().projectileSpeed = 5;            }
+                gameObject.GetComponent<PlatformGenerator>().GeneratePlatform(new Vector3(10, i * 2), new Vector3(-10, i * 2), 1, true).GetComponent<Platform>().projectileSpeed = 5;
+            }
         };
 
         BaseState.Attack att2 = () =>
